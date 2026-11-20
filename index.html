@@ -447,6 +447,36 @@
     .maint-step.running { background:#eff6ff; border-color:#3b82f6; color:#1d4ed8; }
     .maint-step.done { background:#ecfdf5; border-color:#10b981; color:#047857; }
     .maint-step.warn { background:#fffbeb; border-color:#f59e0b; color:#92400e; }
+
+    /* === Spotlight Dynamic Onboarding Tour === */
+    .tour-click-guard {
+      position: fixed; inset: 0; z-index: 9985;
+      background: transparent;
+    }
+    .tour-spotlight {
+      position: fixed; z-index: 9990;
+      border-radius: 16px;
+      pointer-events: none;
+      box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.72), 0 0 0 3px #10b981, 0 0 26px rgba(16, 185, 129, 0.55);
+      transition: top .32s cubic-bezier(.22,1,.36,1), left .32s cubic-bezier(.22,1,.36,1), width .32s cubic-bezier(.22,1,.36,1), height .32s cubic-bezier(.22,1,.36,1);
+    }
+    .tour-card {
+      position: fixed; z-index: 9995;
+      width: min(390px, calc(100vw - 24px));
+      max-height: calc(100vh - 36px);
+      overflow-y: auto;
+      background: #ffffff;
+      border: 1.5px solid #a7f3d0;
+      border-radius: 18px;
+      padding: 15px 16px;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.36);
+      display: flex; flex-direction: column; gap: 10px;
+      transition: top .28s cubic-bezier(.22,1,.36,1), left .28s cubic-bezier(.22,1,.36,1);
+    }
+    .tour-dots { display: flex; align-items: center; gap: 5px; }
+    .tour-dot { width: 7px; height: 7px; border-radius: 999px; background: #cbd5e1; transition: all .2s ease; }
+    .tour-dot.done { background: #6ee7b7; }
+    .tour-dot.active { width: 20px; background: var(--emerald); }
   </style>
 </head>
 <body>
@@ -1209,7 +1239,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">完整使用手冊・所有安裝與進階設定步驟一次整合</div>
               <h2 style="font-size:20px;font-weight:800;margin-top:2px;">📖 NutriFit 操作說明與安裝指南</h2>
             </div>
-            <div class="flex-gap" style="gap:6px;"><button type="button" class="btn btn-sm btn-blue" onclick="openOnboardingModal()">👋 重看新手教學</button><button type="button" class="btn btn-sm btn-primary" onclick="downloadIosStandaloneApp()">⬇️ 下載獨立檔 (.html)</button></div>
+            <div class="flex-gap" style="gap:6px;"><button type="button" class="btn btn-sm btn-blue" onclick="startDynamicTour(0)">🎬 播放動態新手教學</button><button type="button" class="btn btn-sm btn-primary" onclick="downloadIosStandaloneApp()">⬇️ 下載獨立檔 (.html)</button></div>
           </div>
 
           <!-- Guide 1: iOS Installation -->
@@ -1575,47 +1605,71 @@
     <div class="bottom-nav-inner">
       <button type="button" id="bNavBtn-dashboard" class="bnav-btn active" onclick="switchTab('dashboard')"><span style="font-size:18px;">📊</span><span>今日＆計畫</span></button>
       <button type="button" id="bNavBtn-food_ai" class="bnav-btn" onclick="switchTab('food_ai')"><span style="font-size:18px;">🍱</span><span>飲食/AI</span></button>
-      <button type="button" class="bnav-btn bnav-cam" onclick="openCustomFoodModal('ai')"><span style="font-size:18px;">➕</span><span>記食物</span></button>
+      <button type="button" id="bNavBtn-add" class="bnav-btn bnav-cam" onclick="openCustomFoodModal('ai')"><span style="font-size:18px;">➕</span><span>記食物</span></button>
       <button type="button" id="bNavBtn-guide" class="bnav-btn" onclick="switchTab('guide')"><span style="font-size:18px;">📖</span><span>說明</span></button>
       <button type="button" id="bNavBtn-system" class="bnav-btn" onclick="switchTab('system')"><span style="font-size:18px;">⚙️</span><span>系統</span></button>
     </div>
   </nav>
 
-  <!-- Modal: New User Onboarding Setup Guide (Auto-shown for new users with "不再顯示" option) -->
+  <!-- Modal: Dynamic Onboarding Tour Prompt (Auto-shown with "不再顯示" option) -->
   <div id="onboardingGuideModal" class="modal-backdrop hidden">
     <div class="modal-sheet" style="max-width:480px;display:flex;flex-direction:column;gap:12px;">
       <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;">
         <div>
           <span class="badge badge-blue">👋 歡迎使用 NutriFit</span>
-          <h3 style="font-size:18px;font-weight:900;margin-top:4px;">新使用者快速設定教學（2 步驟上手）</h3>
+          <h3 style="font-size:18px;font-weight:900;margin-top:4px;">是否開始動態新手教學？</h3>
         </div>
-        <button type="button" onclick="closeOnboardingModal()" style="font-size:18px;color:#64748b;font-weight:800;">✕</button>
+        <button type="button" onclick="closeOnboardingModal(false)" style="font-size:18px;color:#64748b;font-weight:800;">✕</button>
       </div>
 
-      <div class="card-soft" style="background:#ecfdf5;border-color:#a7f3d0;display:flex;flex-direction:column;gap:4px;">
-        <div class="text-xs font-extrabold" style="color:#065f46;">步驟 1️⃣｜先到「⚙️ 系統」完成個人體態設定</div>
-        <div class="text-xs" style="color:#064e3b;line-height:1.6;">
-          點擊底部最右側 <strong>「⚙️ 系統」</strong>，依序設定您的<strong>生理性別、年齡、身高、目前體重、目標減脂體重與活動強度</strong>，系統即會自動換算專屬 BMI、基礎代謝 BMR／TDEE 與每日熱量營養目標。
-        </div>
+      <div class="text-xs" style="color:#334155;line-height:1.65;">
+        約 <strong>30 秒</strong> 帶您自動巡覽各分頁核心功能（<strong>體態設定 → Gemini API Key → 營養監控 → 記食物 → 減脂計畫 → 飲食與 AI → 操作說明</strong>），逐一高亮畫面並摘要重點。
       </div>
 
-      <div class="card-soft" style="background:#eff6ff;border-color:#bfdbfe;display:flex;flex-direction:column;gap:4px;">
-        <div class="text-xs font-extrabold" style="color:#1e3a8a;">步驟 2️⃣｜（選填）免費申請並綁定 Gemini API Key</div>
-        <ol class="text-xs" style="margin:2px 0 0 18px;color:#1e293b;line-height:1.65;">
-          <li>點開 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800;text-decoration:underline;">Google AI Studio API Key 頁面 ↗</a>，登入 Google 帳號點 <strong>Create API key</strong> 免費建立一組金鑰並複製。</li>
-          <li>回到本 App 的 <strong>「⚙️ 系統」→「🔑 個人免費 Gemini API Key」</strong> 貼上按儲存（僅存您手機本機，安全不外洩），即可解鎖<strong>外食餐盤克數視覺辨識</strong>與<strong>深度 AI 營養師問答</strong>！</li>
-        </ol>
-      </div>
+      <details class="card-soft" style="background:#f8fafc;border-color:#cbd5e1;padding:10px 12px;">
+        <summary class="text-xs font-extrabold" style="color:#1e3a8a;cursor:pointer;">📋 展開查看：2 步驟快速設定（體態 + Gemini API Key 申請）</summary>
+        <div class="text-xs" style="color:#334155;line-height:1.65;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
+          <div><strong>1️⃣ 體態設定：</strong>至「⚙️ 系統」設定性別、年齡、身高、體重與目標體重，自動換算每日熱量與營養基準。</div>
+          <div><strong>2️⃣ 免費申請 Gemini API Key：</strong>點開 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800;text-decoration:underline;">Google AI Studio ↗</a> 點 <strong>Create API key</strong> 複製，回「⚙️ 系統」貼上儲存即可啟用拍照辨識與 AI 問答。</div>
+        </div>
+      </details>
 
       <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#334155;cursor:pointer;">
-        <input type="checkbox" id="onboardingDontShowCheck" checked style="width:16px;height:16px;accent-color:var(--emerald);" />
-        下次開啟不再顯示此新手教學
+        <input type="checkbox" id="onboardingDontShowCheck" style="width:16px;height:16px;accent-color:var(--emerald);" />
+        下次開啟不再顯示此新手教學（之後仍可於「📖 說明」重播）
       </label>
 
-      <div class="flex-gap" style="gap:8px;">
-        <button type="button" class="btn btn-primary" style="flex:1;" onclick="closeOnboardingModal();switchTab('system');">⚙️ 立即前往系統設定</button>
-        <button type="button" class="btn btn-slate-soft" onclick="closeOnboardingModal()">稍後再設</button>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button type="button" class="btn btn-primary" style="width:100%;" onclick="beginDynamicTourFromPrompt()">🚀 立即開始動態教學（7 步驟）</button>
+        <div class="flex-gap" style="gap:8px;">
+          <button type="button" class="btn btn-slate-soft" style="flex:1;" onclick="closeOnboardingModal(false)">稍後再說</button>
+          <button type="button" class="btn btn-slate-soft" style="flex:1;color:#64748b;" onclick="closeOnboardingModal(true)">🔕 不再顯示</button>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Spotlight Dynamic Tour Overlay -->
+  <div id="tourClickGuard" class="tour-click-guard hidden"></div>
+  <div id="tourSpotlight" class="tour-spotlight hidden"></div>
+  <div id="tourTooltipCard" class="tour-card hidden" role="dialog" aria-modal="true" aria-label="動態新手教學導覽">
+    <div class="flex-between" style="gap:6px;">
+      <div class="flex-gap" style="gap:6px;">
+        <span id="tourStepBadge" class="badge badge-emerald">步驟 1 / 7</span>
+        <span id="tourTabBadge" class="badge badge-blue">⚙️ 系統</span>
+      </div>
+      <button type="button" onclick="finishDynamicTour(false, false)" style="font-size:12px;font-weight:800;color:#64748b;padding:2px 6px;">✕ 結束</button>
+    </div>
+    <h4 id="tourStepTitle" style="font-size:16px;font-weight:900;color:#0f172a;line-height:1.35;"></h4>
+    <div id="tourStepBody" class="text-xs" style="color:#334155;line-height:1.65;"></div>
+    <div id="tourStepExtra" class="hidden"></div>
+    <div class="flex-between" style="padding-top:6px;border-top:1px solid var(--border);gap:8px;flex-wrap:wrap;">
+      <div id="tourDotsContainer" class="tour-dots"></div>
+      <button type="button" onclick="finishDynamicTour(true, false)" style="font-size:11px;font-weight:800;color:#64748b;text-decoration:underline;">不再顯示</button>
+    </div>
+    <div class="flex-gap" style="gap:8px;">
+      <button type="button" id="tourPrevBtn" class="btn btn-sm btn-slate-soft" style="flex:1;" onclick="prevDynamicTourStep()">← 上一步</button>
+      <button type="button" id="tourNextBtn" class="btn btn-sm btn-primary" style="flex:1.4;" onclick="nextDynamicTourStep()">下一步 →</button>
     </div>
   </div>
 
@@ -3979,7 +4033,7 @@
       }
     }
 
-    const APP_VERSION = 'v3.4.0';
+    const APP_VERSION = 'v3.5.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -5322,12 +5376,12 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v3.4.0',
+      version: 'v3.5.0',
       date: '2026-11-20',
       items: [
-        '📊 主頁兩大子分頁簡化命名為「營養監控」與「減脂計畫」，操作更直覺。',
-        '🎯 「減脂計畫」最上方新增「重點總覽儀表板」，一屏彙整單日營養攝取分析、減脂藍圖與單日營養健檢（點擊卡片可直接跳轉明細）。',
-        '🔍 區塊名稱統一精簡為「單日營養攝取分析」（移除多餘補記食物鍵）、「減脂藍圖」與「單日營養健檢」。'
+        '🎬 新增「7 步驟聚光燈動態新手教學」：自動切換各分頁並反白高亮重點區塊，逐一摘要介紹體態設定、Gemini API Key、營養監控、記食物、減脂計畫、飲食與 AI 及操作說明。',
+        '👋 開啟 App 時自動詢問「是否開始動態新手教學？」，支援「稍後再說」與「不再顯示」選項，並可隨時至「📖 操作說明」重播。',
+        '📱 浮動說明卡支援手機版智慧避開遮擋與進度點切換。'
       ]
     };
 
@@ -5342,16 +5396,267 @@
     }
 
     function openOnboardingModal() {
+      const chk = document.getElementById('onboardingDontShowCheck');
+      if (chk) chk.checked = false;
       document.getElementById('onboardingGuideModal')?.classList.remove('hidden');
     }
 
-    function closeOnboardingModal() {
+    function closeOnboardingModal(forceDontShow = false) {
       document.getElementById('onboardingGuideModal')?.classList.add('hidden');
+      const chk = document.getElementById('onboardingDontShowCheck');
+      if (forceDontShow || (chk && chk.checked)) {
+        try { localStorage.setItem('nutrifit_hide_onboarding', '1'); } catch (e) {}
+        if (forceDontShow) showToast('已設定不再自動顯示新手教學（可於「📖 說明」隨時重播）', '🔕');
+      }
+    }
+
+    // === 7-Step Spotlight Dynamic Onboarding Tour Engine ===
+    let dynamicTourActive = false;
+    let dynamicTourIndex = 0;
+    let dynamicTourRaf = null;
+    let dynamicTourTimer = null;
+
+    const DYNAMIC_TOUR_STEPS = [
+      {
+        tabLabel: '⚙️ 系統｜體態設定',
+        title: '1. 先完成個人體態與目標設定',
+        body: '進入「⚙️ 系統」設定您的生理性別、年齡、身高、目前體重、目標減脂體重與活動強度，系統會即時換算 BMI、BMR/TDEE 與每日熱量及五大營養素目標。',
+        prepare: () => { switchTab('system'); },
+        getTarget: () => document.querySelector('#view-ios .card'),
+        isFixed: false
+      },
+      {
+        tabLabel: '⚙️ 系統｜AI 金鑰',
+        title: '2. 綁定個人免費 Gemini API Key（選填）',
+        body: '在此貼上 Google AI Studio 免費申請的 API Key（僅存您手機本機，安全不外洩），即可解鎖「拍照辨識雙語營養標示」、「外食餐盤估重」與「AI 營養師問答」。',
+        extraHtml: '<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="btn btn-sm btn-blue" style="width:100%;text-decoration:none;">🔑 前往 Google AI Studio 免費申請 Key ↗</a>',
+        prepare: () => { switchTab('system'); },
+        getTarget: () => {
+          const inp = document.getElementById('geminiApiKeyInput');
+          return inp ? (inp.closest('.card-soft') || inp.closest('.card') || inp) : document.querySelector('#view-ios');
+        },
+        isFixed: false
+      },
+      {
+        tabLabel: '📊 營養監控',
+        title: '3. 今日攝取營養總覽與拖拉補水',
+        body: '主頁「營養監控」即時顯示今日剩餘熱量與蛋白、碳水、脂肪、纖維、飲水達標率；直接拖拉 0–1000 ml 滑桿即可快速記錄喝水量，下方也能檢視與編輯「單日飲食明細」。',
+        prepare: () => { switchTab('dashboard'); switchDashPlanSubTab('today'); },
+        getTarget: () => document.getElementById('topTodayIntakeDashboard'),
+        isFixed: false
+      },
+      {
+        tabLabel: '➕ 記食物',
+        title: '4. 隨時拍照辨識或手動記餐',
+        body: '點擊底部正中央「➕ 記食物」，可拍包裝營養標示自動讀數、拍外食餐盤 AI 估重（支援自訂品名）或手動記餐；發布後的餐點也能在單日飲食明細中隨時點擊 ✏️ 修改。',
+        prepare: () => { switchTab('dashboard'); switchDashPlanSubTab('today'); },
+        getTarget: () => document.getElementById('bNavBtn-add'),
+        isFixed: true
+      },
+      {
+        tabLabel: '⚖️ 減脂計畫',
+        title: '5. 減脂計畫總覽儀表板',
+        body: '「減脂計畫」最上方整合三大重點指標，點擊卡片即可快速跳轉至「單日營養攝取分析」、「減脂藍圖（達成天數與每日跟練）」及「單日營養健檢」。',
+        prepare: () => { switchTab('dashboard'); switchDashPlanSubTab('plan'); },
+        getTarget: () => document.getElementById('planTopSummaryDashboard'),
+        isFixed: false
+      },
+      {
+        tabLabel: '🍱 飲食與 AI',
+        title: '6. AI 減脂營養師問答 × 超商餐點庫',
+        body: '不知道下一餐吃什麼？直接問 AI 營養師，系統會自動讀取您今日剩餘熱量與蛋白質缺口推薦搭配，也可切換至「超商無海鮮餐點」一鍵套用。',
+        prepare: () => { switchTab('food_ai'); switchFoodAiSubTab('chat'); },
+        getTarget: () => document.querySelector('#view-chat .card'),
+        isFixed: false
+      },
+      {
+        tabLabel: '📖 操作說明',
+        title: '7. 操作手冊與隨時重播教學',
+        body: '想串接 iOS 健康步數捷徑、查詢進階功能，或之後想再看一次這套動態導覽，隨時都可以到「📖 操作說明」點上方按鈕重新播放！',
+        prepare: () => { switchTab('guide'); },
+        getTarget: () => document.querySelector('#view-guide .card'),
+        isFixed: false
+      }
+    ];
+
+    function beginDynamicTourFromPrompt() {
       const chk = document.getElementById('onboardingDontShowCheck');
       if (chk && chk.checked) {
         try { localStorage.setItem('nutrifit_hide_onboarding', '1'); } catch (e) {}
       }
+      document.getElementById('onboardingGuideModal')?.classList.add('hidden');
+      startDynamicTour(0);
     }
+
+    function startDynamicTour(stepIdx = 0) {
+      dynamicTourActive = true;
+      dynamicTourIndex = Math.max(0, Math.min(stepIdx, DYNAMIC_TOUR_STEPS.length - 1));
+      document.getElementById('tourClickGuard')?.classList.remove('hidden');
+      document.getElementById('tourSpotlight')?.classList.remove('hidden');
+      document.getElementById('tourTooltipCard')?.classList.remove('hidden');
+      renderDynamicTourStep(dynamicTourIndex);
+    }
+
+    function renderDynamicTourStep(idx) {
+      if (!dynamicTourActive) return;
+      const step = DYNAMIC_TOUR_STEPS[idx];
+      if (!step) return;
+      if (dynamicTourTimer) clearTimeout(dynamicTourTimer);
+
+      try { step.prepare(); } catch (e) {}
+
+      const stepBadge = document.getElementById('tourStepBadge');
+      const tabBadge = document.getElementById('tourTabBadge');
+      const titleEl = document.getElementById('tourStepTitle');
+      const bodyEl = document.getElementById('tourStepBody');
+      const extraEl = document.getElementById('tourStepExtra');
+      const dotsEl = document.getElementById('tourDotsContainer');
+      const prevBtn = document.getElementById('tourPrevBtn');
+      const nextBtn = document.getElementById('tourNextBtn');
+
+      if (stepBadge) stepBadge.textContent = `步驟 ${idx + 1} / ${DYNAMIC_TOUR_STEPS.length}`;
+      if (tabBadge) tabBadge.textContent = step.tabLabel;
+      if (titleEl) titleEl.textContent = step.title;
+      if (bodyEl) bodyEl.textContent = step.body;
+      if (extraEl) {
+        if (step.extraHtml) {
+          extraEl.innerHTML = step.extraHtml;
+          extraEl.classList.remove('hidden');
+        } else {
+          extraEl.innerHTML = '';
+          extraEl.classList.add('hidden');
+        }
+      }
+      if (dotsEl) {
+        dotsEl.innerHTML = DYNAMIC_TOUR_STEPS.map((_, i) =>
+          `<span class="tour-dot ${i === idx ? 'active' : (i < idx ? 'done' : '')}"></span>`
+        ).join('');
+      }
+      if (prevBtn) prevBtn.disabled = (idx === 0);
+      if (nextBtn) {
+        nextBtn.textContent = (idx === DYNAMIC_TOUR_STEPS.length - 1) ? '✅ 完成並回到首頁' : '下一步 →';
+      }
+
+      const target = step.getTarget ? step.getTarget() : null;
+      if (target && !step.isFixed) {
+        try {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (e) {
+          target.scrollIntoView();
+        }
+      }
+
+      // Position immediately and refine after smooth scroll settles
+      positionDynamicTourHighlight();
+      dynamicTourTimer = setTimeout(positionDynamicTourHighlight, 280);
+    }
+
+    function positionDynamicTourHighlight() {
+      if (!dynamicTourActive) return;
+      const step = DYNAMIC_TOUR_STEPS[dynamicTourIndex];
+      const spot = document.getElementById('tourSpotlight');
+      const card = document.getElementById('tourTooltipCard');
+      if (!step || !spot || !card) return;
+
+      const vw = window.innerWidth || document.documentElement.clientWidth || 390;
+      const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+      const target = step.getTarget ? step.getTarget() : null;
+
+      let rect = { top: vh * 0.2, left: 16, width: vw - 32, height: 140, bottom: vh * 0.2 + 140 };
+      if (target) {
+        const r = target.getBoundingClientRect();
+        if (r.width > 0 && r.height > 0) {
+          const pad = 6;
+          const clampedTop = Math.max(8, Math.min(r.top - pad, vh - 80));
+          const clampedLeft = Math.max(8, r.left - pad);
+          const clampedWidth = Math.min(vw - 16, r.width + pad * 2);
+          const maxH = step.isFixed ? (r.height + pad * 2) : Math.min(r.height + pad * 2, Math.max(120, vh * 0.48));
+          rect = {
+            top: clampedTop,
+            left: clampedLeft,
+            width: clampedWidth,
+            height: maxH,
+            bottom: clampedTop + maxH
+          };
+        }
+      }
+
+      spot.style.top = rect.top + 'px';
+      spot.style.left = rect.left + 'px';
+      spot.style.width = rect.width + 'px';
+      spot.style.height = rect.height + 'px';
+
+      // Smart tooltip card placement (below or above spotlight so it never clips off screen)
+      const cardW = card.offsetWidth || Math.min(390, vw - 24);
+      const cardH = card.offsetHeight || 220;
+      const gap = 12;
+      let cardLeft = Math.max(12, Math.min(rect.left + (rect.width - cardW) / 2, vw - cardW - 12));
+      let cardTop;
+
+      const spaceBelow = vh - rect.bottom - gap;
+      const spaceAbove = rect.top - gap;
+      if (step.isFixed || (spaceAbove > spaceBelow && spaceBelow < cardH)) {
+        cardTop = Math.max(12, rect.top - cardH - gap);
+      } else if (spaceBelow >= cardH) {
+        cardTop = rect.bottom + gap;
+      } else {
+        cardTop = Math.max(12, vh - cardH - 16);
+      }
+
+      card.style.left = cardLeft + 'px';
+      card.style.top = cardTop + 'px';
+    }
+
+    function nextDynamicTourStep() {
+      if (!dynamicTourActive) return;
+      if (dynamicTourIndex < DYNAMIC_TOUR_STEPS.length - 1) {
+        dynamicTourIndex++;
+        renderDynamicTourStep(dynamicTourIndex);
+      } else {
+        finishDynamicTour(true, true);
+      }
+    }
+
+    function prevDynamicTourStep() {
+      if (!dynamicTourActive || dynamicTourIndex <= 0) return;
+      dynamicTourIndex--;
+      renderDynamicTourStep(dynamicTourIndex);
+    }
+
+    function finishDynamicTour(dontShowAgain = false, returnHome = true) {
+      dynamicTourActive = false;
+      if (dynamicTourTimer) clearTimeout(dynamicTourTimer);
+      document.getElementById('tourClickGuard')?.classList.add('hidden');
+      document.getElementById('tourSpotlight')?.classList.add('hidden');
+      document.getElementById('tourTooltipCard')?.classList.add('hidden');
+      if (dontShowAgain) {
+        try { localStorage.setItem('nutrifit_hide_onboarding', '1'); } catch (e) {}
+      }
+      if (returnHome) {
+        try {
+          switchTab('dashboard');
+          switchDashPlanSubTab('today');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) {}
+        showToast('🎉 動態新手教學完成！隨時可至「📖 說明」重播', '✨');
+      } else if (dontShowAgain) {
+        showToast('已結束教學並設為不再自動顯示', '🔕');
+      }
+    }
+
+    function scheduleTourReposition() {
+      if (!dynamicTourActive) return;
+      if (dynamicTourRaf) cancelAnimationFrame(dynamicTourRaf);
+      dynamicTourRaf = requestAnimationFrame(positionDynamicTourHighlight);
+    }
+    window.addEventListener('resize', scheduleTourReposition);
+    window.addEventListener('scroll', scheduleTourReposition, { passive: true });
+    window.addEventListener('keydown', (e) => {
+      if (!dynamicTourActive) return;
+      if (e.key === 'Escape') finishDynamicTour(false, false);
+      else if (e.key === 'ArrowRight') nextDynamicTourStep();
+      else if (e.key === 'ArrowLeft') prevDynamicTourStep();
+    });
 
     function openWhatsNewModal(forceShow = false) {
       const modal = document.getElementById('whatsNewModal');
