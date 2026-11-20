@@ -475,17 +475,17 @@
               <div class="flex-gap">
                 <h1 class="brand-title">NutriFit 減脂營養管家</h1>
                 <span id="headerSeafoodModeBadge" class="badge badge-emerald" style="cursor:pointer;" onclick="toggleSeafoodRestriction()" title="點擊切換海鮮排除模式">🛡️ 100% 無海鮮</span>
-                <span id="memoryStatusBadge" class="badge badge-blue">💾 已記憶 (15:12:59)</span>
+                <span id="memoryStatusBadge" class="badge badge-blue">💾 已記憶 (15:14:59)</span>
               </div>
               <div class="text-xs text-muted">上班族超商減脂減重・維持高能量與均衡營養追蹤系統</div>
             </div>
           </div>
 
           <div class="header-pill">
-            <div><span id="headerGenderBadge" class="badge badge-blue" style="margin-right:4px;">♂ 男性</span><strong id="headerHeightText">170 cm</strong> / <strong id="headerWeightText">70 kg</strong></div>
-            <div><span class="text-muted">BMI：</span><strong id="headerBmiText">24.2</strong> <span id="headerBmiBadge" class="badge badge-amber">過重</span></div>
-            <div><span class="text-muted">今日熱量：</span><strong id="headerCalText" style="color:var(--emerald);">0 / 1618 kcal</strong></div>
-            <div><span class="text-muted">蛋白質：</span><strong id="headerProText" style="color:var(--blue);">0 / 113 g</strong></div>
+            <div><span id="headerGenderBadge" class="badge badge-blue" style="margin-right:4px;">♂ 男性</span><strong id="headerHeightText">174.5 cm</strong> / <strong id="headerWeightText">77.1 kg</strong></div>
+            <div><span class="text-muted">BMI：</span><strong id="headerBmiText">25.3</strong> <span id="headerBmiBadge" class="badge badge-amber">過重</span></div>
+            <div><span class="text-muted">今日熱量：</span><strong id="headerCalText" style="color:var(--emerald);">0 / 1732 kcal</strong></div>
+            <div><span class="text-muted">蛋白質：</span><strong id="headerProText" style="color:var(--blue);">0 / 121 g</strong></div>
           </div>
         </div>
 
@@ -506,8 +506,8 @@
     <!-- Toast -->
     <div id="toastContainer" class="toast-wrap hidden">
       <div class="toast-box">
-        <span id="toastIcon" style="font-size:18px;">✅</span>
-        <div id="toastMsg" style="flex:1;">✅ 連線成功！具備 zeal388/Nutrifit-2 寫入權限</div>
+        <span id="toastIcon" style="font-size:18px;">💾</span>
+        <div id="toastMsg" style="flex:1;">已儲存 GitHub 設定（固定網址：https://zeal388.github.io/Nutrifit-2/）</div>
         <button type="button" onclick="hideToast()" style="color:#94a3b8;font-weight:800;font-size:14px;">✕</button>
       </div>
     </div>
@@ -543,8 +543,8 @@
             <div>
               <div class="text-xs font-extrabold" style="color:#6ee7b7;">⚡ 今日攝取營養即時總覽・<span id="topDashDateLabel">今天 (2026-11-20)</span></div>
               <div class="flex-gap mt-1" style="align-items:baseline;gap:8px;">
-                <strong id="topDashRemCalText" style="font-size:26px;font-weight:900;color:#fff;">尚餘 1,618 kcal</strong>
-                <span id="topDashCalRatioText" class="text-xs" style="color:#a7f3d0;">已攝取 0 / 1618 kcal (0%)</span>
+                <strong id="topDashRemCalText" style="font-size:26px;font-weight:900;color:#fff;">尚餘 1,732 kcal</strong>
+                <span id="topDashCalRatioText" class="text-xs" style="color:#a7f3d0;">已攝取 0 / 1732 kcal (0%)</span>
               </div>
             </div>
             <div class="flex-gap" style="gap:6px;">
@@ -560,17 +560,17 @@
           <div class="grid grid-5" style="gap:8px;">
             <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:8px 10px;">
               <div class="flex-between text-xs" style="color:#bfdbfe;"><span>🥩 蛋白</span><strong id="topDashProPct">0%</strong></div>
-              <div id="topDashProVal" class="text-xs font-extrabold mt-1" style="color:#fff;">0 / 113g</div>
+              <div id="topDashProVal" class="text-xs font-extrabold mt-1" style="color:#fff;">0 / 121g</div>
               <div style="height:4px;background:rgba(255,255,255,0.15);border-radius:999px;overflow:hidden;margin-top:4px;"><div id="topDashProBar" style="height:100%;width:0%;background:#60a5fa;"></div></div>
             </div>
             <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:8px 10px;">
               <div class="flex-between text-xs" style="color:#fde68a;"><span>🍚 碳水</span><strong id="topDashCarbPct">0%</strong></div>
-              <div id="topDashCarbVal" class="text-xs font-extrabold mt-1" style="color:#fff;">0 / 154g</div>
+              <div id="topDashCarbVal" class="text-xs font-extrabold mt-1" style="color:#fff;">0 / 165g</div>
               <div style="height:4px;background:rgba(255,255,255,0.15);border-radius:999px;overflow:hidden;margin-top:4px;"><div id="topDashCarbBar" style="height:100%;width:0%;background:#fbbf24;"></div></div>
             </div>
             <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:8px 10px;">
               <div class="flex-between text-xs" style="color:#fecdd3;"><span>🥑 脂肪</span><strong id="topDashFatPct">0%</strong></div>
-              <div id="topDashFatVal" class="text-xs font-extrabold mt-1" style="color:#fff;">0 / 61g</div>
+              <div id="topDashFatVal" class="text-xs font-extrabold mt-1" style="color:#fff;">0 / 65g</div>
               <div style="height:4px;background:rgba(255,255,255,0.15);border-radius:999px;overflow:hidden;margin-top:4px;"><div id="topDashFatBar" style="height:100%;width:0%;background:#fb7185;"></div></div>
             </div>
             <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:8px 10px;">
@@ -580,7 +580,7 @@
             </div>
             <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:8px 10px;">
               <div class="flex-between text-xs" style="color:#a5f3fc;"><span>💧 飲水</span><strong id="topDashWaterPct">0%</strong></div>
-              <div id="topDashWaterVal" class="text-xs font-extrabold mt-1" style="color:#fff;">0 / 2450ml</div>
+              <div id="topDashWaterVal" class="text-xs font-extrabold mt-1" style="color:#fff;">0 / 2699ml</div>
               <div style="height:4px;background:rgba(255,255,255,0.15);border-radius:999px;overflow:hidden;margin-top:4px;"><div id="topDashWaterBar" style="height:100%;width:0%;background:#22d3ee;"></div></div>
             </div>
           </div>
@@ -642,17 +642,17 @@
                 <div class="flex-between">
                   <div class="flex-gap">
                     <span style="color:#a7f3d0;">BMI：</span>
-                    <strong id="heroBmiValue" style="font-size:16px;">24.2</strong>
+                    <strong id="heroBmiValue" style="font-size:16px;">25.3</strong>
                     <span id="heroBmiStatus" class="badge badge-amber">體重過重 (24~26.9)</span>
                   </div>
-                  <span id="heroIdealWeightText" style="color:#a7f3d0;font-size:11px;">健康體重：53.5～69.4 kg</span>
+                  <span id="heroIdealWeightText" style="color:#a7f3d0;font-size:11px;">健康體重：56.3～73.1 kg</span>
                 </div>
                 <div class="flex-between" style="font-size:11px;color:#cbd5e1;border-top:1px solid rgba(255,255,255,0.1);padding-top:4px;">
-                  <span id="heroBmrTdeeText">♂ 男性 30歲｜BMR 1618 / TDEE 2023 kcal</span>
+                  <span id="heroBmrTdeeText">♂ 男性 27歲｜BMR 1732 / TDEE 2165 kcal</span>
                   <span id="heroWaistHint" style="color:#6ee7b7;">國健署理想腰圍 &lt;90cm</span>
                 </div>
                 <div class="flex-between" style="font-size:11px;color:#fde68a;border-top:1px solid rgba(255,255,255,0.08);padding-top:4px;">
-                  <span id="heroEtaSummaryText">🎯 預計 2027/04/03 達標 63kg（約 19.1 週・-0.37kg/週）</span>
+                  <span id="heroEtaSummaryText">🎯 預計 2027/02/01 達標 73kg（約 10.4 週・-0.39kg/週）</span>
                   <button type="button" onclick="switchTab('plan')" style="color:#6ee7b7;font-weight:800;font-size:11px;text-decoration:underline;">查看執行引導 →</button>
                 </div>
               </div>
@@ -675,31 +675,31 @@
             <div class="flex-between">
               <div>
                 <div class="text-xs font-bold text-muted">🔥 每日熱量攝取 (Calories)</div>
-                <div class="mt-1"><strong id="statCalCurrent" style="font-size:24px;">0</strong> <span class="text-xs text-muted">/ <span id="statCalTarget">1618</span> kcal</span></div>
+                <div class="mt-1"><strong id="statCalCurrent" style="font-size:24px;">0</strong> <span class="text-xs text-muted">/ <span id="statCalTarget">1732</span> kcal</span></div>
               </div>
               <span id="badgeCalStatus" class="badge badge-amber">⏳ 尚需補充</span>
             </div>
             <div class="progress-track mt-3"><div id="barCal" class="progress-fill" style="width:0%;background:#10b981;"></div></div>
-            <div class="flex-between text-xs text-muted mt-2"><span id="statCalRemain" style="color: rgb(100, 116, 139);">還可攝取 1618 kcal</span><strong id="statCalPct">0%</strong></div>
+            <div class="flex-between text-xs text-muted mt-2"><span id="statCalRemain" style="color: rgb(100, 116, 139);">還可攝取 1732 kcal</span><strong id="statCalPct">0%</strong></div>
           </div>
 
           <div class="card">
             <div class="flex-between">
               <div>
                 <div class="text-xs font-bold text-muted">💪 蛋白質 (Protein・保肌核心)</div>
-                <div class="mt-1"><strong id="statProCurrent" style="font-size:24px;color:var(--blue);">0</strong> <span class="text-xs text-muted">/ <span id="statProTarget">113</span> g</span></div>
+                <div class="mt-1"><strong id="statProCurrent" style="font-size:24px;color:var(--blue);">0</strong> <span class="text-xs text-muted">/ <span id="statProTarget">121</span> g</span></div>
               </div>
               <span id="badgeProStatus" class="badge badge-amber">⏳ 尚需補充</span>
             </div>
             <div class="progress-track mt-3"><div id="barPro" class="progress-fill" style="width:0%;background:var(--blue);"></div></div>
-            <div class="flex-between text-xs text-muted mt-2"><span id="statProHint">目標每公斤 1.61g 蛋白質</span><strong id="statProPct" style="color:var(--blue);">0%</strong></div>
+            <div class="flex-between text-xs text-muted mt-2"><span id="statProHint">目標每公斤 1.57g 蛋白質</span><strong id="statProPct" style="color:var(--blue);">0%</strong></div>
           </div>
 
           <div class="card">
             <div class="flex-between">
               <div>
                 <div class="text-xs font-bold text-muted">🍠 碳水化合物 (Carbs・工作能量)</div>
-                <div class="mt-1"><strong id="statCarbCurrent" style="font-size:24px;color:var(--amber);">0</strong> <span class="text-xs text-muted">/ <span id="statCarbTarget">154</span> g</span></div>
+                <div class="mt-1"><strong id="statCarbCurrent" style="font-size:24px;color:var(--amber);">0</strong> <span class="text-xs text-muted">/ <span id="statCarbTarget">165</span> g</span></div>
               </div>
               <span id="badgeCarbStatus" class="badge badge-amber">⏳ 尚需補充</span>
             </div>
@@ -711,7 +711,7 @@
             <div class="flex-between">
               <div>
                 <div class="text-xs font-bold text-muted">🥑 脂肪 (Fat・荷爾蒙與飽足)</div>
-                <div class="mt-1"><strong id="statFatCurrent" style="font-size:24px;color:var(--rose);">0</strong> <span class="text-xs text-muted">/ <span id="statFatTarget">61</span> g</span></div>
+                <div class="mt-1"><strong id="statFatCurrent" style="font-size:24px;color:var(--rose);">0</strong> <span class="text-xs text-muted">/ <span id="statFatTarget">65</span> g</span></div>
               </div>
               <span id="badgeFatStatus" class="badge badge-amber">⏳ 尚需補充</span>
             </div>
@@ -738,7 +738,7 @@
                 <div class="flex-gap mt-1" style="gap:6px;align-items:baseline;">
                   <input type="number" id="waterDirectInput" min="0" max="8000" step="50" value="1500" aria-label="今日飲水總量 (ml)" oninput="handleWaterDirectTyping(this.value)" onblur="commitWaterDirectInput(this.value)" onchange="commitWaterDirectInput(this.value)" style="width:88px;padding:4px 8px;font-size:20px;font-weight:900;color:var(--cyan);border:1px solid #a5f3fc;background:#ecfeff;border-radius:8px;text-align:right;">
                   <span id="statWaterCurrent" class="hidden">0</span>
-                  <span class="text-xs text-muted">/ <span id="statWaterTarget">2450</span> ml</span>
+                  <span class="text-xs text-muted">/ <span id="statWaterTarget">2699</span> ml</span>
                 </div>
               </div>
               <div class="flex-gap" style="gap:4px;">
@@ -825,7 +825,7 @@
               <div style="width:36px;height:36px;border-radius:10px;background:var(--emerald);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">💡</div>
               <div style="flex:1;">
                 <h3 id="coachTitle" class="text-sm font-extrabold" style="color:#064e3b;">💡 尚未記錄今日餐點</h3>
-                <p id="coachText" class="text-xs mt-1" style="color:#065f46;">今日目標 1618 大卡、蛋白質 113g。可套用三餐範本或透過拍照／手動新增。</p>
+                <p id="coachText" class="text-xs mt-1" style="color:#065f46;">今日目標 1732 大卡、蛋白質 121g。可套用三餐範本或透過拍照／手動新增。</p>
               </div>
             </div>
             <button type="button" class="btn btn-sm btn-primary" onclick="recommendNextFood()">✨ 智能推薦下一樣無海鮮單品</button>
@@ -943,7 +943,7 @@
                 </div>
               </div>
               <div style="min-width:150px;">
-                <div class="flex-between text-xs font-bold" style="margin-bottom:4px;"><label for="planAgeInput">年齡 (歲)</label><span id="planAgeDisplay" style="color:var(--blue);">30 歲</span></div>
+                <div class="flex-between text-xs font-bold" style="margin-bottom:4px;"><label for="planAgeInput">年齡 (歲)</label><span id="planAgeDisplay" style="color:var(--blue);">27 歲</span></div>
                 <div class="stepper">
                   <button type="button" class="stepper-btn" onclick="stepAge(-1)">－</button>
                   <input type="number" id="planAgeInput" class="stepper-input" min="18" max="80" step="1" value="30" oninput="handleAgeTyping(this.value)" onblur="commitAgeInput(this.value)" onchange="commitAgeInput(this.value)">
@@ -958,7 +958,7 @@
 
           <div class="grid grid-5 card-soft">
             <div style="display:flex;flex-direction:column;gap:8px;">
-              <div class="flex-between text-xs font-bold"><label for="planHeightInput">使用者身高 (cm)</label><span id="planHeightDisplay" style="color:var(--teal);">170 cm</span></div>
+              <div class="flex-between text-xs font-bold"><label for="planHeightInput">使用者身高 (cm)</label><span id="planHeightDisplay" style="color:var(--teal);">174.5 cm</span></div>
               <div class="stepper">
                 <button type="button" class="stepper-btn" onclick="stepHeight(-1)">－</button>
                 <input type="number" id="planHeightInput" class="stepper-input" min="120" max="230" step="0.5" value="170" oninput="handleHeightTyping(this.value)" onblur="commitHeightInput(this.value)" onchange="commitHeightInput(this.value)">
@@ -968,7 +968,7 @@
             </div>
 
             <div style="display:flex;flex-direction:column;gap:8px;">
-              <div class="flex-between text-xs font-bold"><label for="planWeightInput">目前體重 (kg)</label><span id="planWeightDisplay" style="color:var(--emerald);">70 kg</span></div>
+              <div class="flex-between text-xs font-bold"><label for="planWeightInput">目前體重 (kg)</label><span id="planWeightDisplay" style="color:var(--emerald);">77.1 kg</span></div>
               <div class="stepper">
                 <button type="button" class="stepper-btn" onclick="stepWeight(-0.5)">－</button>
                 <input type="number" id="planWeightInput" class="stepper-input" min="35" max="180" step="0.5" value="70" oninput="handleWeightTyping(this.value)" onblur="commitWeightInput(this.value)" onchange="commitWeightInput(this.value)">
@@ -978,14 +978,14 @@
             </div>
 
             <div style="display:flex;flex-direction:column;gap:8px;">
-              <div class="flex-between text-xs font-bold"><label for="planTargetWeightInput">目標減脂體重 (kg)</label><span id="planTargetWeightDisplay" style="color:var(--blue);">63 kg</span></div>
+              <div class="flex-between text-xs font-bold"><label for="planTargetWeightInput">目標減脂體重 (kg)</label><span id="planTargetWeightDisplay" style="color:var(--blue);">73 kg</span></div>
               <div class="stepper">
                 <button type="button" class="stepper-btn" onclick="stepTargetWeight(-0.5)">－</button>
                 <input type="number" id="planTargetWeightInput" class="stepper-input" min="35" max="160" step="0.5" value="63" oninput="handleTargetWeightTyping(this.value)" onblur="commitTargetWeightInput(this.value)" onchange="commitTargetWeightInput(this.value)">
                 <button type="button" class="stepper-btn" onclick="stepTargetWeight(0.5)">＋</button>
               </div>
               <input type="range" id="planTargetWeightSlider" min="40" max="120" step="0.5" value="63" oninput="handleTargetWeightSlider(this.value)">
-              <div id="planWeightDiffText" class="text-xs text-muted">預計減重 -7 kg</div>
+              <div id="planWeightDiffText" class="text-xs text-muted">預計減重 -4.1 kg</div>
             </div>
 
             <div style="display:flex;flex-direction:column;gap:6px;">
@@ -995,7 +995,7 @@
                 <option value="moderate">中度工作：站立或走動較多</option>
                 <option value="heavy">重度工作：高體力或規律重訓</option>
               </select>
-              <div id="planBmiCalFactorHint" class="text-xs text-muted">♂男性 BMR 1618 × 活動係數 1.25 = TDEE 2023 kcal</div>
+              <div id="planBmiCalFactorHint" class="text-xs text-muted">♂男性 BMR 1732 × 活動係數 1.25 = TDEE 2165 kcal</div>
             </div>
 
             <div style="display:flex;flex-direction:column;gap:6px;">
@@ -1021,23 +1021,23 @@
             <div class="grid grid-4 mt-3">
               <div class="card-soft">
                 <div class="text-xs text-muted">目前 BMI</div>
-                <div class="flex-gap mt-1"><strong id="bmiCardCurrentVal" style="font-size:22px;">24.2</strong><span id="bmiCardCategoryBadge" class="badge badge-amber">過重</span></div>
-                <div id="bmiCardFormulaText" class="text-xs text-muted mt-1">70 ÷ (1.70)² = 24.22</div>
+                <div class="flex-gap mt-1"><strong id="bmiCardCurrentVal" style="font-size:22px;">25.3</strong><span id="bmiCardCategoryBadge" class="badge badge-amber">過重</span></div>
+                <div id="bmiCardFormulaText" class="text-xs text-muted mt-1">77.1 ÷ (1.75)² = 25.32</div>
               </div>
               <div class="card-soft">
                 <div class="text-xs text-muted">目標體重對應 BMI</div>
-                <div class="flex-gap mt-1"><strong id="bmiCardTargetVal" style="font-size:22px;color:var(--blue);">21.8</strong><span id="bmiCardTargetBadge" class="badge badge-emerald">正常</span></div>
-                <div id="bmiCardTargetText" class="text-xs text-muted mt-1">目標 63 kg 對應體位</div>
+                <div class="flex-gap mt-1"><strong id="bmiCardTargetVal" style="font-size:22px;color:var(--blue);">24.0</strong><span id="bmiCardTargetBadge" class="badge badge-emerald">正常</span></div>
+                <div id="bmiCardTargetText" class="text-xs text-muted mt-1">目標 73 kg 對應體位</div>
               </div>
               <div class="card-soft">
                 <div class="text-xs text-muted">健康正常體重 &amp; 理想腰圍</div>
-                <div id="bmiCardHealthyRange" class="font-extrabold mt-1" style="font-size:16px;color:var(--emerald);">53.5 ～ 69.4 kg</div>
-                <div id="bmiCardIdealStandard" class="text-xs text-muted mt-1">男性標準體重 (BMI 22)：63.6 kg｜腰圍 &lt;90cm</div>
+                <div id="bmiCardHealthyRange" class="font-extrabold mt-1" style="font-size:16px;color:var(--emerald);">56.3 ～ 73.1 kg</div>
+                <div id="bmiCardIdealStandard" class="text-xs text-muted mt-1">男性標準體重 (BMI 22)：67 kg｜腰圍 &lt;90cm</div>
               </div>
               <div class="card-soft">
                 <div class="text-xs text-muted">性別專屬 BMR / TDEE</div>
-                <div id="bmiCardCalorieAdvice" class="text-sm font-extrabold mt-1">BMR 1618 / TDEE 2023</div>
-                <div id="bmiCardActionHint" class="text-xs text-muted mt-1">每日赤字 405 大卡（男性安全下限 ≥1500 kcal）</div>
+                <div id="bmiCardCalorieAdvice" class="text-sm font-extrabold mt-1">BMR 1732 / TDEE 2165</div>
+                <div id="bmiCardActionHint" class="text-xs text-muted mt-1">每日赤字 433 大卡（男性安全下限 ≥1500 kcal）</div>
               </div>
             </div>
 
@@ -1051,7 +1051,7 @@
                 <div style="width:18%;background:#fbbf24;"></div>
                 <div style="width:18%;background:#fb923c;"></div>
                 <div style="width:18%;background:#f43f5e;"></div>
-                <div id="bmiSpectrumMarker" style="position: absolute; top: 0px; bottom: 0px; width: 10px; background: rgb(15, 23, 42); border: 2px solid rgb(255, 255, 255); border-radius: 999px; left: 46%; transition: left 0.3s;"></div>
+                <div id="bmiSpectrumMarker" style="position: absolute; top: 0px; bottom: 0px; width: 10px; background: rgb(15, 23, 42); border: 2px solid rgb(255, 255, 255); border-radius: 999px; left: 51%; transition: left 0.3s;"></div>
               </div>
             </div>
           </div>
@@ -1061,17 +1061,17 @@
             <div class="flex-between">
               <div>
                 <div class="text-xs font-bold" style="color:#6ee7b7;">您的專屬每日減脂營養處方</div>
-                <h3 id="personalPlanHeading" style="font-size:17px;font-weight:800;margin-top:2px;">♂ 男性 30歲・170 cm / 70 kg (BMI 24.2)</h3>
+                <h3 id="personalPlanHeading" style="font-size:17px;font-weight:800;margin-top:2px;">♂ 男性 27歲・174.5 cm / 77.1 kg (BMI 25.3)</h3>
               </div>
-              <span id="personalEnergyDeficitBadge" class="badge" style="background:rgba(16,185,129,0.22);color:#a7f3d0;">較 TDEE (2023 kcal) 減少 405 大卡</span>
+              <span id="personalEnergyDeficitBadge" class="badge" style="background:rgba(16,185,129,0.22);color:#a7f3d0;">較 TDEE (2165 kcal) 減少 433 大卡</span>
             </div>
             <div class="grid grid-6 mt-3" style="gap:10px;">
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">目標熱量</div><div id="pCardCal" style="font-size:18px;font-weight:800;margin-top:4px;">1618 kcal</div></div>
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">蛋白質</div><div id="pCardPro" style="font-size:18px;font-weight:800;color:#93c5fd;margin-top:4px;">113 g</div><div id="pCardProEq" style="font-size:11px;color:#6ee7b7;">1.61 g/kg</div></div>
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">碳水化合物</div><div id="pCardCarb" style="font-size:18px;font-weight:800;color:#fcd34d;margin-top:4px;">154 g</div></div>
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">優質脂肪</div><div id="pCardFat" style="font-size:18px;font-weight:800;color:#fda4af;margin-top:4px;">61 g</div></div>
+              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">目標熱量</div><div id="pCardCal" style="font-size:18px;font-weight:800;margin-top:4px;">1732 kcal</div></div>
+              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">蛋白質</div><div id="pCardPro" style="font-size:18px;font-weight:800;color:#93c5fd;margin-top:4px;">121 g</div><div id="pCardProEq" style="font-size:11px;color:#6ee7b7;">1.57 g/kg</div></div>
+              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">碳水化合物</div><div id="pCardCarb" style="font-size:18px;font-weight:800;color:#fcd34d;margin-top:4px;">165 g</div></div>
+              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">優質脂肪</div><div id="pCardFat" style="font-size:18px;font-weight:800;color:#fda4af;margin-top:4px;">65 g</div></div>
               <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">膳食纖維</div><div id="pCardFib" style="font-size:18px;font-weight:800;color:#5eead4;margin-top:4px;">28 g</div></div>
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">每日飲水</div><div id="pCardWater" style="font-size:18px;font-weight:800;color:#67e8f9;margin-top:4px;">2450 ml</div></div>
+              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">每日飲水</div><div id="pCardWater" style="font-size:18px;font-weight:800;color:#67e8f9;margin-top:4px;">2699 ml</div></div>
             </div>
           </div>
 
@@ -1091,23 +1091,23 @@
             <!-- Actual vs Target Comparison Strip -->
             <div id="planIntakeGapGrid" class="grid grid-5" style="gap:8px;">
             <div class="card-soft" style="padding:10px;">
-              <div class="flex-between"><span class="text-xs font-bold text-muted">熱量</span><span class="badge badge-blue" style="font-size:10px;">剩 1618 kcal</span></div>
-              <div class="mt-1"><strong style="font-size:16px;">0</strong> <span class="text-xs text-muted">/ 1618 kcal</span></div>
+              <div class="flex-between"><span class="text-xs font-bold text-muted">熱量</span><span class="badge badge-blue" style="font-size:10px;">剩 1732 kcal</span></div>
+              <div class="mt-1"><strong style="font-size:16px;">0</strong> <span class="text-xs text-muted">/ 1732 kcal</span></div>
             </div>
           
             <div class="card-soft" style="padding:10px;">
-              <div class="flex-between"><span class="text-xs font-bold text-muted">蛋白質</span><span class="badge badge-blue" style="font-size:10px;">剩 113 g</span></div>
-              <div class="mt-1"><strong style="font-size:16px;">0</strong> <span class="text-xs text-muted">/ 113 g</span></div>
+              <div class="flex-between"><span class="text-xs font-bold text-muted">蛋白質</span><span class="badge badge-blue" style="font-size:10px;">剩 121 g</span></div>
+              <div class="mt-1"><strong style="font-size:16px;">0</strong> <span class="text-xs text-muted">/ 121 g</span></div>
             </div>
           
             <div class="card-soft" style="padding:10px;">
-              <div class="flex-between"><span class="text-xs font-bold text-muted">碳水</span><span class="badge badge-blue" style="font-size:10px;">剩 154 g</span></div>
-              <div class="mt-1"><strong style="font-size:16px;">0</strong> <span class="text-xs text-muted">/ 154 g</span></div>
+              <div class="flex-between"><span class="text-xs font-bold text-muted">碳水</span><span class="badge badge-blue" style="font-size:10px;">剩 165 g</span></div>
+              <div class="mt-1"><strong style="font-size:16px;">0</strong> <span class="text-xs text-muted">/ 165 g</span></div>
             </div>
           
             <div class="card-soft" style="padding:10px;">
-              <div class="flex-between"><span class="text-xs font-bold text-muted">脂肪</span><span class="badge badge-blue" style="font-size:10px;">剩 61 g</span></div>
-              <div class="mt-1"><strong style="font-size:16px;">0</strong> <span class="text-xs text-muted">/ 61 g</span></div>
+              <div class="flex-between"><span class="text-xs font-bold text-muted">脂肪</span><span class="badge badge-blue" style="font-size:10px;">剩 65 g</span></div>
+              <div class="mt-1"><strong style="font-size:16px;">0</strong> <span class="text-xs text-muted">/ 65 g</span></div>
             </div>
           
             <div class="card-soft" style="padding:10px;">
@@ -1131,7 +1131,7 @@
               <div id="planImprovementAdviceList" style="display:flex;flex-direction:column;gap:8px;">
         <div class="audit-advice info">
           <div class="font-extrabold" style="color:var(--slate-900);margin-bottom:2px;">📝 尚未記錄今日餐點</div>
-          <div class="text-muted">建議先記錄早餐或午餐（支援超商標示拍照 OCR 或外食餐盤估算），系統會依您的目標（1618 kcal / 蛋白 113g）給出下一餐的精準補救與替換建議。</div>
+          <div class="text-muted">建議先記錄早餐或午餐（支援超商標示拍照 OCR 或外食餐盤估算），系統會依您的目標（1732 kcal / 蛋白 121g）給出下一餐的精準補救與替換建議。</div>
         </div>
       </div>
             </div>
@@ -1158,23 +1158,23 @@
             <div class="grid grid-4" style="gap:10px;">
               <div class="card-soft" style="background:#eff6ff;border-color:#bfdbfe;">
                 <div class="text-xs font-bold" style="color:#1d4ed8;">預計達成日期</div>
-                <div id="etaTargetDate" style="font-size:20px;font-weight:900;color:#1e3a8a;margin-top:4px;">2027/04/03</div>
-                <div id="etaDurationText" class="text-xs text-muted mt-1">約 19.1 週（134 天）</div>
+                <div id="etaTargetDate" style="font-size:20px;font-weight:900;color:#1e3a8a;margin-top:4px;">2027/02/01</div>
+                <div id="etaDurationText" class="text-xs text-muted mt-1">約 10.4 週（73 天）</div>
               </div>
               <div class="card-soft" style="background:#ecfdf5;border-color:#a7f3d0;">
                 <div class="text-xs font-bold" style="color:#047857;">每週預估減重速率</div>
-                <div id="etaWeeklyRate" style="font-size:20px;font-weight:900;color:#065f46;margin-top:4px;">-0.37 kg / 週</div>
+                <div id="etaWeeklyRate" style="font-size:20px;font-weight:900;color:#065f46;margin-top:4px;">-0.39 kg / 週</div>
                 <div id="etaPaceBadgeWrap" class="mt-1"><span id="etaPaceBadge" class="badge badge-emerald">✅ 黃金穩健速率 (不易復胖)</span></div>
               </div>
               <div class="card-soft">
                 <div class="text-xs font-bold text-muted">每日總熱量缺口</div>
-                <div id="etaDailyDeficit" style="font-size:20px;font-weight:900;color:var(--slate-900);margin-top:4px;">-405 kcal</div>
-                <div id="etaDeficitBreakdown" class="text-xs text-muted mt-1">飲食赤字 405 + 運動 0 kcal</div>
+                <div id="etaDailyDeficit" style="font-size:20px;font-weight:900;color:var(--slate-900);margin-top:4px;">-433 kcal</div>
+                <div id="etaDeficitBreakdown" class="text-xs text-muted mt-1">飲食赤字 433 + 運動 0 kcal</div>
               </div>
               <div class="card-soft">
                 <div class="text-xs font-bold text-muted">目標累計需消耗熱量</div>
-                <div id="etaTotalKcalBurn" style="font-size:20px;font-weight:900;color:var(--amber);margin-top:4px;">53,900 kcal</div>
-                <div id="etaWeightGoalSummary" class="text-xs text-muted mt-1">70 → 63 kg（減 7 kg × 7700）</div>
+                <div id="etaTotalKcalBurn" style="font-size:20px;font-weight:900;color:var(--amber);margin-top:4px;">31,570 kcal</div>
+                <div id="etaWeightGoalSummary" class="text-xs text-muted mt-1">77.1 → 73 kg（減 4.1 kg × 7700）</div>
               </div>
             </div>
 
@@ -1185,7 +1185,7 @@
           <div class="phase-card ">
             <div class="flex-between">
               <span class="badge badge-blue">階段一：適應與消水腫期</span>
-              <strong class="text-xs" style="color:var(--slate-900);">69.3 kg</strong>
+              <strong class="text-xs" style="color:var(--slate-900);">76.3 kg</strong>
             </div>
             <div class="text-xs font-bold mt-1" style="color:var(--blue);">📅 預計檢核日：2026/12/04</div>
             <div class="text-xs text-muted mt-1" style="line-height:1.5;">前 2 週重點：戒含糖飲料、建立 211 餐盤與每日補水習慣，降低血糖波動。</div>
@@ -1194,18 +1194,18 @@
           <div class="phase-card ">
             <div class="flex-between">
               <span class="badge badge-amber">階段二：穩定燃脂推進期</span>
-              <strong class="text-xs" style="color:var(--slate-900);">65.8 kg</strong>
+              <strong class="text-xs" style="color:var(--slate-900);">74.6 kg</strong>
             </div>
-            <div class="text-xs font-bold mt-1" style="color:var(--blue);">📅 預計檢核日：2027/02/08</div>
+            <div class="text-xs font-bold mt-1" style="color:var(--blue);">📅 預計檢核日：2027/01/03</div>
             <div class="text-xs text-muted mt-1" style="line-height:1.5;">外食午餐避開油炸勾芡、採「菜→肉→飯」順序；每降 3 kg 回來重算 TDEE 破停滯期。</div>
           </div>
         
           <div class="phase-card highlight">
             <div class="flex-between">
               <span class="badge badge-emerald">階段三：目標達陣與防復胖期</span>
-              <strong class="text-xs" style="color:var(--slate-900);">63 kg</strong>
+              <strong class="text-xs" style="color:var(--slate-900);">73 kg</strong>
             </div>
-            <div class="text-xs font-bold mt-1" style="color:var(--blue);">📅 預計檢核日：2027/04/03</div>
+            <div class="text-xs font-bold mt-1" style="color:var(--blue);">📅 預計檢核日：2027/02/01</div>
             <div class="text-xs text-muted mt-1" style="line-height:1.5;">達標後每週緩慢回調 +100 kcal 至新體重 TDEE，鎖住代謝與減脂成果。</div>
           </div>
         </div>
@@ -1220,25 +1220,25 @@
               <div id="planMealGuideGrid" class="grid grid-4" style="gap:10px;">
           <div class="meal-slot-card">
             <div class="text-xs font-extrabold" style="color:var(--slate-900);">🌅 08:00 早餐 (25%)</div>
-            <div class="text-xs font-extrabold" style="color:var(--emerald);">🔥 405 kcal｜🥩 蛋白 28g</div>
+            <div class="text-xs font-extrabold" style="color:var(--emerald);">🔥 433 kcal｜🥩 蛋白 30g</div>
             <div class="text-xs text-muted" style="line-height:1.45;">無糖豆漿 + 茶葉蛋/雞胸肉 + 小地瓜；避開含糖奶茶與高油蛋餅。</div>
           </div>
         
           <div class="meal-slot-card">
             <div class="text-xs font-extrabold" style="color:var(--slate-900);">☀️ 12:00 午餐外食 (38%)</div>
-            <div class="text-xs font-extrabold" style="color:var(--emerald);">🔥 615 kcal｜🥩 蛋白 43g</div>
+            <div class="text-xs font-extrabold" style="color:var(--emerald);">🔥 658 kcal｜🥩 蛋白 46g</div>
             <div class="text-xs text-muted" style="line-height:1.45;">自助餐依「菜→肉→飯」進食，白飯減半、主菜選滷/烤去皮不油炸。</div>
           </div>
         
           <div class="meal-slot-card">
             <div class="text-xs font-extrabold" style="color:var(--slate-900);">⚡ 16:00 午後點心 (10%)</div>
-            <div class="text-xs font-extrabold" style="color:var(--emerald);">🔥 162 kcal｜🥩 蛋白 14g</div>
+            <div class="text-xs font-extrabold" style="color:var(--emerald);">🔥 173 kcal｜🥩 蛋白 15g</div>
             <div class="text-xs text-muted" style="line-height:1.45;">無糖優格、鹽味毛豆或溫泉蛋 + 補水 500ml，避免下班暴食。</div>
           </div>
         
           <div class="meal-slot-card">
             <div class="text-xs font-extrabold" style="color:var(--slate-900);">🌙 19:00 晚餐收斂 (27%)</div>
-            <div class="text-xs font-extrabold" style="color:var(--emerald);">🔥 437 kcal｜🥩 蛋白 28g</div>
+            <div class="text-xs font-extrabold" style="color:var(--emerald);">🔥 468 kcal｜🥩 蛋白 30g</div>
             <div class="text-xs text-muted" style="line-height:1.45;">高蛋白原型肉類（雞/牛/豆腐）+ 雙份蔬菜，睡前 3 小時停止進食。</div>
           </div>
         </div>
@@ -1284,7 +1284,7 @@
             <button type="button" class="check-row " onclick="toggleChecklistItem('waterGoal')">
               <span class="check-box"></span>
               <div style="flex:1;">
-                <div class="text-xs font-extrabold" style="color:var(--slate-900);">飲水量達今日個人目標（2450 ml）</div>
+                <div class="text-xs font-extrabold" style="color:var(--slate-900);">飲水量達今日個人目標（2699 ml）</div>
                 <div class="text-xs text-muted">上午、下午各喝 800–1000 ml，提升代謝並減少假性飢餓</div>
               </div>
             </button>
@@ -1302,8 +1302,8 @@
 
           <!-- Weight Tier Cards & Table -->
           <div>
-            <h3 id="weightMatrixHeading" class="text-sm font-extrabold">📋 不同體重階梯（45kg–100kg）每日營養攝取建議量（目前：♂ 男性・30歲・170cm）</h3>
-            <div id="weightMobileCardsGrid" class="grid grid-4 compact-2 mt-3"><button type="button" onclick="applyWeightFromMatrix(45)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>45 kg</strong><span class="badge badge-sky">15.6 過輕</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1910 kcal <span class="text-muted" style="font-weight:600;">(BMR 1368)</span></div><div class="text-xs text-muted mt-1">蛋白 134g・碳水 181g</div></button><button type="button" onclick="applyWeightFromMatrix(50)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>50 kg</strong><span class="badge badge-sky">17.3 過輕</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1973 kcal <span class="text-muted" style="font-weight:600;">(BMR 1418)</span></div><div class="text-xs text-muted mt-1">蛋白 138g・碳水 187g</div></button><button type="button" onclick="applyWeightFromMatrix(55)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>55 kg</strong><span class="badge badge-emerald">19.0 正常</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1578 kcal <span class="text-muted" style="font-weight:600;">(BMR 1468)</span></div><div class="text-xs text-muted mt-1">蛋白 110g・碳水 150g</div></button><button type="button" onclick="applyWeightFromMatrix(60)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>60 kg</strong><span class="badge badge-emerald">20.8 正常</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1632 kcal <span class="text-muted" style="font-weight:600;">(BMR 1518)</span></div><div class="text-xs text-muted mt-1">蛋白 114g・碳水 155g</div></button><button type="button" onclick="applyWeightFromMatrix(65)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>65 kg</strong><span class="badge badge-emerald">22.5 正常</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1686 kcal <span class="text-muted" style="font-weight:600;">(BMR 1568)</span></div><div class="text-xs text-muted mt-1">蛋白 118g・碳水 160g</div></button><button type="button" onclick="applyWeightFromMatrix(70)" class="card-soft" style="text-align:left;border:2px solid var(--emerald);background:#ecfdf5;"><div class="flex-between"><strong>70 kg</strong><span class="badge badge-amber">24.2 過重</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1618 kcal <span class="text-muted" style="font-weight:600;">(BMR 1618)</span></div><div class="text-xs text-muted mt-1">蛋白 113g・碳水 154g</div></button><button type="button" onclick="applyWeightFromMatrix(75)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>75 kg</strong><span class="badge badge-amber">26.0 過重</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1668 kcal <span class="text-muted" style="font-weight:600;">(BMR 1668)</span></div><div class="text-xs text-muted mt-1">蛋白 117g・碳水 158g</div></button><button type="button" onclick="applyWeightFromMatrix(80)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>80 kg</strong><span class="badge badge-orange">27.7 輕度肥胖</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1718 kcal <span class="text-muted" style="font-weight:600;">(BMR 1718)</span></div><div class="text-xs text-muted mt-1">蛋白 120g・碳水 163g</div></button><button type="button" onclick="applyWeightFromMatrix(85)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>85 kg</strong><span class="badge badge-orange">29.4 輕度肥胖</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1768 kcal <span class="text-muted" style="font-weight:600;">(BMR 1768)</span></div><div class="text-xs text-muted mt-1">蛋白 124g・碳水 168g</div></button><button type="button" onclick="applyWeightFromMatrix(90)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>90 kg</strong><span class="badge badge-rose">31.1 肥胖</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1818 kcal <span class="text-muted" style="font-weight:600;">(BMR 1818)</span></div><div class="text-xs text-muted mt-1">蛋白 127g・碳水 173g</div></button><button type="button" onclick="applyWeightFromMatrix(100)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>100 kg</strong><span class="badge badge-rose">34.6 肥胖</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1918 kcal <span class="text-muted" style="font-weight:600;">(BMR 1918)</span></div><div class="text-xs text-muted mt-1">蛋白 134g・碳水 182g</div></button></div>
+            <h3 id="weightMatrixHeading" class="text-sm font-extrabold">📋 不同體重階梯（45kg–100kg）每日營養攝取建議量（目前：♂ 男性・27歲・174.5cm）</h3>
+            <div id="weightMobileCardsGrid" class="grid grid-4 compact-2 mt-3"><button type="button" onclick="applyWeightFromMatrix(45)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>45 kg</strong><span class="badge badge-sky">14.8 過輕</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1964 kcal <span class="text-muted" style="font-weight:600;">(BMR 1411)</span></div><div class="text-xs text-muted mt-1">蛋白 137g・碳水 187g</div></button><button type="button" onclick="applyWeightFromMatrix(50)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>50 kg</strong><span class="badge badge-sky">16.4 過輕</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 2026 kcal <span class="text-muted" style="font-weight:600;">(BMR 1461)</span></div><div class="text-xs text-muted mt-1">蛋白 142g・碳水 192g</div></button><button type="button" onclick="applyWeightFromMatrix(55)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>55 kg</strong><span class="badge badge-sky">18.1 過輕</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 2089 kcal <span class="text-muted" style="font-weight:600;">(BMR 1511)</span></div><div class="text-xs text-muted mt-1">蛋白 146g・碳水 198g</div></button><button type="button" onclick="applyWeightFromMatrix(60)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>60 kg</strong><span class="badge badge-emerald">19.7 正常</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1678 kcal <span class="text-muted" style="font-weight:600;">(BMR 1561)</span></div><div class="text-xs text-muted mt-1">蛋白 117g・碳水 159g</div></button><button type="button" onclick="applyWeightFromMatrix(65)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>65 kg</strong><span class="badge badge-emerald">21.3 正常</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1732 kcal <span class="text-muted" style="font-weight:600;">(BMR 1611)</span></div><div class="text-xs text-muted mt-1">蛋白 121g・碳水 165g</div></button><button type="button" onclick="applyWeightFromMatrix(70)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>70 kg</strong><span class="badge badge-emerald">23.0 正常</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1785 kcal <span class="text-muted" style="font-weight:600;">(BMR 1661)</span></div><div class="text-xs text-muted mt-1">蛋白 125g・碳水 170g</div></button><button type="button" onclick="applyWeightFromMatrix(75)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>75 kg</strong><span class="badge badge-amber">24.6 過重</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1711 kcal <span class="text-muted" style="font-weight:600;">(BMR 1711)</span></div><div class="text-xs text-muted mt-1">蛋白 120g・碳水 163g</div></button><button type="button" onclick="applyWeightFromMatrix(77.1)" class="card-soft" style="text-align:left;border:2px solid var(--emerald);background:#ecfdf5;"><div class="flex-between"><strong>77.1 kg</strong><span class="badge badge-amber">25.3 過重</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1732 kcal <span class="text-muted" style="font-weight:600;">(BMR 1732)</span></div><div class="text-xs text-muted mt-1">蛋白 121g・碳水 165g</div></button><button type="button" onclick="applyWeightFromMatrix(80)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>80 kg</strong><span class="badge badge-amber">26.3 過重</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1761 kcal <span class="text-muted" style="font-weight:600;">(BMR 1761)</span></div><div class="text-xs text-muted mt-1">蛋白 123g・碳水 167g</div></button><button type="button" onclick="applyWeightFromMatrix(85)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>85 kg</strong><span class="badge badge-orange">27.9 輕度肥胖</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1811 kcal <span class="text-muted" style="font-weight:600;">(BMR 1811)</span></div><div class="text-xs text-muted mt-1">蛋白 127g・碳水 172g</div></button><button type="button" onclick="applyWeightFromMatrix(90)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>90 kg</strong><span class="badge badge-orange">29.6 輕度肥胖</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1861 kcal <span class="text-muted" style="font-weight:600;">(BMR 1861)</span></div><div class="text-xs text-muted mt-1">蛋白 130g・碳水 177g</div></button><button type="button" onclick="applyWeightFromMatrix(100)" class="card-soft" style="text-align:left;"><div class="flex-between"><strong>100 kg</strong><span class="badge badge-rose">32.8 肥胖</span></div><div class="text-xs font-extrabold mt-2" style="color:var(--emerald);">🔥 1961 kcal <span class="text-muted" style="font-weight:600;">(BMR 1961)</span></div><div class="text-xs text-muted mt-1">蛋白 137g・碳水 186g</div></button></div>
             <div class="table-wrap mt-3">
               <table>
                 <thead>
@@ -1311,7 +1311,7 @@
                     <th>體重</th><th>對應 BMI</th><th>基礎代謝 BMR</th><th>維持 TDEE</th><th>減脂建議</th><th>蛋白質</th><th>碳水</th><th>脂肪</th><th>纖維</th><th>飲水</th><th>操作</th>
                   </tr>
                 </thead>
-                <tbody id="weightMatrixBody"><tr class=""><td><strong>45 kg</strong></td><td>15.6 <span class="badge badge-sky">過輕</span></td><td>1368</td><td>1710</td><td style="color:var(--emerald);font-weight:800;">1910 kcal</td><td style="color:var(--blue);font-weight:700;">134g</td><td style="color:var(--amber);font-weight:700;">181g</td><td style="color:var(--rose);font-weight:700;">72g</td><td>28g</td><td>2000ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(45)">套用</button></td></tr><tr class=""><td><strong>50 kg</strong></td><td>17.3 <span class="badge badge-sky">過輕</span></td><td>1418</td><td>1773</td><td style="color:var(--emerald);font-weight:800;">1973 kcal</td><td style="color:var(--blue);font-weight:700;">138g</td><td style="color:var(--amber);font-weight:700;">187g</td><td style="color:var(--rose);font-weight:700;">75g</td><td>28g</td><td>2000ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(50)">套用</button></td></tr><tr class=""><td><strong>55 kg</strong></td><td>19.0 <span class="badge badge-emerald">正常</span></td><td>1468</td><td>1835</td><td style="color:var(--emerald);font-weight:800;">1578 kcal</td><td style="color:var(--blue);font-weight:700;">110g</td><td style="color:var(--amber);font-weight:700;">150g</td><td style="color:var(--rose);font-weight:700;">60g</td><td>28g</td><td>2000ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(55)">套用</button></td></tr><tr class=""><td><strong>60 kg</strong></td><td>20.8 <span class="badge badge-emerald">正常</span></td><td>1518</td><td>1898</td><td style="color:var(--emerald);font-weight:800;">1632 kcal</td><td style="color:var(--blue);font-weight:700;">114g</td><td style="color:var(--amber);font-weight:700;">155g</td><td style="color:var(--rose);font-weight:700;">62g</td><td>28g</td><td>2100ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(60)">套用</button></td></tr><tr class=""><td><strong>65 kg</strong></td><td>22.5 <span class="badge badge-emerald">正常</span></td><td>1568</td><td>1960</td><td style="color:var(--emerald);font-weight:800;">1686 kcal</td><td style="color:var(--blue);font-weight:700;">118g</td><td style="color:var(--amber);font-weight:700;">160g</td><td style="color:var(--rose);font-weight:700;">64g</td><td>28g</td><td>2275ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(65)">套用</button></td></tr><tr class="active-row"><td><strong>70 kg</strong></td><td>24.2 <span class="badge badge-amber">過重</span></td><td>1618</td><td>2023</td><td style="color:var(--emerald);font-weight:800;">1618 kcal</td><td style="color:var(--blue);font-weight:700;">113g</td><td style="color:var(--amber);font-weight:700;">154g</td><td style="color:var(--rose);font-weight:700;">61g</td><td>28g</td><td>2450ml</td><td><button type="button" class="btn btn-sm btn-primary" onclick="applyWeightFromMatrix(70)">使用中</button></td></tr><tr class=""><td><strong>75 kg</strong></td><td>26.0 <span class="badge badge-amber">過重</span></td><td>1668</td><td>2085</td><td style="color:var(--emerald);font-weight:800;">1668 kcal</td><td style="color:var(--blue);font-weight:700;">117g</td><td style="color:var(--amber);font-weight:700;">158g</td><td style="color:var(--rose);font-weight:700;">63g</td><td>28g</td><td>2625ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(75)">套用</button></td></tr><tr class=""><td><strong>80 kg</strong></td><td>27.7 <span class="badge badge-orange">輕度肥胖</span></td><td>1718</td><td>2148</td><td style="color:var(--emerald);font-weight:800;">1718 kcal</td><td style="color:var(--blue);font-weight:700;">120g</td><td style="color:var(--amber);font-weight:700;">163g</td><td style="color:var(--rose);font-weight:700;">65g</td><td>28g</td><td>2800ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(80)">套用</button></td></tr><tr class=""><td><strong>85 kg</strong></td><td>29.4 <span class="badge badge-orange">輕度肥胖</span></td><td>1768</td><td>2210</td><td style="color:var(--emerald);font-weight:800;">1768 kcal</td><td style="color:var(--blue);font-weight:700;">124g</td><td style="color:var(--amber);font-weight:700;">168g</td><td style="color:var(--rose);font-weight:700;">67g</td><td>28g</td><td>2975ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(85)">套用</button></td></tr><tr class=""><td><strong>90 kg</strong></td><td>31.1 <span class="badge badge-rose">肥胖</span></td><td>1818</td><td>2273</td><td style="color:var(--emerald);font-weight:800;">1818 kcal</td><td style="color:var(--blue);font-weight:700;">127g</td><td style="color:var(--amber);font-weight:700;">173g</td><td style="color:var(--rose);font-weight:700;">69g</td><td>28g</td><td>3150ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(90)">套用</button></td></tr><tr class=""><td><strong>100 kg</strong></td><td>34.6 <span class="badge badge-rose">肥胖</span></td><td>1918</td><td>2398</td><td style="color:var(--emerald);font-weight:800;">1918 kcal</td><td style="color:var(--blue);font-weight:700;">134g</td><td style="color:var(--amber);font-weight:700;">182g</td><td style="color:var(--rose);font-weight:700;">72g</td><td>28g</td><td>3500ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(100)">套用</button></td></tr></tbody>
+                <tbody id="weightMatrixBody"><tr class=""><td><strong>45 kg</strong></td><td>14.8 <span class="badge badge-sky">過輕</span></td><td>1411</td><td>1764</td><td style="color:var(--emerald);font-weight:800;">1964 kcal</td><td style="color:var(--blue);font-weight:700;">137g</td><td style="color:var(--amber);font-weight:700;">187g</td><td style="color:var(--rose);font-weight:700;">74g</td><td>28g</td><td>2000ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(45)">套用</button></td></tr><tr class=""><td><strong>50 kg</strong></td><td>16.4 <span class="badge badge-sky">過輕</span></td><td>1461</td><td>1826</td><td style="color:var(--emerald);font-weight:800;">2026 kcal</td><td style="color:var(--blue);font-weight:700;">142g</td><td style="color:var(--amber);font-weight:700;">192g</td><td style="color:var(--rose);font-weight:700;">77g</td><td>28g</td><td>2000ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(50)">套用</button></td></tr><tr class=""><td><strong>55 kg</strong></td><td>18.1 <span class="badge badge-sky">過輕</span></td><td>1511</td><td>1889</td><td style="color:var(--emerald);font-weight:800;">2089 kcal</td><td style="color:var(--blue);font-weight:700;">146g</td><td style="color:var(--amber);font-weight:700;">198g</td><td style="color:var(--rose);font-weight:700;">79g</td><td>28g</td><td>2000ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(55)">套用</button></td></tr><tr class=""><td><strong>60 kg</strong></td><td>19.7 <span class="badge badge-emerald">正常</span></td><td>1561</td><td>1951</td><td style="color:var(--emerald);font-weight:800;">1678 kcal</td><td style="color:var(--blue);font-weight:700;">117g</td><td style="color:var(--amber);font-weight:700;">159g</td><td style="color:var(--rose);font-weight:700;">63g</td><td>28g</td><td>2100ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(60)">套用</button></td></tr><tr class=""><td><strong>65 kg</strong></td><td>21.3 <span class="badge badge-emerald">正常</span></td><td>1611</td><td>2014</td><td style="color:var(--emerald);font-weight:800;">1732 kcal</td><td style="color:var(--blue);font-weight:700;">121g</td><td style="color:var(--amber);font-weight:700;">165g</td><td style="color:var(--rose);font-weight:700;">65g</td><td>28g</td><td>2275ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(65)">套用</button></td></tr><tr class=""><td><strong>70 kg</strong></td><td>23.0 <span class="badge badge-emerald">正常</span></td><td>1661</td><td>2076</td><td style="color:var(--emerald);font-weight:800;">1785 kcal</td><td style="color:var(--blue);font-weight:700;">125g</td><td style="color:var(--amber);font-weight:700;">170g</td><td style="color:var(--rose);font-weight:700;">67g</td><td>28g</td><td>2450ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(70)">套用</button></td></tr><tr class=""><td><strong>75 kg</strong></td><td>24.6 <span class="badge badge-amber">過重</span></td><td>1711</td><td>2139</td><td style="color:var(--emerald);font-weight:800;">1711 kcal</td><td style="color:var(--blue);font-weight:700;">120g</td><td style="color:var(--amber);font-weight:700;">163g</td><td style="color:var(--rose);font-weight:700;">65g</td><td>28g</td><td>2625ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(75)">套用</button></td></tr><tr class="active-row"><td><strong>77.1 kg</strong></td><td>25.3 <span class="badge badge-amber">過重</span></td><td>1732</td><td>2165</td><td style="color:var(--emerald);font-weight:800;">1732 kcal</td><td style="color:var(--blue);font-weight:700;">121g</td><td style="color:var(--amber);font-weight:700;">165g</td><td style="color:var(--rose);font-weight:700;">65g</td><td>28g</td><td>2699ml</td><td><button type="button" class="btn btn-sm btn-primary" onclick="applyWeightFromMatrix(77.1)">使用中</button></td></tr><tr class=""><td><strong>80 kg</strong></td><td>26.3 <span class="badge badge-amber">過重</span></td><td>1761</td><td>2201</td><td style="color:var(--emerald);font-weight:800;">1761 kcal</td><td style="color:var(--blue);font-weight:700;">123g</td><td style="color:var(--amber);font-weight:700;">167g</td><td style="color:var(--rose);font-weight:700;">67g</td><td>28g</td><td>2800ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(80)">套用</button></td></tr><tr class=""><td><strong>85 kg</strong></td><td>27.9 <span class="badge badge-orange">輕度肥胖</span></td><td>1811</td><td>2264</td><td style="color:var(--emerald);font-weight:800;">1811 kcal</td><td style="color:var(--blue);font-weight:700;">127g</td><td style="color:var(--amber);font-weight:700;">172g</td><td style="color:var(--rose);font-weight:700;">68g</td><td>28g</td><td>2975ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(85)">套用</button></td></tr><tr class=""><td><strong>90 kg</strong></td><td>29.6 <span class="badge badge-orange">輕度肥胖</span></td><td>1861</td><td>2326</td><td style="color:var(--emerald);font-weight:800;">1861 kcal</td><td style="color:var(--blue);font-weight:700;">130g</td><td style="color:var(--amber);font-weight:700;">177g</td><td style="color:var(--rose);font-weight:700;">70g</td><td>28g</td><td>3150ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(90)">套用</button></td></tr><tr class=""><td><strong>100 kg</strong></td><td>32.8 <span class="badge badge-rose">肥胖</span></td><td>1961</td><td>2451</td><td style="color:var(--emerald);font-weight:800;">1961 kcal</td><td style="color:var(--blue);font-weight:700;">137g</td><td style="color:var(--amber);font-weight:700;">186g</td><td style="color:var(--rose);font-weight:700;">74g</td><td>28g</td><td>3500ml</td><td><button type="button" class="btn btn-sm btn-slate-soft" onclick="applyWeightFromMatrix(100)">套用</button></td></tr></tbody>
               </table>
             </div>
           </div>
@@ -1418,7 +1418,7 @@
 
               <div class="card flex-between text-xs" style="padding:10px 12px;">
                 <span class="text-muted">加入後今日累計熱量將變為：</span>
-                <strong id="scanAfterCalPreview" style="color:var(--emerald);font-size:14px;">119.5 / 1618 kcal</strong>
+                <strong id="scanAfterCalPreview" style="color:var(--emerald);font-size:14px;">119.5 / 1732 kcal</strong>
               </div>
 
               <button type="button" id="btnAddScannedFood" class="btn btn-primary" style="width:100%;" onclick="addScannedFoodToLog()">➕ 將辨識結果加入今日累積攝取</button>
@@ -2078,7 +2078,7 @@
               <h2 style="font-size:20px;font-weight:800;margin-top:2px;">🖥️ 系統後台監測與維運儀表板</h2>
             </div>
             <div class="flex-gap" style="gap:6px;">
-              <span id="sysActiveAiModelBadge" class="badge badge-emerald">🤖 AI 模型：gemini-3.8-flash</span>
+              <span id="sysActiveAiModelBadge" class="badge badge-emerald">🤖 AI 模型：gemini-3.5-flash-lite</span>
               <span id="sysOverallHealthBadge" class="badge badge-blue">🩺 待診斷</span>
             </div>
           </div>
@@ -2092,13 +2092,13 @@
             </div>
             <div class="card-soft" style="padding:10px;">
               <div class="text-xs text-muted">AI 視覺＆問答引擎</div>
-              <div id="sysAiEngineKpi" class="text-sm font-extrabold mt-1" style="color: rgb(100, 116, 139);">離線模式（未設 Key）</div>
-              <div id="geminiKeyStatusText" class="text-xs text-muted" style="color: rgb(71, 85, 105);">⚙️ 外食影像模式：本機餐盤色塊面積估算（可綁定免費 Gemini Key 升級真AI視覺）</div>
+              <div id="sysAiEngineKpi" class="text-sm font-extrabold mt-1" style="color: var(--emerald);">gemini-3.5-flash-lite</div>
+              <div id="geminiKeyStatusText" class="text-xs text-muted" style="color: rgb(4, 120, 87);">✅ 外食影像模式：已綁定 Gemini 3.8 Flash 真多模態視覺 AI（精準辨識菜色＋克數）</div>
             </div>
             <div class="card-soft" style="padding:10px;">
               <div class="text-xs text-muted">本機記憶用量</div>
-              <div id="sysStorageKpi" class="text-sm font-extrabold mt-1" style="color:var(--blue);">0 KB｜已存 2 天</div>
-              <div id="sysOtaOriginKpi" class="text-xs text-muted">ℹ️ 離線/預覽模式（詳見操作說明）</div>
+              <div id="sysStorageKpi" class="text-sm font-extrabold mt-1" style="color:var(--blue);">3 KB｜已存 2 天</div>
+              <div id="sysOtaOriginKpi" class="text-xs text-muted">✅ 支援同網域無損 OTA (zeal388.github.io)</div>
             </div>
             <div class="card-soft" style="padding:10px;">
               <div class="text-xs text-muted">AI 測試與額度工具</div>
@@ -2155,7 +2155,7 @@
             <div id="adminPublisherSection" class="" style="border-top:1px solid #bfdbfe;padding-top:10px;margin-top:4px;display:flex;flex-direction:column;gap:8px;">
               <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">🚀 純手機 GitHub 一鍵發佈器（免電腦直接推送更新至 GitHub Pages）</div>
-                <span id="ghPublishStatusBadge" class="badge badge-slate" style="background:#e2e8f0;color:#475569;">尚未設定 Repo</span>
+                <span id="ghPublishStatusBadge" class="badge badge-emerald" style="background:#e2e8f0;color:#475569;">✅ 已綁定 zeal388/Nutrifit-2</span>
               </div>
               <div class="grid grid-3" style="gap:6px;">
                 <input type="text" id="ghOwnerInput" placeholder="GitHub 帳號 (owner)" style="font-size:12px;padding:6px 8px;">
@@ -2190,7 +2190,7 @@
           </div>
 
           <div id="sysAiUpdateStatusBox" class="card-soft text-xs text-muted" style="background:#f8fafc;line-height:1.55;">
-            目前啟用模型：<strong id="sysActiveModelText" style="color:var(--slate-900);">gemini-3.8-flash</strong>（上次檢查：<span id="sysLastModelCheckText">尚未檢查</span>）。點擊「🔄 自動更新 AI 模組」會直接向 Google API 查詢最新可用的 Flash 視覺與對話模型並自動切換，避免舊模型下架導致 404 失敗。
+            目前啟用模型：<strong id="sysActiveModelText" style="color:var(--slate-900);">gemini-3.5-flash-lite</strong>（上次檢查：<span id="sysLastModelCheckText">2026/11/20 下午2:46:38</span>）。點擊「🔄 自動更新 AI 模組」會直接向 Google API 查詢最新可用的 Flash 視覺與對話模型並自動切換，避免舊模型下架導致 404 失敗。
           </div>
 
           <div id="sysDiagResultsList" style="display:flex;flex-direction:column;gap:8px;">
@@ -2273,8 +2273,8 @@
                 </div>
 
                 <div class="text-xs" style="display:flex;flex-direction:column;gap:8px;">
-                  <div class="flex-between"><span>最後自動記憶時間：</span><strong id="memLastSavedTime">今日 15:12:59</strong></div>
-                  <div class="flex-between"><span>身高 / 體重 / 目標：</span><strong id="memProfileSummary" style="color:var(--emerald);">♂男性 30歲・170cm / 70kg (BMI 24.2) → 63kg</strong></div>
+                  <div class="flex-between"><span>最後自動記憶時間：</span><strong id="memLastSavedTime">今日 15:14:59</strong></div>
+                  <div class="flex-between"><span>身高 / 體重 / 目標：</span><strong id="memProfileSummary" style="color:var(--emerald);">♂男性 27歲・174.5cm / 77.1kg (BMI 25.3) → 73kg</strong></div>
                   <div class="flex-between"><span>已記憶日誌天數：</span><strong id="memDaysCount" style="color:var(--blue);">2 天</strong></div>
                   <div class="flex-between"><span>已記憶常用食物：</span><strong id="memCustomFoodsCount" style="color:var(--teal);">3 項</strong></div>
                 </div>
@@ -2574,11 +2574,11 @@
   "currentTab": "dashboard",
   "activeDate": "2026-11-20",
   "gender": "male",
-  "age": 30,
+  "age": 27,
   "excludeSeafood": true,
-  "heightCm": 170,
-  "weightKg": 70,
-  "targetWeightKg": 63,
+  "heightCm": 174.5,
+  "weightKg": 77.1,
+  "targetWeightKg": 73,
   "activityLevel": "light",
   "macroMode": "high_protein",
   "extraExerciseKcal": 0,
@@ -2592,7 +2592,7 @@
   "waterMl": 0,
   "selectedPresetId": "p_chicken",
   "uploadedImageObj": null,
-  "lastSavedAt": "15:12:59",
+  "lastSavedAt": "15:14:59",
   "savedCustomFoods": [
     {
       "name": "石安牧場日式茶碗蒸",
@@ -2684,10 +2684,7 @@
         "noSugarFried": false,
         "waterGoal": false,
         "postMealWalk": false
-      },
-      "activeKcal": 0,
-      "steps": 0,
-      "workoutLabel": ""
+      }
     }
   }
 };
