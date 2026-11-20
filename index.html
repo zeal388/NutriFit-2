@@ -474,8 +474,8 @@
             <div>
               <div class="flex-gap">
                 <h1 class="brand-title">NutriFit 減脂營養管家</h1>
-                <span class="badge badge-emerald">🛡️ 100% 無海鮮</span>
-                <span id="memoryStatusBadge" class="badge badge-blue">💾 已記憶 (14:46:48)</span>
+                <span id="headerSeafoodModeBadge" class="badge badge-emerald" style="cursor:pointer;" onclick="toggleSeafoodRestriction()" title="點擊切換海鮮排除模式">🛡️ 100% 無海鮮</span>
+                <span id="memoryStatusBadge" class="badge badge-blue">💾 已記憶 (15:12:59)</span>
               </div>
               <div class="text-xs text-muted">上班族超商減脂減重・維持高能量與均衡營養追蹤系統</div>
             </div>
@@ -506,14 +506,22 @@
     <!-- Toast -->
     <div id="toastContainer" class="toast-wrap hidden">
       <div class="toast-box">
-        <span id="toastIcon" style="font-size:18px;">🚀</span>
-        <div id="toastMsg" style="flex:1;">已完成修復：AI 模組已自動切換至有額度的可用模型 (gemini-3.5-flash-lite)</div>
+        <span id="toastIcon" style="font-size:18px;">✅</span>
+        <div id="toastMsg" style="flex:1;">✅ 連線成功！具備 zeal388/Nutrifit-2 寫入權限</div>
         <button type="button" onclick="hideToast()" style="color:#94a3b8;font-weight:800;font-size:14px;">✕</button>
       </div>
     </div>
 
     <!-- Main Content -->
     <main class="container main-wrap">
+      <!-- Auto OTA Update Available Banner (Triggered Automatically on Startup when Remote Version > Local Version) -->
+      <div id="autoOtaUpdateBanner" class="card-soft hidden" style="background:linear-gradient(90deg,#ecfdf5,#eff6ff);border:2px solid #10b981;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 14px;">
+        <div class="text-xs font-extrabold" style="color:#065f46;">🆕 偵測到新版本 <strong id="autoOtaRemoteVerText">v3.0.0</strong>！點擊更新即可升級最新功能（100% 保留所有歷史紀錄）。</div>
+        <div class="flex-gap" style="gap:6px;">
+          <button type="button" class="btn btn-sm btn-primary" onclick="applyOtaUpdateNow()">⚡ 立即無損更新</button>
+          <button type="button" class="btn btn-sm btn-slate-soft" onclick="document.getElementById('autoOtaUpdateBanner').classList.add('hidden')">稍後</button>
+        </div>
+      </div>
 
       <!-- Consolidated Sub-Navigation for 📊 今日監控與計畫 Hub -->
       <div id="dashPlanSubBar" style="display:flex;flex-direction:column;gap:8px;" class="hidden">
@@ -2070,27 +2078,27 @@
               <h2 style="font-size:20px;font-weight:800;margin-top:2px;">🖥️ 系統後台監測與維運儀表板</h2>
             </div>
             <div class="flex-gap" style="gap:6px;">
-              <span id="sysActiveAiModelBadge" class="badge badge-emerald">🤖 AI 模型：gemini-3.5-flash-lite</span>
-              <span id="sysOverallHealthBadge" class="badge badge-emerald">✅ 全系統健康正常</span>
+              <span id="sysActiveAiModelBadge" class="badge badge-emerald">🤖 AI 模型：gemini-3.8-flash</span>
+              <span id="sysOverallHealthBadge" class="badge badge-blue">🩺 待診斷</span>
             </div>
           </div>
 
           <!-- 4 Backend Telemetry KPI Cards -->
           <div class="grid grid-4" style="gap:8px;">
-            <div class="card-soft" style="padding:10px;">
+            <div class="card-soft" style="padding:10px;cursor:pointer;user-select:none;" onclick="handleAdminVersionTap()" title="管理者連點 5 下可切換發佈器模式">
               <div class="text-xs text-muted">App 版本 / 資料結構</div>
-              <div id="sysVersionKpi" class="text-sm font-extrabold mt-1" style="color:var(--slate-900);">v2.9.2 (Schema v2)</div>
-              <div class="text-xs text-muted">與本機紀錄完全解耦</div>
+              <div id="sysVersionKpi" class="text-sm font-extrabold mt-1" style="color:var(--slate-900);">v3.0.0 (Schema v2)</div>
+              <div id="sysAdminHintText" class="text-xs text-muted">🔓 管理者發佈模式已啟用（連點 5 下鎖定）</div>
             </div>
             <div class="card-soft" style="padding:10px;">
               <div class="text-xs text-muted">AI 視覺＆問答引擎</div>
-              <div id="sysAiEngineKpi" class="text-sm font-extrabold mt-1" style="color: var(--emerald);">gemini-3.5-flash-lite</div>
-              <div id="geminiKeyStatusText" class="text-xs text-muted" style="color: rgb(4, 120, 87);">✅ 視覺辨識引擎：已連線 gemini-3.5-flash-lite（支援雙語標示與外食份量估重）</div>
+              <div id="sysAiEngineKpi" class="text-sm font-extrabold mt-1" style="color: rgb(100, 116, 139);">離線模式（未設 Key）</div>
+              <div id="geminiKeyStatusText" class="text-xs text-muted" style="color: rgb(71, 85, 105);">⚙️ 外食影像模式：本機餐盤色塊面積估算（可綁定免費 Gemini Key 升級真AI視覺）</div>
             </div>
             <div class="card-soft" style="padding:10px;">
               <div class="text-xs text-muted">本機記憶用量</div>
-              <div id="sysStorageKpi" class="text-sm font-extrabold mt-1" style="color:var(--blue);">3 KB｜已存 2 天</div>
-              <div id="sysOtaOriginKpi" class="text-xs text-muted">✅ 支援同網域無損 OTA (zeal388.github.io)</div>
+              <div id="sysStorageKpi" class="text-sm font-extrabold mt-1" style="color:var(--blue);">0 KB｜已存 2 天</div>
+              <div id="sysOtaOriginKpi" class="text-xs text-muted">ℹ️ 離線/預覽模式（詳見操作說明）</div>
             </div>
             <div class="card-soft" style="padding:10px;">
               <div class="text-xs text-muted">AI 測試與額度工具</div>
@@ -2099,6 +2107,15 @@
                 <button type="button" id="btnQuickRepairAiModal" class="btn btn-sm" style="background:#fef3c7;color:#92400e;border:1px solid #fcd34d;padding:4px 8px;" onclick="repairAiModuleQuota(false)">🔧 修 429</button>
               </div>
             </div>
+          </div>
+
+          <!-- Dietary Preference Toggle (Allows Sharing App with Friends Who Eat Seafood!) -->
+          <div class="card-soft flex-between" style="background:#f8fafc;flex-wrap:wrap;gap:8px;">
+            <div>
+              <div class="text-xs font-extrabold" style="color:var(--slate-900);">🛡️ 飲食偏好設定：嚴格排除海鮮模式（過敏／不吃海鮮保護）</div>
+              <div id="seafoodPrefDescText" class="text-xs text-muted mt-1">目前已開啟：全站餐點與 AI 建議皆 100% 排除魚蝦蟹貝等海鮮食材（若分享給吃海鮮的朋友，可由對方自行關閉）。</div>
+            </div>
+            <button type="button" id="btnToggleSeafoodPref" class="btn btn-sm btn-primary" onclick="toggleSeafoodRestriction()">🛡️ 無海鮮模式：開啟中</button>
           </div>
 
           <!-- Centralized API Key Management (Moved out of Frontend Modal & Chat!) -->
@@ -2118,10 +2135,10 @@
           <div class="card-soft" style="background:#eff6ff;border-color:#93c5fd;display:flex;flex-direction:column;gap:10px;">
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
-                <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 線上 OTA 無損更新中心（目前版本：<span id="otaCurrentVerBadge">v2.9.2</span>）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">線上版本為 v2.9.2，您目前使用的是最新版本（資料結構 Schema v2）。</div>
+                <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 線上 OTA 無損更新中心（目前版本：<span id="otaCurrentVerBadge">v3.0.0</span>）</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">本機紀錄（Schema v2）與程式碼完全解耦；同網域更新時 100% 保留所有歷史體重、飲食與飲水紀錄。</div>
               </div>
-              <span id="otaVersionStatusBadge" class="badge badge-emerald">✅ 已是最新 (v2.9.2)</span>
+              <span id="otaVersionStatusBadge" class="badge badge-blue">尚未檢查新版</span>
             </div>
             <div class="flex-gap" style="gap:6px;flex-wrap:wrap;">
               <input type="url" id="otaCustomUrlInput" placeholder="選填：固定部署網址（留空則自動檢查目前網址）" style="flex:1;min-width:200px;font-size:12px;padding:6px 10px;">
@@ -2134,8 +2151,8 @@
               <button type="button" class="btn btn-sm btn-slate-soft" onclick="switchTab('guide')">📖 查看 OTA 設定教學</button>
             </div>
 
-            <!-- GitHub Pages One-Click Mobile Publisher (方案 1) -->
-            <div style="border-top:1px solid #bfdbfe;padding-top:10px;margin-top:4px;display:flex;flex-direction:column;gap:8px;">
+            <!-- Hidden Admin-Only GitHub Pages One-Click Publisher (Tap Version 5x to Unlock on Owner's Phone) -->
+            <div id="adminPublisherSection" class="" style="border-top:1px solid #bfdbfe;padding-top:10px;margin-top:4px;display:flex;flex-direction:column;gap:8px;">
               <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">🚀 純手機 GitHub 一鍵發佈器（免電腦直接推送更新至 GitHub Pages）</div>
                 <span id="ghPublishStatusBadge" class="badge badge-slate" style="background:#e2e8f0;color:#475569;">尚未設定 Repo</span>
@@ -2156,45 +2173,32 @@
                 <button type="button" id="btnGhPublishPasted" class="btn btn-sm btn-primary" onclick="publishHtmlToGithub('pasted')">🚀 推送貼上的新版至 GitHub</button>
                 <button type="button" id="btnGhPublishCurrent" class="btn btn-sm btn-dark" onclick="publishHtmlToGithub('current')">📤 推送目前版本至 GitHub</button>
               </div>
-              <div id="ghPublishLogText" class="text-xs text-muted" style="line-height:1.5;">✅ <strong>發佈成功！</strong>版本 <strong>v2.9.2</strong>（Commit <code>3c8622c</code>）已推送至 <code>zeal388/Nutrifit-2</code>。等待約 20～30 秒讓 GitHub Pages 建置完成後，點上方「🔍 檢查線上新版」→「⚡ 立即無損套用更新」即可升級！（固定網址：<a href="https://zeal388.github.io/Nutrifit-2/" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline;">https://zeal388.github.io/Nutrifit-2/</a>）</div>
+              <div id="ghPublishLogText" class="text-xs text-muted" style="line-height:1.5;">提示：Token 僅保存於您手機本機 <code>localStorage</code>，絕不會寫入推送出去的 <code>index.html</code> 原始碼中。</div>
             </div>
           </div>
 
           <div style="display:flex;flex-direction:column;gap:10px;">
-            <button type="button" id="btnOneClickMaint" class="btn btn-primary" style="min-height:50px;font-size:14px;width:100%;justify-content:center;" onclick="runOneClickSystemMaintenance()">🚀 一鍵全自動維護（自動診斷 → AI模組更新 → 二次診斷 → 排除問題）</button>
+            <button type="button" id="btnOneClickMaint" class="btn btn-primary" style="min-height:50px;font-size:14px;width:100%;justify-content:center;" onclick="runOneClickSystemMaintenance()">
+              🚀 一鍵全自動維護（自動診斷 → AI模組更新 → 二次診斷 → 排除問題）
+            </button>
             <div class="maint-steps" aria-label="四階段維護進度">
-              <div id="maintStep1" class="maint-step done">✅ 1. 自動診斷</div>
-              <div id="maintStep2" class="maint-step done">✅ 2. AI模組更新</div>
-              <div id="maintStep3" class="maint-step done">✅ 3. 二次診斷</div>
-              <div id="maintStep4" class="maint-step done">✅ 4. 排除問題</div>
+              <div id="maintStep1" class="maint-step">1. 自動診斷</div>
+              <div id="maintStep2" class="maint-step">2. AI模組更新</div>
+              <div id="maintStep3" class="maint-step">3. 二次診斷</div>
+              <div id="maintStep4" class="maint-step">4. 排除問題</div>
             </div>
           </div>
 
           <div id="sysAiUpdateStatusBox" class="card-soft text-xs text-muted" style="background:#f8fafc;line-height:1.55;">
-            目前啟用模型：<strong id="sysActiveModelText" style="color:var(--slate-900);">gemini-3.5-flash-lite</strong>（上次檢查：<span id="sysLastModelCheckText">2026/11/20 下午2:46:38</span>）。點擊「🔄 自動更新 AI 模組」會直接向 Google API 查詢最新可用的 Flash 視覺與對話模型並自動切換，避免舊模型下架導致 404 失敗。
+            目前啟用模型：<strong id="sysActiveModelText" style="color:var(--slate-900);">gemini-3.8-flash</strong>（上次檢查：<span id="sysLastModelCheckText">尚未檢查</span>）。點擊「🔄 自動更新 AI 模組」會直接向 Google API 查詢最新可用的 Flash 視覺與對話模型並自動切換，避免舊模型下架導致 404 失敗。
           </div>
 
           <div id="sysDiagResultsList" style="display:flex;flex-direction:column;gap:8px;">
-          <div class="diag-row ok">
-            <div><strong>✅ 1. 本機記憶儲存空間 (localStorage)</strong><div class="text-muted mt-1">讀寫正常，目前使用約 3 KB / 5120 KB</div></div>
-            <span class="badge badge-emerald">正常</span>
+            <div class="diag-row ok">
+              <div><strong>✅ 系統核心已就緒</strong><div class="text-muted">點擊上方「🩺 自動診斷問題」即可一次檢測本機記憶、資料完整性、API 連線與最新 AI 模型可用性。</div></div>
+              <span class="badge badge-emerald">就緒</span>
+            </div>
           </div>
-        
-          <div class="diag-row ok">
-            <div><strong>✅ 2. 個人數據與無海鮮合規檢查</strong><div class="text-muted mt-1">檔案完整（男性 30歲・170cm/70kg），今日 0 筆餐點 100% 無海鮮</div></div>
-            <span class="badge badge-emerald">通過</span>
-          </div>
-        
-          <div class="diag-row ok">
-            <div><strong>✅ 3. Gemini AI 引擎與網路連線（零扣額度檢測）</strong><div class="text-muted mt-1">金鑰驗證成功！目前使用 gemini-3.5-flash-lite（雲端最新可用：gemini-3.8-flash）。若拍照遇到 HTTP 429 則代表免費方案當分鐘/當日配額已滿。</div></div>
-            <span class="badge badge-emerald">連線正常</span>
-          </div>
-        
-          <div class="diag-row ok">
-            <div><strong>✅ 4. 裝置與執行環境偵測</strong><div class="text-muted mt-1">iOS 瀏覽器模式（建議加入主畫面方便日常記錄）</div></div>
-            <span class="badge badge-emerald">iOS</span>
-          </div>
-        </div>
         </div>
         <div class="card" style="display:flex;flex-direction:column;gap:16px;">
           <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:12px;">
@@ -2269,7 +2273,7 @@
                 </div>
 
                 <div class="text-xs" style="display:flex;flex-direction:column;gap:8px;">
-                  <div class="flex-between"><span>最後自動記憶時間：</span><strong id="memLastSavedTime">今日 14:46:48</strong></div>
+                  <div class="flex-between"><span>最後自動記憶時間：</span><strong id="memLastSavedTime">今日 15:12:59</strong></div>
                   <div class="flex-between"><span>身高 / 體重 / 目標：</span><strong id="memProfileSummary" style="color:var(--emerald);">♂男性 30歲・170cm / 70kg (BMI 24.2) → 63kg</strong></div>
                   <div class="flex-between"><span>已記憶日誌天數：</span><strong id="memDaysCount" style="color:var(--blue);">2 天</strong></div>
                   <div class="flex-between"><span>已記憶常用食物：</span><strong id="memCustomFoodsCount" style="color:var(--teal);">3 項</strong></div>
@@ -2571,6 +2575,7 @@
   "activeDate": "2026-11-20",
   "gender": "male",
   "age": 30,
+  "excludeSeafood": true,
   "heightCm": 170,
   "weightKg": 70,
   "targetWeightKg": 63,
@@ -2587,7 +2592,7 @@
   "waterMl": 0,
   "selectedPresetId": "p_chicken",
   "uploadedImageObj": null,
-  "lastSavedAt": "14:46:48",
+  "lastSavedAt": "15:12:59",
   "savedCustomFoods": [
     {
       "name": "石安牧場日式茶碗蒸",
@@ -2679,7 +2684,10 @@
         "noSugarFried": false,
         "waterGoal": false,
         "postMealWalk": false
-      }
+      },
+      "activeKcal": 0,
+      "steps": 0,
+      "workoutLabel": ""
     }
   }
 };
@@ -3299,6 +3307,7 @@
     }
 
     function containsSeafood(text) {
+      if (appState && appState.excludeSeafood === false) return false;
       if (!text) return false;
       // 先排除「無海鮮、不含海鮮、零海鮮、非海鮮、去海鮮」等否定詞，避免誤判！
       const clean = String(text)
@@ -3373,6 +3382,8 @@
         updateSystemModelStatusUi();
         loadOtaSourceUrlUi();
         loadGithubDeployUi();
+        updateAdminModeUi();
+        updateSeafoodPrefUi();
       }
 
       for (const h of ['dashboard', 'food_ai', 'guide', 'system']) {
@@ -4720,7 +4731,7 @@
       }
     }
 
-    const APP_VERSION = 'v2.9.2';
+    const APP_VERSION = 'v3.0.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -4881,6 +4892,97 @@
         if (raw) return JSON.parse(raw);
       } catch (e) {}
       return { owner: '', repo: '', branch: 'main', path: 'index.html', token: '' };
+    }
+
+    // === v3.0.0 Multi-User Features: Seafood Toggle, Hidden Admin Mode & Auto Startup OTA Check ===
+    function toggleSeafoodRestriction() {
+      appState.excludeSeafood = (appState.excludeSeafood === false);
+      updateSeafoodPrefUi();
+      renderAll();
+      showToast(appState.excludeSeafood ? '已開啟「🛡️ 100% 無海鮮保護模式」' : '已切換為「🍽️ 全食材模式（開放海鮮）」', appState.excludeSeafood ? '🛡️' : '🍽️');
+    }
+
+    function updateSeafoodPrefUi() {
+      const excl = appState.excludeSeafood !== false;
+      const hb = document.getElementById('headerSeafoodModeBadge');
+      if (hb) {
+        hb.textContent = excl ? '🛡️ 100% 無海鮮' : '🍽️ 全食材模式';
+        hb.className = 'badge ' + (excl ? 'badge-emerald' : 'badge-blue');
+      }
+      const btn = document.getElementById('btnToggleSeafoodPref');
+      if (btn) {
+        btn.textContent = excl ? '🛡️ 無海鮮模式：開啟中' : '🍽️ 全食材模式（含海鮮）';
+        btn.className = 'btn btn-sm ' + (excl ? 'btn-primary' : 'btn-blue');
+      }
+      const desc = document.getElementById('seafoodPrefDescText');
+      if (desc) {
+        desc.textContent = excl
+          ? '目前已開啟：全站餐點與 AI 建議皆 100% 排除魚蝦蟹貝等海鮮食材（若分享給吃海鮮的朋友，可由對方自行關閉）。'
+          : '目前已關閉排除限制：允許記錄與推薦魚類、蝦蟹等海鮮原型蛋白（隨時可點右側按鈕切回無海鮮模式）。';
+      }
+    }
+
+    let adminTapCount = 0;
+    let adminTapTimer = null;
+
+    function isAdminModeUnlocked() {
+      try {
+        if (localStorage.getItem('nutrifit_admin_mode') === '1') return true;
+        // 若這支手機已經存過 GitHub Token，自動保持管理者發佈器解鎖（不影響未存 Token 的朋友！）
+        const gh = getGithubDeployConfig();
+        if (gh && gh.token) return true;
+      } catch (e) {}
+      return false;
+    }
+
+    function updateAdminModeUi() {
+      const unlocked = isAdminModeUnlocked();
+      const sec = document.getElementById('adminPublisherSection');
+      if (sec) sec.classList.toggle('hidden', !unlocked);
+      const hint = document.getElementById('sysAdminHintText');
+      if (hint) hint.textContent = unlocked ? '🔓 管理者發佈模式已啟用（連點 5 下鎖定）' : '與本機紀錄完全解耦';
+    }
+
+    function handleAdminVersionTap() {
+      adminTapCount++;
+      if (adminTapTimer) clearTimeout(adminTapTimer);
+      adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 4000);
+      if (adminTapCount >= 5) {
+        adminTapCount = 0;
+        const nextState = !isAdminModeUnlocked();
+        try {
+          if (nextState) localStorage.setItem('nutrifit_admin_mode', '1');
+          else localStorage.removeItem('nutrifit_admin_mode');
+        } catch (e) {}
+        updateAdminModeUi();
+        showToast(nextState ? '🔓 已解鎖管理者發佈模式（顯示 GitHub 一鍵發佈器）' : '🔒 已隱藏管理者發佈器（一般使用者畫面）', nextState ? '🔓' : '🔒');
+      }
+    }
+
+    async function runSilentStartupOtaCheck() {
+      const targetUrl = getOtaTargetUrl();
+      if (!targetUrl) return;
+      try {
+        let text = '';
+        try {
+          const r = await fetch(targetUrl + (targetUrl.includes('?') ? '&' : '?') + '_ota_auto=' + Date.now(), { cache: 'no-store' });
+          if (r.ok) text = await r.text();
+        } catch (e) {
+          const ghMatch = targetUrl.match(/https?:\/\/([^.]+)\.github\.io\/([^/?#]+)/i);
+          if (ghMatch) {
+            const rawR = await fetch(`https://raw.githubusercontent.com/${encodeURIComponent(ghMatch[1])}/${encodeURIComponent(ghMatch[2])}/main/index.html?_t=${Date.now()}`, { cache: 'no-store' });
+            if (rawR.ok) text = await rawR.text();
+          }
+        }
+        const m = text.match(/const\s+APP_VERSION\s*=\s*['"](v?\d+\.\d+(?:\.\d+)?)['"]/);
+        const remoteVer = m ? m[1] : null;
+        if (remoteVer && compareSemver(remoteVer, APP_VERSION) > 0) {
+          const banner = document.getElementById('autoOtaUpdateBanner');
+          const verTxt = document.getElementById('autoOtaRemoteVerText');
+          if (verTxt) verTxt.textContent = remoteVer;
+          if (banner) banner.classList.remove('hidden');
+        }
+      } catch (e) {}
     }
 
     function loadGithubDeployUi() {
@@ -6183,7 +6285,7 @@
         const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode, appState.heightCm, appState.gender, appState.age);
         const totals = computeDailyTotals();
         const logsText = (appState.logs || []).map(x => `${x.name}(${Math.round(x.calories * (x.portion || 1))}kcal, P${Math.round(x.protein * (x.portion || 1))}g, F${Math.round(x.fat * (x.portion || 1))}g)`).join('；') || '尚無紀錄';
-        const sysPrompt = `你是台灣專業減脂營養師，請用繁體中文、直接簡潔、具體可執行的方式回答。硬性限制：所有推薦食物必須 100% 排除海鮮（魚蝦蟹貝鮭魚鮪魚明太子等）。
+        const sysPrompt = `你是台灣專業減脂營養師，請用繁體中文、直接簡潔、具體可執行的方式回答。${appState.excludeSeafood !== false ? '硬性限制：所有推薦食物必須 100% 排除海鮮（魚蝦蟹貝鮭魚鮪魚明太子等）。' : '飲食偏好：使用者可接受海鮮與各類原型蛋白質。'}
 使用者即時狀態：${targets.genderLabel} ${targets.age}歲、身高 ${appState.heightCm}cm、目前體重 ${appState.weightKg}kg（BMI ${targets.bmiInfo.bmi.toFixed(1)}）、目標體重 ${appState.targetWeightKg}kg、BMR ${targets.bmr}、TDEE ${targets.maintCalories}。
 今日活動量：活動能量 ${appState.todayActiveKcal} kcal、步數 ${appState.todaySteps} 步（今日運動動態加成 +${targets.bonusCal} kcal）。
 今日目標：熱量 ${targets.targetCalories} kcal、蛋白 ${targets.targetProtein}g、碳水 ${targets.targetCarbs}g、脂肪 ${targets.targetFat}g、飲水 ${targets.targetWater}ml。
@@ -6210,7 +6312,7 @@
       const now = new Date(), p = n => String(n).padStart(2, '0');
       appState.lastSavedAt = `${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}`;
       return {
-        activeDate: appState.activeDate, gender: appState.gender, age: appState.age, heightCm: appState.heightCm, weightKg: appState.weightKg,
+        activeDate: appState.activeDate, gender: appState.gender, age: appState.age, excludeSeafood: appState.excludeSeafood !== false, heightCm: appState.heightCm, weightKg: appState.weightKg,
         targetWeightKg: appState.targetWeightKg, activityLevel: appState.activityLevel,
         macroMode: appState.macroMode, extraExerciseKcal: appState.extraExerciseKcal, todayActiveKcal: appState.todayActiveKcal, todaySteps: appState.todaySteps, todayWorkoutLabel: appState.todayWorkoutLabel, dailyChecklist: appState.dailyChecklist, waterMl: appState.waterMl, lastSavedAt: appState.lastSavedAt,
         savedCustomFoods: appState.savedCustomFoods, logs: appState.logs, historyByDate: appState.historyByDate
@@ -6233,6 +6335,7 @@
         if (parsed.activeDate) appState.activeDate = String(parsed.activeDate);
         if (parsed.gender === 'male' || parsed.gender === 'female') appState.gender = parsed.gender;
         if (parsed.age) appState.age = Math.max(18, Math.min(80, Number(parsed.age) || 30));
+        if (typeof parsed.excludeSeafood === 'boolean') appState.excludeSeafood = parsed.excludeSeafood;
         if (parsed.heightCm) appState.heightCm = Number(parsed.heightCm);
         if (parsed.weightKg) appState.weightKg = Number(parsed.weightKg);
         if (parsed.targetWeightKg) appState.targetWeightKg = Number(parsed.targetWeightKg);
@@ -6347,7 +6450,7 @@
     const DEFAULT_INITIAL_LOGS = ${JSON.stringify(DEFAULT_INITIAL_LOGS)};
     const DEFAULT_SAVED_CUSTOM_FOODS = ${JSON.stringify(DEFAULT_SAVED_CUSTOM_FOODS)};
     let appState = ${JSON.stringify({
-      currentTab: 'dashboard', activeDate: appState.activeDate, gender: appState.gender, age: appState.age, heightCm: appState.heightCm,
+      currentTab: 'dashboard', activeDate: appState.activeDate, gender: appState.gender, age: appState.age, excludeSeafood: appState.excludeSeafood !== false, heightCm: appState.heightCm,
       weightKg: appState.weightKg, targetWeightKg: appState.targetWeightKg, activityLevel: appState.activityLevel,
       macroMode: appState.macroMode, extraExerciseKcal: appState.extraExerciseKcal, dailyChecklist: appState.dailyChecklist, waterMl: appState.waterMl, selectedPresetId: appState.selectedPresetId || 'p_chicken',
       uploadedImageObj: null, lastSavedAt: appState.lastSavedAt, savedCustomFoods: appState.savedCustomFoods,
@@ -6424,8 +6527,11 @@
       updateGeminiKeyUi();
       // 每次開啟 App 主動跳轉至當天本地日期（保留過往歷史紀錄不遺失，防止數據誤植到前一天）
       ensureActiveDateIsToday(false);
+      updateSeafoodPrefUi();
+      updateAdminModeUi();
       renderStoreCatalog();
       renderAll();
+      setTimeout(() => runSilentStartupOtaCheck(), 1500);
     });
 
     // 若手機背景掛著跨夜回到 App，自動偵測並跳轉至當天日期
@@ -6440,6 +6546,5 @@
       }
     });
   </script>
-
 
 </body></html>
