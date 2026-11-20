@@ -475,7 +475,7 @@
               <div class="flex-gap">
                 <h1 class="brand-title">NutriFit 減脂營養管家</h1>
                 <span class="badge badge-emerald">🛡️ 100% 無海鮮</span>
-                <span id="memoryStatusBadge" class="badge badge-blue">💾 已記憶 (14:45:04)</span>
+                <span id="memoryStatusBadge" class="badge badge-blue">💾 已記憶 (14:46:48)</span>
               </div>
               <div class="text-xs text-muted">上班族超商減脂減重・維持高能量與均衡營養追蹤系統</div>
             </div>
@@ -506,8 +506,8 @@
     <!-- Toast -->
     <div id="toastContainer" class="toast-wrap hidden">
       <div class="toast-box">
-        <span id="toastIcon" style="font-size:18px;">✅</span>
-        <div id="toastMsg" style="flex:1;">✅ 連線成功！具備 zeal388/Nutrifit-2 寫入權限</div>
+        <span id="toastIcon" style="font-size:18px;">🚀</span>
+        <div id="toastMsg" style="flex:1;">已完成修復：AI 模組已自動切換至有額度的可用模型 (gemini-3.5-flash-lite)</div>
         <button type="button" onclick="hideToast()" style="color:#94a3b8;font-weight:800;font-size:14px;">✕</button>
       </div>
     </div>
@@ -2070,8 +2070,8 @@
               <h2 style="font-size:20px;font-weight:800;margin-top:2px;">🖥️ 系統後台監測與維運儀表板</h2>
             </div>
             <div class="flex-gap" style="gap:6px;">
-              <span id="sysActiveAiModelBadge" class="badge badge-emerald">🤖 AI 模型：gemini-3.8-flash</span>
-              <span id="sysOverallHealthBadge" class="badge badge-blue">🩺 待診斷</span>
+              <span id="sysActiveAiModelBadge" class="badge badge-emerald">🤖 AI 模型：gemini-3.5-flash-lite</span>
+              <span id="sysOverallHealthBadge" class="badge badge-emerald">✅ 全系統健康正常</span>
             </div>
           </div>
 
@@ -2084,12 +2084,12 @@
             </div>
             <div class="card-soft" style="padding:10px;">
               <div class="text-xs text-muted">AI 視覺＆問答引擎</div>
-              <div id="sysAiEngineKpi" class="text-sm font-extrabold mt-1" style="color: rgb(100, 116, 139);">離線模式（未設 Key）</div>
-              <div id="geminiKeyStatusText" class="text-xs text-muted" style="color: rgb(71, 85, 105);">⚙️ 外食影像模式：本機餐盤色塊面積估算（可綁定免費 Gemini Key 升級真AI視覺）</div>
+              <div id="sysAiEngineKpi" class="text-sm font-extrabold mt-1" style="color: var(--emerald);">gemini-3.5-flash-lite</div>
+              <div id="geminiKeyStatusText" class="text-xs text-muted" style="color: rgb(4, 120, 87);">✅ 視覺辨識引擎：已連線 gemini-3.5-flash-lite（支援雙語標示與外食份量估重）</div>
             </div>
             <div class="card-soft" style="padding:10px;">
               <div class="text-xs text-muted">本機記憶用量</div>
-              <div id="sysStorageKpi" class="text-sm font-extrabold mt-1" style="color:var(--blue);">0 KB｜已存 2 天</div>
+              <div id="sysStorageKpi" class="text-sm font-extrabold mt-1" style="color:var(--blue);">3 KB｜已存 2 天</div>
               <div id="sysOtaOriginKpi" class="text-xs text-muted">✅ 支援同網域無損 OTA (zeal388.github.io)</div>
             </div>
             <div class="card-soft" style="padding:10px;">
@@ -2119,9 +2119,9 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 線上 OTA 無損更新中心（目前版本：<span id="otaCurrentVerBadge">v2.9.2</span>）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">本機紀錄（Schema v2）與程式碼完全解耦；同網域更新時 100% 保留所有歷史體重、飲食與飲水紀錄。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">線上版本為 v2.9.2，您目前使用的是最新版本（資料結構 Schema v2）。</div>
               </div>
-              <span id="otaVersionStatusBadge" class="badge badge-blue">尚未檢查新版</span>
+              <span id="otaVersionStatusBadge" class="badge badge-emerald">✅ 已是最新 (v2.9.2)</span>
             </div>
             <div class="flex-gap" style="gap:6px;flex-wrap:wrap;">
               <input type="url" id="otaCustomUrlInput" placeholder="選填：固定部署網址（留空則自動檢查目前網址）" style="flex:1;min-width:200px;font-size:12px;padding:6px 10px;">
@@ -2156,32 +2156,45 @@
                 <button type="button" id="btnGhPublishPasted" class="btn btn-sm btn-primary" onclick="publishHtmlToGithub('pasted')">🚀 推送貼上的新版至 GitHub</button>
                 <button type="button" id="btnGhPublishCurrent" class="btn btn-sm btn-dark" onclick="publishHtmlToGithub('current')">📤 推送目前版本至 GitHub</button>
               </div>
-              <div id="ghPublishLogText" class="text-xs text-muted" style="line-height:1.5;">提示：Token 僅保存於您手機本機 <code>localStorage</code>，絕不會寫入推送出去的 <code>index.html</code> 原始碼中。</div>
+              <div id="ghPublishLogText" class="text-xs text-muted" style="line-height:1.5;">✅ <strong>發佈成功！</strong>版本 <strong>v2.9.2</strong>（Commit <code>3c8622c</code>）已推送至 <code>zeal388/Nutrifit-2</code>。等待約 20～30 秒讓 GitHub Pages 建置完成後，點上方「🔍 檢查線上新版」→「⚡ 立即無損套用更新」即可升級！（固定網址：<a href="https://zeal388.github.io/Nutrifit-2/" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline;">https://zeal388.github.io/Nutrifit-2/</a>）</div>
             </div>
           </div>
 
           <div style="display:flex;flex-direction:column;gap:10px;">
-            <button type="button" id="btnOneClickMaint" class="btn btn-primary" style="min-height:50px;font-size:14px;width:100%;justify-content:center;" onclick="runOneClickSystemMaintenance()">
-              🚀 一鍵全自動維護（自動診斷 → AI模組更新 → 二次診斷 → 排除問題）
-            </button>
+            <button type="button" id="btnOneClickMaint" class="btn btn-primary" style="min-height:50px;font-size:14px;width:100%;justify-content:center;" onclick="runOneClickSystemMaintenance()">🚀 一鍵全自動維護（自動診斷 → AI模組更新 → 二次診斷 → 排除問題）</button>
             <div class="maint-steps" aria-label="四階段維護進度">
-              <div id="maintStep1" class="maint-step">1. 自動診斷</div>
-              <div id="maintStep2" class="maint-step">2. AI模組更新</div>
-              <div id="maintStep3" class="maint-step">3. 二次診斷</div>
-              <div id="maintStep4" class="maint-step">4. 排除問題</div>
+              <div id="maintStep1" class="maint-step done">✅ 1. 自動診斷</div>
+              <div id="maintStep2" class="maint-step done">✅ 2. AI模組更新</div>
+              <div id="maintStep3" class="maint-step done">✅ 3. 二次診斷</div>
+              <div id="maintStep4" class="maint-step done">✅ 4. 排除問題</div>
             </div>
           </div>
 
           <div id="sysAiUpdateStatusBox" class="card-soft text-xs text-muted" style="background:#f8fafc;line-height:1.55;">
-            目前啟用模型：<strong id="sysActiveModelText" style="color:var(--slate-900);">gemini-3.8-flash</strong>（上次檢查：<span id="sysLastModelCheckText">尚未檢查</span>）。點擊「🔄 自動更新 AI 模組」會直接向 Google API 查詢最新可用的 Flash 視覺與對話模型並自動切換，避免舊模型下架導致 404 失敗。
+            目前啟用模型：<strong id="sysActiveModelText" style="color:var(--slate-900);">gemini-3.5-flash-lite</strong>（上次檢查：<span id="sysLastModelCheckText">2026/11/20 下午2:46:38</span>）。點擊「🔄 自動更新 AI 模組」會直接向 Google API 查詢最新可用的 Flash 視覺與對話模型並自動切換，避免舊模型下架導致 404 失敗。
           </div>
 
           <div id="sysDiagResultsList" style="display:flex;flex-direction:column;gap:8px;">
-            <div class="diag-row ok">
-              <div><strong>✅ 系統核心已就緒</strong><div class="text-muted">點擊上方「🩺 自動診斷問題」即可一次檢測本機記憶、資料完整性、API 連線與最新 AI 模型可用性。</div></div>
-              <span class="badge badge-emerald">就緒</span>
-            </div>
+          <div class="diag-row ok">
+            <div><strong>✅ 1. 本機記憶儲存空間 (localStorage)</strong><div class="text-muted mt-1">讀寫正常，目前使用約 3 KB / 5120 KB</div></div>
+            <span class="badge badge-emerald">正常</span>
           </div>
+        
+          <div class="diag-row ok">
+            <div><strong>✅ 2. 個人數據與無海鮮合規檢查</strong><div class="text-muted mt-1">檔案完整（男性 30歲・170cm/70kg），今日 0 筆餐點 100% 無海鮮</div></div>
+            <span class="badge badge-emerald">通過</span>
+          </div>
+        
+          <div class="diag-row ok">
+            <div><strong>✅ 3. Gemini AI 引擎與網路連線（零扣額度檢測）</strong><div class="text-muted mt-1">金鑰驗證成功！目前使用 gemini-3.5-flash-lite（雲端最新可用：gemini-3.8-flash）。若拍照遇到 HTTP 429 則代表免費方案當分鐘/當日配額已滿。</div></div>
+            <span class="badge badge-emerald">連線正常</span>
+          </div>
+        
+          <div class="diag-row ok">
+            <div><strong>✅ 4. 裝置與執行環境偵測</strong><div class="text-muted mt-1">iOS 瀏覽器模式（建議加入主畫面方便日常記錄）</div></div>
+            <span class="badge badge-emerald">iOS</span>
+          </div>
+        </div>
         </div>
         <div class="card" style="display:flex;flex-direction:column;gap:16px;">
           <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:12px;">
@@ -2256,7 +2269,7 @@
                 </div>
 
                 <div class="text-xs" style="display:flex;flex-direction:column;gap:8px;">
-                  <div class="flex-between"><span>最後自動記憶時間：</span><strong id="memLastSavedTime">今日 14:45:04</strong></div>
+                  <div class="flex-between"><span>最後自動記憶時間：</span><strong id="memLastSavedTime">今日 14:46:48</strong></div>
                   <div class="flex-between"><span>身高 / 體重 / 目標：</span><strong id="memProfileSummary" style="color:var(--emerald);">♂男性 30歲・170cm / 70kg (BMI 24.2) → 63kg</strong></div>
                   <div class="flex-between"><span>已記憶日誌天數：</span><strong id="memDaysCount" style="color:var(--blue);">2 天</strong></div>
                   <div class="flex-between"><span>已記憶常用食物：</span><strong id="memCustomFoodsCount" style="color:var(--teal);">3 項</strong></div>
@@ -2574,7 +2587,7 @@
   "waterMl": 0,
   "selectedPresetId": "p_chicken",
   "uploadedImageObj": null,
-  "lastSavedAt": "14:45:04",
+  "lastSavedAt": "14:46:48",
   "savedCustomFoods": [
     {
       "name": "石安牧場日式茶碗蒸",
