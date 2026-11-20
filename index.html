@@ -520,7 +520,7 @@
         <div class="text-xs font-extrabold" style="color:#065f46;">🆕 偵測到新版本 <strong id="autoOtaRemoteVerText">v3.0.0</strong>！點擊更新即可升級最新功能（100% 保留所有歷史紀錄）。</div>
         <div class="flex-gap" style="gap:6px;">
           <button type="button" class="btn btn-sm btn-primary" onclick="applyOtaUpdateNow()">⚡ 立即無損更新</button>
-          <button type="button" class="btn btn-sm btn-slate-soft" onclick="document.getElementById('autoOtaUpdateBanner').classList.add('hidden')">稍後</button>
+          <button type="button" class="btn btn-sm btn-slate-soft" onclick="dismissOtaBannerForCurrentRemote()">不再顯示此版</button>
         </div>
       </div>
       <!-- Remote Admin Announcement Banner (Controlled by Admin Console config.json) -->
@@ -532,8 +532,8 @@
       <!-- Consolidated Sub-Navigation for 📊 今日監控與計畫 Hub -->
       <div id="dashPlanSubBar" style="display:flex;flex-direction:column;gap:8px;">
         <div class="subtab-bar" role="tablist" aria-label="今日監控與減脂計畫切換">
-          <button type="button" id="subBtn-today" class="subtab-btn active" onclick="switchDashPlanSubTab('today')">📊 今日飲食・飲水與運動監控</button>
-          <button type="button" id="subBtn-plan" class="subtab-btn" onclick="switchDashPlanSubTab('plan')">⚖️ 身形 BMI・營養診斷與達標計畫</button>
+          <button type="button" id="subBtn-today" class="subtab-btn active" onclick="switchDashPlanSubTab('today')">📊 營養監控</button>
+          <button type="button" id="subBtn-plan" class="subtab-btn" onclick="switchDashPlanSubTab('plan')">⚖️ 減脂計畫</button>
         </div>
       </div>
 
@@ -560,7 +560,7 @@
               </div>
               <div class="flex-gap" style="gap:8px;flex-wrap:nowrap;">
                 <input type="range" id="topWaterAddSlider" min="0" max="1000" step="50" value="250" oninput="updateTopWaterSliderLabel(this.value)" style="flex:1;accent-color:#22d3ee;" />
-                <button type="button" class="btn btn-sm" style="background:#06b6d4;color:#fff;flex-shrink:0;padding:5px 10px;" onclick="applyTopWaterSlider()">＋ 補水</button>
+                <button type="button" class="btn btn-sm" style="background:#06b6d4;color:#fff;flex-shrink:0;padding:5px 10px;" onclick="applyTopWaterSlider()">＋ 補水</button><button type="button" class="btn btn-sm" style="background:rgba(255,255,255,0.16);color:#e2e8f0;flex-shrink:0;padding:5px 8px;" onclick="resetWater()" title="重置今日飲水">↺</button>
               </div>
             </div>
           </div>
@@ -660,33 +660,7 @@
             <div class="flex-between text-xs text-muted mt-2"><span>搭配一日野菜、毛豆、高纖豆漿</span><strong id="statFibPct" style="color:var(--teal);">0%</strong></div>
           </div>
 
-          <div class="card">
-            <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
-              <div>
-                <div class="text-xs font-bold text-muted">💧 每日飲水排鈉（可直接編輯或自訂增減 ml）</div>
-                <div class="flex-gap mt-1" style="gap:6px;align-items:baseline;">
-                  <input type="number" id="waterDirectInput" min="0" max="8000" step="50" value="1500" aria-label="今日飲水總量 (ml)"
-                    oninput="handleWaterDirectTyping(this.value)" onblur="commitWaterDirectInput(this.value)" onchange="commitWaterDirectInput(this.value)"
-                    style="width:88px;padding:4px 8px;font-size:20px;font-weight:900;color:var(--cyan);border:1px solid #a5f3fc;background:#ecfeff;border-radius:8px;text-align:right;" />
-                  <span id="statWaterCurrent" class="hidden">1500</span>
-                  <span class="text-xs text-muted">/ <span id="statWaterTarget">2450</span> ml</span>
-                </div>
-              </div>
-              <div class="flex-gap" style="gap:4px;">
-                <button type="button" class="btn btn-sm" style="background:#ecfeff;color:#155e75;border:1px solid #a5f3fc;" onclick="addWater(250)">+250</button>
-                <button type="button" class="btn btn-sm" style="background:var(--cyan);color:#fff;" onclick="addWater(500)">+500</button>
-                <button type="button" class="btn btn-sm btn-slate-soft" onclick="resetWater()" title="重置飲水">↺</button>
-              </div>
-            </div>
-            <div class="flex-gap mt-2" style="gap:6px;flex-wrap:wrap;">
-              <input type="number" id="waterCustomStepInput" min="10" max="3000" step="10" value="350" placeholder="自訂 ml" aria-label="自訂增減飲水量 (ml)"
-                style="width:86px;padding:5px 8px;font-size:12px;font-weight:700;border-radius:8px;" />
-              <button type="button" class="btn btn-sm" style="background:#cffafe;color:#0e7490;border:1px solid #67e8f9;" onclick="applyCustomWaterDelta(1)">＋ 自訂加入</button>
-              <button type="button" class="btn btn-sm btn-slate-soft" onclick="applyCustomWaterDelta(-1)">－ 扣除</button>
-            </div>
-            <div class="progress-track mt-3"><div id="barWater" class="progress-fill" style="width:0%;background:var(--cyan);"></div></div>
-            <div class="flex-between text-xs text-muted mt-2"><span>超商鮮食偏鹹，足量飲水助代謝</span><strong id="statWaterPct" style="color:var(--cyan);">0%</strong></div>
-          </div>
+
         </div>
 
         <!-- iOS Fitness / Health Activity Sync & Dynamic Target Adjustment -->
@@ -814,6 +788,48 @@
 
       <!-- ==================== TAB 2: 體重與BMI飲食控制計劃表 ==================== -->
       <section id="view-plan" class="hidden" style="display:flex;flex-direction:column;gap:16px;">
+        <!-- Top Executive Overview Dashboard for ⚖️ 減脂計畫 (單日營養攝取分析 × 減脂藍圖 × 單日營養健檢) -->
+        <div id="planTopSummaryDashboard" class="card" style="background:linear-gradient(135deg,#0f172a 0%,#064e3b 100%);color:#fff;border:none;display:flex;flex-direction:column;gap:12px;">
+          <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
+            <div>
+              <div class="text-xs font-extrabold" style="color:#6ee7b7;">🎯 減脂計畫重點總覽儀表板</div>
+              <h2 style="font-size:18px;font-weight:900;margin-top:2px;">單日營養攝取分析・減脂藍圖・單日營養健檢</h2>
+            </div>
+            <span id="planTopGoalPill" class="badge" style="background:rgba(16,185,129,0.28);color:#d1fae5;border:1px solid rgba(110,231,183,0.4);">70 → 63 kg</span>
+          </div>
+
+          <div class="grid grid-3" style="gap:10px;">
+            <!-- Card 1: 單日營養攝取分析 -->
+            <button type="button" onclick="scrollToPlanSection('planSectionIntake')" style="text-align:left;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);border-radius:12px;padding:12px;color:#fff;display:flex;flex-direction:column;gap:4px;cursor:pointer;">
+              <div class="flex-between" style="width:100%;">
+                <span class="text-xs font-extrabold" style="color:#6ee7b7;">🔍 單日營養攝取分析</span>
+                <span id="planSumIntakeBadge" class="badge badge-emerald" style="font-size:10px;">達標中</span>
+              </div>
+              <div id="planSumIntakeMain" style="font-size:17px;font-weight:900;margin-top:2px;">0 / 1618 kcal</div>
+              <div id="planSumIntakeSub" class="text-xs" style="color:#cbd5e1;line-height:1.45;">尚餘 1618 kcal・蛋白缺 113g</div>
+            </button>
+
+            <!-- Card 2: 減脂藍圖 -->
+            <button type="button" onclick="scrollToPlanSection('planSectionBlueprint')" style="text-align:left;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);border-radius:12px;padding:12px;color:#fff;display:flex;flex-direction:column;gap:4px;cursor:pointer;">
+              <div class="flex-between" style="width:100%;">
+                <span class="text-xs font-extrabold" style="color:#93c5fd;">🗓️ 減脂藍圖</span>
+                <span id="planSumBlueprintBadge" class="badge badge-blue" style="font-size:10px;">穩健步調</span>
+              </div>
+              <div id="planSumBlueprintMain" style="font-size:17px;font-weight:900;margin-top:2px;">預計 2027/03/28</div>
+              <div id="planSumBlueprintSub" class="text-xs" style="color:#cbd5e1;line-height:1.45;">約 18.7 週・每週 -0.37 kg</div>
+            </button>
+
+            <!-- Card 3: 單日營養健檢 -->
+            <button type="button" onclick="scrollToPlanSection('planSectionAudit')" style="text-align:left;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);border-radius:12px;padding:12px;color:#fff;display:flex;flex-direction:column;gap:4px;cursor:pointer;">
+              <div class="flex-between" style="width:100%;">
+                <span class="text-xs font-extrabold" style="color:#fcd34d;">📋 單日營養健檢</span>
+                <span id="planSumAuditBadge" class="badge badge-amber" style="font-size:10px;">0 項餐點</span>
+              </div>
+              <div id="planSumAuditMain" style="font-size:17px;font-weight:900;margin-top:2px;">尚無飲食紀錄</div>
+              <div id="planSumAuditSub" class="text-xs" style="color:#cbd5e1;line-height:1.45;">記錄餐點後自動標記高油/高碳與優質高蛋白</div>
+            </button>
+          </div>
+        </div>
         <div class="card" style="display:flex;flex-direction:column;gap:16px;">
           <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:12px;">
             <div>
@@ -823,80 +839,12 @@
             <button type="button" class="btn btn-sm btn-primary" onclick="switchTab('dashboard')">返回今日監控 →</button>
           </div>
 
-          <!-- Gender & Age Selector Bar -->
-          <div class="card-soft" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:#f8fafc;border:1px solid #cbd5e1;">
-            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-              <div>
-                <div class="text-xs font-extrabold" style="color:var(--slate-700);margin-bottom:4px;">生理性別（影響 BMR / TDEE、安全熱量下限、理想腰圍與飲水）</div>
-                <div class="gender-switch" role="group" aria-label="生理性別選擇">
-                  <button type="button" id="planGenderMaleBtn" class="gender-btn active-male" style="min-height:40px;padding:6px 18px;font-size:13px;" onclick="setGender('male')">♂ 男性換算</button>
-                  <button type="button" id="planGenderFemaleBtn" class="gender-btn" style="min-height:40px;padding:6px 18px;font-size:13px;" onclick="setGender('female')">♀ 女性換算</button>
-                </div>
-              </div>
-              <div style="min-width:150px;">
-                <div class="flex-between text-xs font-bold" style="margin-bottom:4px;"><label for="planAgeInput">年齡 (歲)</label><span id="planAgeDisplay" style="color:var(--blue);">30 歲</span></div>
-                <div class="stepper">
-                  <button type="button" class="stepper-btn" onclick="stepAge(-1)">－</button>
-                  <input type="number" id="planAgeInput" class="stepper-input" min="18" max="80" step="1" value="30" oninput="handleAgeTyping(this.value)" onblur="commitAgeInput(this.value)" onchange="commitAgeInput(this.value)" />
-                  <button type="button" class="stepper-btn" onclick="stepAge(1)">＋</button>
-                </div>
-              </div>
+          <!-- Body Parameters Moved to ⚙️ 系統 -> 體態設定 -->
+          <div class="card-soft flex-between" style="background:#f8fafc;flex-wrap:wrap;gap:8px;padding:10px 14px;">
+            <div class="text-xs font-bold" style="color:var(--slate-700);">
+              ⚖️ 身形、性別、年齡、目標體重與活動量參數已整合至「⚙️ 系統 → 體態設定」統一管理
             </div>
-            <div id="planGenderFormulaNote" class="text-xs text-muted" style="max-width:340px;line-height:1.5;">
-              採用 <strong>Mifflin-St Jeor</strong> 性別基礎代謝公式，並依衛福部國健署標準區分男女理想腰圍（男 &lt;90cm / 女 &lt;80cm）與減脂安全熱量下限。
-            </div>
-          </div>
-
-          <div class="grid grid-5 card-soft">
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div class="flex-between text-xs font-bold"><label for="planHeightInput">使用者身高 (cm)</label><span id="planHeightDisplay" style="color:var(--teal);">170 cm</span></div>
-              <div class="stepper">
-                <button type="button" class="stepper-btn" onclick="stepHeight(-1)">－</button>
-                <input type="number" id="planHeightInput" class="stepper-input" min="120" max="230" step="0.5" value="170" oninput="handleHeightTyping(this.value)" onblur="commitHeightInput(this.value)" onchange="commitHeightInput(this.value)" />
-                <button type="button" class="stepper-btn" onclick="stepHeight(1)">＋</button>
-              </div>
-              <input type="range" id="planHeightSlider" min="140" max="205" step="0.5" value="170" oninput="handleHeightSlider(this.value)" />
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div class="flex-between text-xs font-bold"><label for="planWeightInput">目前體重 (kg)</label><span id="planWeightDisplay" style="color:var(--emerald);">70 kg</span></div>
-              <div class="stepper">
-                <button type="button" class="stepper-btn" onclick="stepWeight(-0.5)">－</button>
-                <input type="number" id="planWeightInput" class="stepper-input" min="35" max="180" step="0.5" value="70" oninput="handleWeightTyping(this.value)" onblur="commitWeightInput(this.value)" onchange="commitWeightInput(this.value)" />
-                <button type="button" class="stepper-btn" onclick="stepWeight(0.5)">＋</button>
-              </div>
-              <input type="range" id="planWeightSlider" min="40" max="130" step="0.5" value="70" oninput="handleWeightSlider(this.value)" />
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div class="flex-between text-xs font-bold"><label for="planTargetWeightInput">目標減脂體重 (kg)</label><span id="planTargetWeightDisplay" style="color:var(--blue);">63 kg</span></div>
-              <div class="stepper">
-                <button type="button" class="stepper-btn" onclick="stepTargetWeight(-0.5)">－</button>
-                <input type="number" id="planTargetWeightInput" class="stepper-input" min="35" max="160" step="0.5" value="63" oninput="handleTargetWeightTyping(this.value)" onblur="commitTargetWeightInput(this.value)" onchange="commitTargetWeightInput(this.value)" />
-                <button type="button" class="stepper-btn" onclick="stepTargetWeight(0.5)">＋</button>
-              </div>
-              <input type="range" id="planTargetWeightSlider" min="40" max="120" step="0.5" value="63" oninput="handleTargetWeightSlider(this.value)" />
-              <div id="planWeightDiffText" class="text-xs text-muted">預計減重目標：-7 kg</div>
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:6px;">
-              <label for="planActivitySelect" class="text-xs font-bold">上班族日常活動強度</label>
-              <select id="planActivitySelect" onchange="updatePlanParams()">
-                <option value="light">輕度工作：坐辦公室上班族</option>
-                <option value="moderate">中度工作：站立或走動較多</option>
-                <option value="heavy">重度工作：高體力或規律重訓</option>
-              </select>
-              <div id="planBmiCalFactorHint" class="text-xs text-muted">依 BMI 與活動量自動匹配熱量係數</div>
-            </div>
-
-            <div style="display:flex;flex-direction:column;gap:6px;">
-              <label for="planMacroModeSelect" class="text-xs font-bold">營養素分配策略</label>
-              <select id="planMacroModeSelect" onchange="updatePlanParams()">
-                <option value="high_protein">營養師減醣高蛋白 (P:28%/C:38%/F:34%)</option>
-                <option value="balanced">國健署均衡減重 (P:20%/C:50%/F:30%)</option>
-              </select>
-              <div class="text-xs text-muted">高蛋白減醣能避免午後暈碳並保肌</div>
-            </div>
+            <button type="button" class="btn btn-sm btn-blue" onclick="switchTab('system')">✏️ 前往體態設定修改</button>
           </div>
 
           <!-- BMI Assessment Card -->
@@ -967,15 +915,14 @@
           </div>
 
           <!-- Today's Intake Integration, Nutrition Label Audit & Improvement Advice -->
-          <div class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:14px;">
+          <div id="planSectionIntake" class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:14px;">
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--border);padding-bottom:10px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:var(--emerald);">計畫與實戰整合：今日攝取食物 × 營養標示診斷與改善建議</div>
-                <h3 style="font-size:17px;font-weight:800;margin-top:2px;">🔍 今日飲食攝取分析與調整處方</h3>
+                <h3 style="font-size:17px;font-weight:800;margin-top:2px;">🔍 單日營養攝取分析</h3>
               </div>
               <div class="flex-gap" style="gap:6px;">
                 <span id="planAuditDateBadge" class="badge badge-blue">📅 2026-11-18</span>
-                <button type="button" class="btn btn-sm btn-primary" onclick="openCustomFoodModal('ai')">＋ 補記今日食物</button>
               </div>
             </div>
 
@@ -985,7 +932,7 @@
             <!-- Logged Foods Per-Item Nutrition Label Audit -->
             <div>
               <div class="flex-between" style="margin-bottom:8px;">
-                <div class="text-xs font-extrabold" style="color:var(--slate-700);">📋 今日已攝取食物項目與營養標示逐項健檢</div>
+                <div id="planSectionAudit" class="text-xs font-extrabold" style="color:var(--slate-700);">📋 單日營養健檢</div>
                 <span id="planAuditItemCount" class="text-xs text-muted">共 0 項餐點</span>
               </div>
               <div id="planLoggedFoodAuditList" style="display:flex;flex-direction:column;gap:8px;"></div>
@@ -999,11 +946,11 @@
           </div>
 
           <!-- Timeline Forecast & Actionable Execution Guide -->
-          <div class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:14px;">
+          <div id="planSectionBlueprint" class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:14px;">
             <div class="flex-between" style="flex-wrap:wrap;gap:10px;border-bottom:1px solid var(--border);padding-bottom:10px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:var(--blue);">功能進階：預計達成時間推估 × 階段式執行引導</div>
-                <h3 style="font-size:17px;font-weight:800;margin-top:2px;">🗓️ 減脂達成時程預測與每日跟練引導</h3>
+                <h3 style="font-size:17px;font-weight:800;margin-top:2px;">🗓️ 減脂藍圖</h3>
               </div>
               <div class="flex-gap" style="gap:6px;">
                 <label for="planExerciseSelect" class="text-xs font-bold text-muted">搭配額外運動：</label>
@@ -1262,7 +1209,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">完整使用手冊・所有安裝與進階設定步驟一次整合</div>
               <h2 style="font-size:20px;font-weight:800;margin-top:2px;">📖 NutriFit 操作說明與安裝指南</h2>
             </div>
-            <button type="button" class="btn btn-sm btn-primary" onclick="downloadIosStandaloneApp()">⬇️ 下載最新版獨立檔 (.html)</button>
+            <div class="flex-gap" style="gap:6px;"><button type="button" class="btn btn-sm btn-blue" onclick="openOnboardingModal()">👋 重看新手教學</button><button type="button" class="btn btn-sm btn-primary" onclick="downloadIosStandaloneApp()">⬇️ 下載獨立檔 (.html)</button></div>
           </div>
 
           <!-- Guide 1: iOS Installation -->
@@ -1419,6 +1366,92 @@
         </div>
 
 
+        <!-- Unified Body & BMI Parameter Settings (Consolidated from Plan Tab into 體態設定) -->
+        <div class="card" style="display:flex;flex-direction:column;gap:12px;">
+          <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:8px;">
+            <div>
+              <div class="text-xs font-extrabold" style="color:var(--emerald);">進階身形與 BMI 減脂目標參數（與首頁即時同步）</div>
+              <h3 style="font-size:16px;font-weight:800;margin-top:2px;">📏 身形・年齡・目標體重與飲食策略設定</h3>
+            </div>
+          </div>
+          <!-- Gender & Age Selector Bar -->
+          <div class="card-soft" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:#f8fafc;border:1px solid #cbd5e1;">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+              <div>
+                <div class="text-xs font-extrabold" style="color:var(--slate-700);margin-bottom:4px;">生理性別（影響 BMR / TDEE、安全熱量下限、理想腰圍與飲水）</div>
+                <div class="gender-switch" role="group" aria-label="生理性別選擇">
+                  <button type="button" id="planGenderMaleBtn" class="gender-btn active-male" style="min-height:40px;padding:6px 18px;font-size:13px;" onclick="setGender('male')">♂ 男性換算</button>
+                  <button type="button" id="planGenderFemaleBtn" class="gender-btn" style="min-height:40px;padding:6px 18px;font-size:13px;" onclick="setGender('female')">♀ 女性換算</button>
+                </div>
+              </div>
+              <div style="min-width:150px;">
+                <div class="flex-between text-xs font-bold" style="margin-bottom:4px;"><label for="planAgeInput">年齡 (歲)</label><span id="planAgeDisplay" style="color:var(--blue);">30 歲</span></div>
+                <div class="stepper">
+                  <button type="button" class="stepper-btn" onclick="stepAge(-1)">－</button>
+                  <input type="number" id="planAgeInput" class="stepper-input" min="18" max="80" step="1" value="30" oninput="handleAgeTyping(this.value)" onblur="commitAgeInput(this.value)" onchange="commitAgeInput(this.value)" />
+                  <button type="button" class="stepper-btn" onclick="stepAge(1)">＋</button>
+                </div>
+              </div>
+            </div>
+            <div id="planGenderFormulaNote" class="text-xs text-muted" style="max-width:340px;line-height:1.5;">
+              採用 <strong>Mifflin-St Jeor</strong> 性別基礎代謝公式，並依衛福部國健署標準區分男女理想腰圍（男 &lt;90cm / 女 &lt;80cm）與減脂安全熱量下限。
+            </div>
+          </div>
+
+          <div class="grid grid-5 card-soft">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="flex-between text-xs font-bold"><label for="planHeightInput">使用者身高 (cm)</label><span id="planHeightDisplay" style="color:var(--teal);">170 cm</span></div>
+              <div class="stepper">
+                <button type="button" class="stepper-btn" onclick="stepHeight(-1)">－</button>
+                <input type="number" id="planHeightInput" class="stepper-input" min="120" max="230" step="0.5" value="170" oninput="handleHeightTyping(this.value)" onblur="commitHeightInput(this.value)" onchange="commitHeightInput(this.value)" />
+                <button type="button" class="stepper-btn" onclick="stepHeight(1)">＋</button>
+              </div>
+              <input type="range" id="planHeightSlider" min="140" max="205" step="0.5" value="170" oninput="handleHeightSlider(this.value)" />
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="flex-between text-xs font-bold"><label for="planWeightInput">目前體重 (kg)</label><span id="planWeightDisplay" style="color:var(--emerald);">70 kg</span></div>
+              <div class="stepper">
+                <button type="button" class="stepper-btn" onclick="stepWeight(-0.5)">－</button>
+                <input type="number" id="planWeightInput" class="stepper-input" min="35" max="180" step="0.5" value="70" oninput="handleWeightTyping(this.value)" onblur="commitWeightInput(this.value)" onchange="commitWeightInput(this.value)" />
+                <button type="button" class="stepper-btn" onclick="stepWeight(0.5)">＋</button>
+              </div>
+              <input type="range" id="planWeightSlider" min="40" max="130" step="0.5" value="70" oninput="handleWeightSlider(this.value)" />
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="flex-between text-xs font-bold"><label for="planTargetWeightInput">目標減脂體重 (kg)</label><span id="planTargetWeightDisplay" style="color:var(--blue);">63 kg</span></div>
+              <div class="stepper">
+                <button type="button" class="stepper-btn" onclick="stepTargetWeight(-0.5)">－</button>
+                <input type="number" id="planTargetWeightInput" class="stepper-input" min="35" max="160" step="0.5" value="63" oninput="handleTargetWeightTyping(this.value)" onblur="commitTargetWeightInput(this.value)" onchange="commitTargetWeightInput(this.value)" />
+                <button type="button" class="stepper-btn" onclick="stepTargetWeight(0.5)">＋</button>
+              </div>
+              <input type="range" id="planTargetWeightSlider" min="40" max="120" step="0.5" value="63" oninput="handleTargetWeightSlider(this.value)" />
+              <div id="planWeightDiffText" class="text-xs text-muted">預計減重目標：-7 kg</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <label for="planActivitySelect" class="text-xs font-bold">上班族日常活動強度</label>
+              <select id="planActivitySelect" onchange="updatePlanParams()">
+                <option value="light">輕度工作：坐辦公室上班族</option>
+                <option value="moderate">中度工作：站立或走動較多</option>
+                <option value="heavy">重度工作：高體力或規律重訓</option>
+              </select>
+              <div id="planBmiCalFactorHint" class="text-xs text-muted">依 BMI 與活動量自動匹配熱量係數</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <label for="planMacroModeSelect" class="text-xs font-bold">營養素分配策略</label>
+              <select id="planMacroModeSelect" onchange="updatePlanParams()">
+                <option value="high_protein">營養師減醣高蛋白 (P:28%/C:38%/F:34%)</option>
+                <option value="balanced">國健署均衡減重 (P:20%/C:50%/F:30%)</option>
+              </select>
+              <div class="text-xs text-muted">高蛋白減醣能避免午後暈碳並保肌</div>
+            </div>
+          </div>
+
+        </div>
+
         <!-- Clean User-Facing Personal Settings (Backend Ops Moved to Dedicated admin.html) -->
         <div class="card" style="display:flex;flex-direction:column;gap:14px;border-color:#a7f3d0;">
           <div class="flex-between" style="flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--border);padding-bottom:12px;">
@@ -1426,7 +1459,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:800;margin-top:2px;">⚙️ 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v3.2.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v3.4.0・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -1457,7 +1490,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v3.2.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v3.4.0・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -1548,6 +1581,44 @@
     </div>
   </nav>
 
+  <!-- Modal: New User Onboarding Setup Guide (Auto-shown for new users with "不再顯示" option) -->
+  <div id="onboardingGuideModal" class="modal-backdrop hidden">
+    <div class="modal-sheet" style="max-width:480px;display:flex;flex-direction:column;gap:12px;">
+      <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;">
+        <div>
+          <span class="badge badge-blue">👋 歡迎使用 NutriFit</span>
+          <h3 style="font-size:18px;font-weight:900;margin-top:4px;">新使用者快速設定教學（2 步驟上手）</h3>
+        </div>
+        <button type="button" onclick="closeOnboardingModal()" style="font-size:18px;color:#64748b;font-weight:800;">✕</button>
+      </div>
+
+      <div class="card-soft" style="background:#ecfdf5;border-color:#a7f3d0;display:flex;flex-direction:column;gap:4px;">
+        <div class="text-xs font-extrabold" style="color:#065f46;">步驟 1️⃣｜先到「⚙️ 系統」完成個人體態設定</div>
+        <div class="text-xs" style="color:#064e3b;line-height:1.6;">
+          點擊底部最右側 <strong>「⚙️ 系統」</strong>，依序設定您的<strong>生理性別、年齡、身高、目前體重、目標減脂體重與活動強度</strong>，系統即會自動換算專屬 BMI、基礎代謝 BMR／TDEE 與每日熱量營養目標。
+        </div>
+      </div>
+
+      <div class="card-soft" style="background:#eff6ff;border-color:#bfdbfe;display:flex;flex-direction:column;gap:4px;">
+        <div class="text-xs font-extrabold" style="color:#1e3a8a;">步驟 2️⃣｜（選填）免費申請並綁定 Gemini API Key</div>
+        <ol class="text-xs" style="margin:2px 0 0 18px;color:#1e293b;line-height:1.65;">
+          <li>點開 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800;text-decoration:underline;">Google AI Studio API Key 頁面 ↗</a>，登入 Google 帳號點 <strong>Create API key</strong> 免費建立一組金鑰並複製。</li>
+          <li>回到本 App 的 <strong>「⚙️ 系統」→「🔑 個人免費 Gemini API Key」</strong> 貼上按儲存（僅存您手機本機，安全不外洩），即可解鎖<strong>外食餐盤克數視覺辨識</strong>與<strong>深度 AI 營養師問答</strong>！</li>
+        </ol>
+      </div>
+
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#334155;cursor:pointer;">
+        <input type="checkbox" id="onboardingDontShowCheck" checked style="width:16px;height:16px;accent-color:var(--emerald);" />
+        下次開啟不再顯示此新手教學
+      </label>
+
+      <div class="flex-gap" style="gap:8px;">
+        <button type="button" class="btn btn-primary" style="flex:1;" onclick="closeOnboardingModal();switchTab('system');">⚙️ 立即前往系統設定</button>
+        <button type="button" class="btn btn-slate-soft" onclick="closeOnboardingModal()">稍後再設</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal: What's New Release Notes Notification (Auto-shown after OTA Update) -->
   <div id="whatsNewModal" class="modal-backdrop hidden">
     <div class="modal-sheet" style="max-width:460px;display:flex;flex-direction:column;gap:12px;">
@@ -1560,6 +1631,10 @@
       </div>
       <ul id="whatsNewList" class="text-xs" style="margin:0 0 4px 18px;color:#1e293b;line-height:1.75;display:flex;flex-direction:column;gap:4px;"></ul>
       <div class="text-xs text-muted" style="background:#f8fafc;border-radius:8px;padding:8px 10px;">💾 您過往的所有體重、飲食與飲水紀錄皆已完整保留。</div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#334155;cursor:pointer;">
+        <input type="checkbox" id="whatsNewDontShowCheck" checked style="width:16px;height:16px;accent-color:var(--emerald);" />
+        下次開啟不再顯示此版本更新通知
+      </label>
       <button type="button" class="btn btn-primary" style="width:100%;" onclick="closeWhatsNewModal()">✅ 知道了，開始使用</button>
     </div>
   </div>
@@ -2136,6 +2211,11 @@
 
       const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
       setTxt('etaTargetDate', plan.etaStr);
+      // 同步「減脂計畫重點總覽儀表板」的「減脂藍圖」卡片
+      setTxt('planSumBlueprintMain', plan.mode === 'maintain' ? '已達目標體重' : `預計 ${plan.etaStr}`);
+      setTxt('planSumBlueprintSub', plan.days > 0 ? `約 ${plan.weeks} 週・每週 ${plan.mode === 'lose' ? '-' : '+'}${plan.weeklyKg} kg` : `維持 ${appState.targetWeightKg} kg 體態`);
+      const _bpBadge = document.getElementById('planSumBlueprintBadge');
+      if (_bpBadge) { _bpBadge.textContent = plan.mode === 'lose' ? `-${plan.weeklyKg}kg/週` : (plan.mode === 'gain' ? `+${plan.weeklyKg}kg/週` : '維持期'); _bpBadge.className = 'badge ' + plan.paceClass; }
       setTxt('etaDurationText', plan.days > 0 ? `約 ${plan.weeks} 週（${plan.days} 天）` : '維持目前健康飲食節奏');
       setTxt('etaWeeklyRate', plan.mode === 'lose' ? `-${plan.weeklyKg} kg / 週` : (plan.mode === 'gain' ? `+${plan.weeklyKg} kg / 週` : '±0.0 kg / 週'));
       const pb = document.getElementById('etaPaceBadge');
@@ -2409,6 +2489,43 @@
         }
       }
 
+      // 同步最上方「減脂計畫重點總覽儀表板」的「單日營養攝取分析」與「單日營養健檢」卡片
+      const _setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+      const _calDiffTop = Math.round(totals.calories - targets.targetCalories);
+      const _proGapTop = Math.round((targets.targetProtein - totals.protein) * 10) / 10;
+      const _fatOverTop = Math.round((totals.fat - targets.targetFat) * 10) / 10;
+      _setTxt('planTopGoalPill', `${appState.weightKg} → ${appState.targetWeightKg} kg (BMI ${targets.bmiInfo.bmi.toFixed(1)})`);
+      _setTxt('planSumIntakeMain', `${Math.round(totals.calories)} / ${targets.targetCalories} kcal`);
+      const _inBadge = document.getElementById('planSumIntakeBadge');
+      if (_inBadge) {
+        if (_calDiffTop > 80) { _inBadge.textContent = `超標 +${_calDiffTop}`; _inBadge.className = 'badge badge-rose'; }
+        else if (_calDiffTop >= -120) { _inBadge.textContent = '精準達標'; _inBadge.className = 'badge badge-emerald'; }
+        else { _inBadge.textContent = `尚餘 ${Math.abs(_calDiffTop)}`; _inBadge.className = 'badge badge-blue'; }
+      }
+      const _intakeNotes = [];
+      _intakeNotes.push(_proGapTop > 0 ? `蛋白缺 ${_proGapTop}g` : '蛋白達標');
+      if (_fatOverTop > 3) _intakeNotes.push(`脂肪超標 +${_fatOverTop}g`);
+      else _intakeNotes.push(`脂肪 ${totals.fat}/${targets.targetFat}g`);
+      _setTxt('planSumIntakeSub', _intakeNotes.join('・'));
+
+      const _highProCnt = analyzed.filter(x => x.a.tags.some(t => t.text.includes('優質高蛋白'))).length;
+      const _warnItems = analyzed.filter(x => x.a.status === 'high_fat' || x.a.status === 'high_carb');
+      const _auBadge = document.getElementById('planSumAuditBadge');
+      if (_auBadge) {
+        _auBadge.textContent = `${analyzed.length} 項餐點`;
+        _auBadge.className = 'badge ' + (_warnItems.length ? 'badge-amber' : 'badge-emerald');
+      }
+      if (!analyzed.length) {
+        _setTxt('planSumAuditMain', '尚無飲食紀錄');
+        _setTxt('planSumAuditSub', '點底部「➕ 記食物」即可自動健檢');
+      } else if (_warnItems.length) {
+        _setTxt('planSumAuditMain', `${_warnItems.length} 項需留意・${_highProCnt} 項高蛋白`);
+        _setTxt('planSumAuditSub', `優先調整：${_warnItems[0].item.name.slice(0, 16)}`);
+      } else {
+        _setTxt('planSumAuditMain', `全部 ${analyzed.length} 項結構均衡`);
+        _setTxt('planSumAuditSub', `含 ${_highProCnt} 項優質高蛋白，表現極佳`);
+      }
+
       adviceEl.innerHTML = advices.map(ad => `
         <div class="audit-advice ${ad.cls}">
           <div class="font-extrabold" style="color:var(--slate-900);margin-bottom:2px;">${ad.title}</div>
@@ -2441,6 +2558,13 @@
 
     let activeDashPlanSubTab = 'today';
     let activeFoodAiSubTab = 'chat';
+
+    function scrollToPlanSection(elId) {
+      const el = document.getElementById(elId);
+      if (el && typeof el.scrollIntoView === 'function') {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
 
     function switchDashPlanSubTab(subId) {
       activeDashPlanSubTab = (subId === 'plan') ? 'plan' : 'today';
@@ -2686,11 +2810,11 @@
       updateProgressCard('Fib', totals.fiber, targets.targetFiber, false);
 
       const wPct = Math.min(150, Math.round((appState.waterMl / targets.targetWater) * 100));
-      document.getElementById('statWaterCurrent').textContent = appState.waterMl;
+      const _swC = document.getElementById('statWaterCurrent'); if (_swC) _swC.textContent = appState.waterMl;
       syncInputSafely('waterDirectInput', appState.waterMl);
-      document.getElementById('statWaterTarget').textContent = targets.targetWater;
-      document.getElementById('statWaterPct').textContent = wPct + '%';
-      document.getElementById('barWater').style.width = Math.min(100, wPct) + '%';
+      const _swT = document.getElementById('statWaterTarget'); if (_swT) _swT.textContent = targets.targetWater;
+      const _swP = document.getElementById('statWaterPct'); if (_swP) _swP.textContent = wPct + '%';
+      const _swB = document.getElementById('barWater'); if (_swB) _swB.style.width = Math.min(100, wPct) + '%';
       // 同步最上方「今日攝取營養即時總覽儀表板」
       const setT = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
       const setW = (id, pct) => { const el = document.getElementById(id); if (el) el.style.width = Math.min(100, Math.max(0, pct)) + '%'; };
@@ -3855,7 +3979,7 @@
       }
     }
 
-    const APP_VERSION = 'v3.2.0';
+    const APP_VERSION = 'v3.4.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -4124,10 +4248,14 @@
         }
         // 5. 若管理者調高 minVersion，自動彈出綠色無損 OTA 更新橫幅
         if (cfg.minVersion && compareSemver(cfg.minVersion, APP_VERSION) > 0) {
-          const banner = document.getElementById('autoOtaUpdateBanner');
-          const verTxt = document.getElementById('autoOtaRemoteVerText');
-          if (verTxt) verTxt.textContent = cfg.minVersion;
-          if (banner) banner.classList.remove('hidden');
+          latestDetectedRemoteVer = cfg.minVersion;
+          const dismissedVer = localStorage.getItem('nutrifit_dismissed_ota_ver') || '';
+          if (dismissedVer !== cfg.minVersion) {
+            const banner = document.getElementById('autoOtaUpdateBanner');
+            const verTxt = document.getElementById('autoOtaRemoteVerText');
+            if (verTxt) verTxt.textContent = cfg.minVersion;
+            if (banner) banner.classList.remove('hidden');
+          }
         }
       } catch (e) {}
     }
@@ -4150,10 +4278,14 @@
         const m = text.match(/const\s+APP_VERSION\s*=\s*['"](v?\d+\.\d+(?:\.\d+)?)['"]/);
         const remoteVer = m ? m[1] : null;
         if (remoteVer && compareSemver(remoteVer, APP_VERSION) > 0) {
-          const banner = document.getElementById('autoOtaUpdateBanner');
-          const verTxt = document.getElementById('autoOtaRemoteVerText');
-          if (verTxt) verTxt.textContent = remoteVer;
-          if (banner) banner.classList.remove('hidden');
+          latestDetectedRemoteVer = remoteVer;
+          const dismissedVer = localStorage.getItem('nutrifit_dismissed_ota_ver') || '';
+          if (dismissedVer !== remoteVer) {
+            const banner = document.getElementById('autoOtaUpdateBanner');
+            const verTxt = document.getElementById('autoOtaRemoteVerText');
+            if (verTxt) verTxt.textContent = remoteVer;
+            if (banner) banner.classList.remove('hidden');
+          }
         }
       } catch (e) {}
     }
@@ -5190,16 +5322,36 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v3.2.0',
+      version: 'v3.4.0',
       date: '2026-11-20',
       items: [
-        '💧 今日攝取營養總覽移除多餘記食物鍵，新增 0–1000 ml 拖拉式補水滑桿。',
-        '⚖️ 原「單日營養攝取」更名為「體態設定」並移至「⚙️ 系統」分頁，首頁瀏覽更俐落。',
-        '✏️ 「單日飲食明細」支援點選 ✏️ 直接編輯已發布餐點的餐別、品項與營養標示。',
-        '🍱 AI 外食辨識結果新增「自訂品名」輸入框，辨識不準時可直接改寫料理名稱。',
-        '✨ 系統分頁移除冗餘的 iOS 安裝與記憶引擎狀態區塊，並新增版本更新日誌通知。'
+        '📊 主頁兩大子分頁簡化命名為「營養監控」與「減脂計畫」，操作更直覺。',
+        '🎯 「減脂計畫」最上方新增「重點總覽儀表板」，一屏彙整單日營養攝取分析、減脂藍圖與單日營養健檢（點擊卡片可直接跳轉明細）。',
+        '🔍 區塊名稱統一精簡為「單日營養攝取分析」（移除多餘補記食物鍵）、「減脂藍圖」與「單日營養健檢」。'
       ]
     };
+
+    let latestDetectedRemoteVer = '';
+
+    function dismissOtaBannerForCurrentRemote() {
+      document.getElementById('autoOtaUpdateBanner')?.classList.add('hidden');
+      if (latestDetectedRemoteVer) {
+        try { localStorage.setItem('nutrifit_dismissed_ota_ver', latestDetectedRemoteVer); } catch (e) {}
+        showToast(`已略過 ${latestDetectedRemoteVer} 更新提示（未來有更新版本時仍會通知）`, '🔕');
+      }
+    }
+
+    function openOnboardingModal() {
+      document.getElementById('onboardingGuideModal')?.classList.remove('hidden');
+    }
+
+    function closeOnboardingModal() {
+      document.getElementById('onboardingGuideModal')?.classList.add('hidden');
+      const chk = document.getElementById('onboardingDontShowCheck');
+      if (chk && chk.checked) {
+        try { localStorage.setItem('nutrifit_hide_onboarding', '1'); } catch (e) {}
+      }
+    }
 
     function openWhatsNewModal(forceShow = false) {
       const modal = document.getElementById('whatsNewModal');
@@ -5213,14 +5365,23 @@
 
     function closeWhatsNewModal() {
       document.getElementById('whatsNewModal')?.classList.add('hidden');
-      try { localStorage.setItem('nutrifit_last_seen_version', APP_VERSION); } catch (e) {}
+      const chk = document.getElementById('whatsNewDontShowCheck');
+      if (!chk || chk.checked) {
+        try { localStorage.setItem('nutrifit_last_seen_version', APP_VERSION); } catch (e) {}
+      }
     }
 
     function checkAndShowWhatsNewOnUpdate() {
       try {
+        const hideOnboarding = localStorage.getItem('nutrifit_hide_onboarding') === '1';
         const lastSeen = localStorage.getItem('nutrifit_last_seen_version') || '';
-        if (lastSeen !== APP_VERSION) {
+        if (!hideOnboarding && !lastSeen) {
+          openOnboardingModal();
+          localStorage.setItem('nutrifit_last_seen_version', APP_VERSION);
+        } else if (lastSeen !== APP_VERSION) {
           openWhatsNewModal(true);
+        } else if (!hideOnboarding) {
+          openOnboardingModal();
         }
       } catch (e) {}
     }
