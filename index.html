@@ -1490,16 +1490,19 @@
   </div>
   <!-- Device Preview Switcher -->
   <div class="vp-bar">
-    <div class="vp-bar-inner">
-      <div class="flex-gap">
-        <span style="width:8px;height:8px;border-radius:50%;background:#34d399;display:inline-block;"></span>
-        <strong style="color:#fffdf8;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-star"/></svg> Merry Christmas・NutriFit</strong>
+    <div class="vp-bar-inner" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:nowrap;">
+      <div style="display:flex;flex-direction:column;gap:5px;min-width:0;flex:1;">
+        <div class="flex-gap" style="gap:6px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#34d399;display:inline-block;flex-shrink:0;"></span>
+          <strong style="color:#fffdf8;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-star"/></svg> Merry Christmas・NutriFit</strong>
+        </div>
+        <div class="vp-btns" style="align-self:flex-start;">
+          <button type="button" id="vpBtn-auto" class="vp-btn active" onclick="setViewportMode('auto')">🔄 自動響應</button>
+          <button type="button" id="vpBtn-phone" class="vp-btn" onclick="setViewportMode('phone')">📱 手機直立</button>
+          <button type="button" id="vpBtn-tablet" class="vp-btn" onclick="setViewportMode('tablet')">📟 平板雙欄</button>
+        </div>
       </div>
-      <div class="vp-btns">
-        <button type="button" id="vpBtn-auto" class="vp-btn active" onclick="setViewportMode('auto')">🔄 自動響應</button>
-        <button type="button" id="vpBtn-phone" class="vp-btn" onclick="setViewportMode('phone')">📱 手機直立</button>
-        <button type="button" id="vpBtn-tablet" class="vp-btn" onclick="setViewportMode('tablet')">📟 平板雙欄</button>
-      </div>
+      <button type="button" id="vpBtn-tour" onclick="startDynamicTour(0)" style="flex-shrink:0;display:inline-flex;align-items:center;gap:4px;padding:7px 11px;border-radius:999px;background:linear-gradient(135deg,#dcfce7,#bbf7d0);color:#14532d;border:1.5px solid #86efac;font-size:12px;font-weight:900;white-space:nowrap;box-shadow:0 3px 10px rgba(78,171,115,0.2);cursor:pointer;">🎬 新手教學</button>
     </div>
   </div>
 
@@ -1621,10 +1624,10 @@
         </div>
 
         <div class="header-nav">
-          <button type="button" id="tabBtn-dashboard" class="tab-btn active" onclick="switchTab('dashboard')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-tree"/></svg> 今日監控與計畫</button>
-          <button type="button" id="tabBtn-food_ai" class="tab-btn" onclick="switchTab('food_ai')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-gingerbread"/></svg> 飲食與 AI</button>
-          <button type="button" id="tabBtn-guide" class="tab-btn" onclick="switchTab('guide')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-snowman"/></svg> 操作說明</button>
-          <button type="button" id="tabBtn-system" class="tab-btn" onclick="switchTab('system')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 系統與設定</button>
+          <button type="button" id="tabBtn-dashboard" class="tab-btn active" onclick="switchTab('dashboard')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-tree"/></svg> 營養資訊</button>
+          <button type="button" id="tabBtn-food_ai" class="tab-btn" onclick="switchTab('food_ai')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-santa"/></svg> AI 營養師</button>
+          <button type="button" id="tabBtn-tips" class="tab-btn" onclick="switchTab('tips')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-stocking"/></svg> 減脂秘訣</button>
+          <button type="button" id="tabBtn-system" class="tab-btn" onclick="switchTab('system')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 系統設置</button>
           <div class="nav-right">
             <input type="date" id="activeDateInput" value="" onchange="switchActiveDate(this.value)" style="width:auto;padding:5px 8px;font-size:12px;font-weight:700;" />
             <button type="button" id="jumpTodayBtn" class="btn btn-sm" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:5px 9px;" onclick="jumpToTodayDate()" title="立即切換至今天日期"><svg class="xmas-ic" style="width:15px;height:15px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-star"/></svg> 今天</button>
@@ -1849,7 +1852,7 @@
             </div>
             <div class="flex-gap" style="gap:6px;">
               <span id="todayWorkoutBonusBadge" class="badge badge-slate" style="background:#f1f5f9;color:#475569;">今日無額外運動加成</span>
-              <button type="button" class="btn btn-sm" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;" onclick="toggleIosShortcutGuide()">📋 貼上健康數據</button><button type="button" class="btn btn-sm btn-slate-soft" onclick="switchTab('guide')">📖 捷徑教學</button>
+              <button type="button" class="btn btn-sm" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;" onclick="toggleIosShortcutGuide()">📋 貼上健康數據</button><button type="button" class="btn btn-sm btn-slate-soft" onclick="openFeatureHelpModal('apple_health')">❓ Apple 健康說明</button>
             </div>
           </div>
 
@@ -2194,14 +2197,6 @@
         </div>
       </section>
 
-      <!-- Consolidated Sub-Navigation for 🍱 飲食與 AI Hub -->
-      <div id="foodAiSubBar" class="hidden" style="display:flex;flex-direction:column;gap:8px;">
-        <div class="subtab-bar" role="tablist" aria-label="飲食與 AI 子分類">
-          <button type="button" id="subBtn-chat" class="subtab-btn active" onclick="switchFoodAiSubTab('chat')"><svg class="xmas-ic" style="width:20px;height:20px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-santa"/></svg> AI 營養師問答</button>
-          <button type="button" id="subBtn-store" class="subtab-btn" onclick="switchFoodAiSubTab('store')"><svg class="xmas-ic" style="width:20px;height:20px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-stocking"/></svg> 超商餐點</button>
-        </div>
-      </div>
-
       <!-- ==================== TAB 3: AI 拍照辨識熱量 ==================== -->
       <section id="view-camera" class="hidden" style="display:flex;flex-direction:column;gap:16px;">
         <div class="card" style="display:flex;flex-direction:column;gap:16px;">
@@ -2360,87 +2355,6 @@
         </div>
       </section>
 
-      <!-- ==================== TAB 4: 📖 操作說明（安裝、OTA、iOS 捷徑、API 金鑰與拍照教學） ==================== -->
-      <section id="view-guide" class="hidden" style="display:flex;flex-direction:column;gap:16px;">
-        <div class="card" style="display:flex;flex-direction:column;gap:16px;">
-          <div class="flex-between" style="flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--border);padding-bottom:12px;">
-            <div>
-              <div class="text-xs font-extrabold" style="color:var(--emerald);">完整使用手冊・所有安裝與進階設定步驟一次整合</div>
-              <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-snowman"/></svg> NutriFit 操作說明與安裝指南</h2>
-            </div>
-            <div class="flex-gap" style="gap:6px;"><button type="button" class="btn btn-sm btn-blue" onclick="startDynamicTour(0)">🎬 播放動態新手教學</button><button type="button" class="btn btn-sm btn-primary" onclick="downloadIosStandaloneApp()">⬇️ 下載獨立檔 (.html)</button></div>
-          </div>
-
-          <!-- Guide 1: iOS Installation -->
-          <div class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:8px;">
-            <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
-              <h3 class="text-sm font-extrabold" style="color:var(--slate-900);">1️⃣ 📱 iPhone / iPad 正確安裝成桌面 App（避開檔案預覽卡死）</h3>
-              <span class="badge badge-emerald">最推薦</span>
-            </div>
-            <div class="text-xs" style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:8px 10px;color:#92400e;line-height:1.55;">
-              <strong>為什麼直接點 iPhone「檔案」裡的 .html 不能操作？</strong> Apple iOS 會強制以「Quick Look 靜態預覽」開啟本機 HTML 並停用所有按鈕。請用下方任一方法開啟：
-            </div>
-            <ol class="text-xs text-muted" style="margin:2px 0 0 18px;line-height:1.7;">
-              <li><strong>方法 A（最推薦・支援未來 OTA 線上更新）</strong>：點右上角「⬇️ 下載最新版獨立檔」取得 <code>NutriFit_App.html</code>（更名為 <code>index.html</code>），上傳至免費固定網址（例如 <strong>GitHub Pages</strong> 或登入後的 <strong>Netlify</strong> 固定站名）。</li>
-              <li>用 iPhone <strong>Safari</strong> 開啟該固定網址 → 點底部中央<strong>「分享（方框向上箭頭）」</strong> → 選擇<strong>「加入主畫面」</strong>，就會變成全螢幕獨立 iOS App！</li>
-              <li><strong>方法 B（純離線單機開啟）</strong>：於 App Store 安裝免費「HTML Viewer Q」或「Koder」App，從中開啟下載好的 <code>NutriFit_App.html</code> 即可完整互動。</li>
-            </ol>
-          </div>
-
-          <!-- Guide 2: OTA Zero-Loss Update + GitHub One-Click Publisher -->
-          <div class="card-soft" style="background:#eff6ff;border-color:#bfdbfe;display:flex;flex-direction:column;gap:8px;">
-            <h3 class="text-sm font-extrabold" style="color:#1e3a8a;">2️⃣ ☁️ 純手機 GitHub Pages + 線上 OTA 無損更新設定（方案 1・免電腦）</h3>
-            <ol class="text-xs" style="margin:2px 0 0 18px;color:#1e293b;line-height:1.7;">
-              <li><strong>建立免費固定網址（只需做一次）</strong>：登入 <a href="https://github.com/new" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;text-decoration:underline;">GitHub</a> 建立一個 Public 倉庫（例如命名 <code>nutrifit</code>，勾選 Add a README file）→ 進入該倉庫 <strong>Settings → Pages</strong> → Branch 選 <code>main</code> 點 Save，即取得固定網址 <code>https://你的帳號.github.io/nutrifit/</code>。</li>
-              <li><strong>建立單一倉庫安全 Token（只需做一次）</strong>：前往 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;text-decoration:underline;">GitHub Fine-grained Tokens</a> → Repository access 選 <strong>Only select repositories（只勾選 nutrifit）</strong> → Permissions 展開 Repository permissions 將 <strong>Contents 設為 Read and write</strong> → 產生並複製 <code>github_pat_...</code>。</li>
-              <li><strong>綁定至本 App 後台</strong>：切到「⚙️ 系統與設定」→ 在「🚀 純手機 GitHub 一鍵發佈器」填入帳號、倉庫名 <code>nutrifit</code> 與 Token 點儲存，接著點<strong>「📤 推送目前版本至 GitHub」</strong>即可把首次版本送上線，再用 Safari 開啟固定網址「加入主畫面」。</li>
-              <li><strong>未來純手機 OTA 更新</strong>：每次有新版時，在手機複製新版原始碼貼進後台輸入框按<strong>「🚀 推送貼上的新版至 GitHub」</strong>，等約 20～30 秒後點<strong>「🔍 檢查線上新版」→「⚡ 立即無損套用更新」</strong>，程式碼即自動升級且 <strong>100% 保留所有歷史體重與飲食資料</strong>！</li>
-            </ol>
-          </div>
-
-          <!-- Guide 3: iOS Shortcuts Health Sync -->
-          <div class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:8px;">
-            <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
-              <h3 class="text-sm font-extrabold" style="color:var(--slate-900);">3️⃣ 🏃 iOS「捷徑 (Shortcuts)」自動同步 Apple 健康／健身數據</h3>
-              <button type="button" class="btn btn-sm btn-slate-soft" onclick="copyShortcutParamSample()">📋 複製 URL 參數格式</button>
-            </div>
-            <div class="text-xs text-muted" style="line-height:1.65;">
-              因 iOS 安全政策限制網頁無法直讀 HealthKit，但透過 iPhone 內建免費「捷徑」App 只需設定一次，以後點一下就能把今日步數與活動能量帶入 NutriFit 自動上調運動日營養目標：
-            </div>
-            <ol class="text-xs text-muted" style="margin:2px 0 0 18px;line-height:1.7;">
-              <li>開啟 iPhone「捷徑」App → 右上角「＋」新增捷徑 → 加入動作「尋找健康樣本」（類型選<strong>步數</strong>，開始日期為<strong>今天</strong>）與「計算統計資料（總和）」。</li>
-              <li>再加入一組「尋找健康樣本」（類型選<strong>動態能量</strong>，開始日期為<strong>今天</strong>）與「計算統計資料（總和）」。</li>
-              <li>加入動作「打開 URL」，填入你的 NutriFit 固定網址並接上參數：<code>?activeKcal=[動態能量總和]&amp;steps=[步數總和]</code>。</li>
-              <li>平日晚上或假日運動完點一下該捷徑，App 就會自動開啟並補償 55% 運動消耗至今日蛋白質、碳水與飲水目標！</li>
-            </ol>
-          </div>
-
-          <!-- Guide 4: Gemini API Key Setup -->
-          <div class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:8px;">
-            <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
-              <h3 class="text-sm font-extrabold" style="color:var(--slate-900);">4️⃣ 🔑 Gemini API Key 申請與後台綁定步驟（解鎖視覺辨識＆AI 問答）</h3>
-              <button type="button" class="btn btn-sm btn-blue" onclick="switchTab('system')">⚙️ 前往系統後台綁定</button>
-            </div>
-            <ol class="text-xs text-muted" style="margin:2px 0 0 18px;line-height:1.7;">
-              <li>前往 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700;text-decoration:underline;">Google AI Studio API Key 頁面</a> 登入 Google 帳號並建立一組 API Key。</li>
-              <li>回到本 App 切至「⚙️ 系統與設定」→ 在「🔑 Gemini API Key 後台集中管理」貼上並點「💾 儲存金鑰」（僅保存在你手機本機，不上傳第三方）。</li>
-              <li>若使用中遇到 <strong>HTTP 429 免費額度達上限</strong>或模型更新，直接點系統頁的<strong>「🚀 一鍵全自動維護」</strong>，系統會自動依序執行診斷、切換有額度模型、二次診斷與排錯。</li>
-            </ol>
-          </div>
-
-          <!-- Guide 5: Photo Recognition & Daily Usage Tips -->
-          <div class="card-soft" style="background:#ecfdf5;border-color:#a7f3d0;display:flex;flex-direction:column;gap:6px;">
-            <h3 class="text-sm font-extrabold" style="color:#065f46;">5️⃣ 📸 拍照辨識與日常減脂操作訣竅</h3>
-            <ul class="text-xs" style="margin:2px 0 0 18px;color:#064e3b;line-height:1.7;">
-              <li><strong>拍超商／食品包裝營養標示</strong>：點首頁「➕ 記食物」→ 選相簿／拍照 → 點<strong>「🏷️ 辨識包裝營養標示」</strong>（內建 1600px 高清雙欄驗算，自動校正小數點漏讀或誤抓每 100g 欄位）。</li>
-              <li><strong>拍便當／自助餐無標示外食</strong>：點<strong>「🍱 辨識外食餐點＆估算份量」</strong>，AI 會拆解盤中每道菜與克數，並可用 ±10g 按鈕微調。</li>
-              <li><strong>防呆與 100% 無海鮮保護</strong>：每次開啟 App 會自動跳轉至當天日期（不覆蓋歷史紀錄），且全站推薦與紀錄皆嚴格排除海鮮食材。</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==================== TAB 4: ⚙️ 系統診斷、AI 自動更新、iOS 與記憶設定 ==================== -->
       <section id="view-ios" class="hidden" style="display:flex;flex-direction:column;gap:16px;">
         <!-- Unified 體態設定 × BMI 減脂目標參數 (Consolidated Single Card) -->
         <div class="card" style="display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,#f5fbf7 0%,#ffffff 38%,#ffffff 100%);">
@@ -2567,7 +2481,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.0.2・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.1.0・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2583,7 +2497,10 @@
           <div class="card-soft" style="background:#f8fafc;">
             <div class="flex-between" style="flex-wrap:wrap;gap:6px;margin-bottom:6px;">
               <div class="text-xs font-extrabold" style="color:var(--slate-900);">🔑 個人免費 Gemini API Key（選填・僅存本機）</div>
-              <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="text-xs font-bold" style="color:var(--blue);text-decoration:underline;">免費申請金鑰 ↗</a>
+              <div class="flex-gap" style="gap:6px;">
+                <button type="button" class="btn btn-sm btn-slate-soft" style="min-height:28px;padding:3px 9px;font-size:11px;" onclick="openFeatureHelpModal('gemini_key')">❓ 申請與綁定說明</button>
+                <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="text-xs font-bold" style="color:var(--blue);text-decoration:underline;">免費申請金鑰 ↗</a>
+              </div>
             </div>
             <div class="text-xs text-muted" style="margin-bottom:6px;">綁定個人金鑰可啟用雲端外食份量視覺估重與深度 AI 營養師問答；不填也可正常使用完整離線功能。</div>
             <div class="flex-gap" style="gap:6px;flex-wrap:wrap;">
@@ -2598,7 +2515,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.0.2・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.1.0・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -2687,11 +2604,11 @@
   <!-- Fixed iOS Bottom Navigation Bar (4 Consolidated Hubs + Quick Log CTA) -->
   <nav aria-label="手機與平板底部主選單" class="bottom-nav">
     <div class="bottom-nav-inner">
-      <button type="button" id="bNavBtn-dashboard" class="bnav-btn active" onclick="switchTab('dashboard')"><svg class="xmas-ic" style="width:24px;height:24px;display:inline-block;vertical-align:-4px;flex-shrink:0;vertical-align:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-tree"/></svg><span>今日＆計畫</span></button>
-      <button type="button" id="bNavBtn-food_ai" class="bnav-btn" onclick="switchTab('food_ai')"><svg class="xmas-ic" style="width:24px;height:24px;display:inline-block;vertical-align:-4px;flex-shrink:0;vertical-align:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-gingerbread"/></svg><span>飲食/AI</span></button>
+      <button type="button" id="bNavBtn-dashboard" class="bnav-btn active" onclick="switchTab('dashboard')"><svg class="xmas-ic" style="width:24px;height:24px;display:inline-block;vertical-align:-4px;flex-shrink:0;vertical-align:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-tree"/></svg><span>營養資訊</span></button>
+      <button type="button" id="bNavBtn-food_ai" class="bnav-btn" onclick="switchTab('food_ai')"><svg class="xmas-ic" style="width:24px;height:24px;display:inline-block;vertical-align:-4px;flex-shrink:0;vertical-align:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-santa"/></svg><span>AI營養師</span></button>
       <button type="button" id="bNavBtn-add" class="bnav-btn bnav-cam" onclick="openCustomFoodModal('ai')"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;vertical-align:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-gift-add"/></svg><span>記食物</span></button>
-      <button type="button" id="bNavBtn-guide" class="bnav-btn" onclick="switchTab('guide')"><svg class="xmas-ic" style="width:24px;height:24px;display:inline-block;vertical-align:-4px;flex-shrink:0;vertical-align:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-snowman"/></svg><span>說明</span></button>
-      <button type="button" id="bNavBtn-system" class="bnav-btn" onclick="switchTab('system')"><svg class="xmas-ic" style="width:24px;height:24px;display:inline-block;vertical-align:-4px;flex-shrink:0;vertical-align:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg><span>系統</span></button>
+      <button type="button" id="bNavBtn-tips" class="bnav-btn" onclick="switchTab('tips')"><svg class="xmas-ic" style="width:24px;height:24px;display:inline-block;vertical-align:-4px;flex-shrink:0;vertical-align:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-stocking"/></svg><span>減脂秘訣</span></button>
+      <button type="button" id="bNavBtn-system" class="bnav-btn" onclick="switchTab('system')"><svg class="xmas-ic" style="width:24px;height:24px;display:inline-block;vertical-align:-4px;flex-shrink:0;vertical-align:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg><span>系統設置</span></button>
     </div>
   </nav>
 
@@ -2707,20 +2624,20 @@
       </div>
 
       <div class="text-xs" style="color:#334155;line-height:1.65;">
-        約 <strong>30 秒</strong> 帶您自動巡覽各分頁核心功能（<strong>體態設定 → Gemini API Key → 營養監控 → 記食物 → 減脂計畫 → 飲食與 AI → 操作說明</strong>），逐一高亮畫面並摘要重點。
+        約 <strong>30 秒</strong> 帶您自動巡覽各分頁核心功能（<strong>體態設定 → Gemini API Key → 營養監控 → 記食物 → 減脂計畫 → AI 營養師 → 減脂秘訣</strong>），逐一高亮畫面並摘要重點。
       </div>
 
       <details class="card-soft" style="background:#f8fafc;border-color:#cbd5e1;padding:10px 12px;">
         <summary class="text-xs font-extrabold" style="color:#1e3a8a;cursor:pointer;">📋 展開查看：2 步驟快速設定（體態 + Gemini API Key 申請）</summary>
         <div class="text-xs" style="color:#334155;line-height:1.65;margin-top:8px;display:flex;flex-direction:column;gap:6px;">
-          <div><strong>1️⃣ 體態設定：</strong>至「⚙️ 系統」設定性別、年齡、身高、體重與目標體重，自動換算每日熱量與營養基準。</div>
-          <div><strong>2️⃣ 免費申請 Gemini API Key：</strong>點開 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800;text-decoration:underline;">Google AI Studio ↗</a> 點 <strong>Create API key</strong> 複製，回「⚙️ 系統」貼上儲存即可啟用拍照辨識與 AI 問答。</div>
+          <div><strong>1️⃣ 體態設定：</strong>至「⚙️ 系統設置」設定性別、年齡、身高、體重與目標體重，自動換算每日熱量與營養基準。</div>
+          <div><strong>2️⃣ 免費申請 Gemini API Key：</strong>點開 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800;text-decoration:underline;">Google AI Studio ↗</a> 點 <strong>Create API key</strong> 複製，回「⚙️ 系統設置」貼上儲存即可啟用拍照辨識與 AI 問答。</div>
         </div>
       </details>
 
       <label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#334155;cursor:pointer;">
         <input type="checkbox" id="onboardingDontShowCheck" style="width:16px;height:16px;accent-color:var(--emerald);" />
-        下次開啟不再顯示此新手教學（之後仍可於「📖 說明」重播）
+        下次開啟不再顯示此新手教學（之後仍可於頂部「🎬 動態新手教學」重播）
       </label>
 
       <div style="display:flex;flex-direction:column;gap:8px;">
@@ -2807,7 +2724,10 @@
       <!-- STEP 1: Enlarged Album & Camera Picker + Food Name (with On-Focus Saved Foods) -->
       <div class="card-soft" style="display:flex;flex-direction:column;gap:10px;">
         <div>
-          <div class="text-xs font-extrabold" style="color:#44322a;"><span class="step-chip">步驟 1</span>選擇拍照／相簿，或直接輸入食物名稱</div>
+          <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
+            <div class="text-xs font-extrabold" style="color:#44322a;"><span class="step-chip">步驟 1</span>選擇拍照／相簿，或直接輸入食物名稱</div>
+            <button type="button" class="btn btn-sm btn-slate-soft" style="min-height:26px;padding:2px 8px;font-size:11px;" onclick="openFeatureHelpModal('photo_tips')">❓ 拍照辨識技巧</button>
+          </div>
           <div style="font-size:11px;color:#8a7367;margin-top:2px;">支援包裝營養標示 OCR 與外食餐盤 AI 估重，辨識後皆可自由修改</div>
         </div>
 
@@ -2944,6 +2864,23 @@
       <div class="flex-between" style="justify-content:flex-end;gap:8px;">
         <button type="button" class="btn btn-slate-soft" onclick="closeCustomFoodModal()">取消</button>
         <button type="button" id="customFoodSubmitBtn" class="btn btn-primary" onclick="submitCustomFood()">✅ 確認加入今日紀錄</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Contextual Feature Help (Apple Health / Gemini API Key / Photo Tips) -->
+  <div id="featureHelpModal" class="modal-backdrop hidden">
+    <div class="modal-sheet" style="max-width:480px;display:flex;flex-direction:column;gap:12px;">
+      <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;">
+        <div>
+          <span id="featureHelpBadge" class="badge badge-blue">❓ 功能說明</span>
+          <h3 id="featureHelpTitle" style="font-size:17px;font-weight:900;margin-top:4px;">說明視窗</h3>
+        </div>
+        <button type="button" onclick="closeFeatureHelpModal()" style="font-size:18px;font-weight:800;color:#64748b;padding:4px 8px;">✕</button>
+      </div>
+      <div id="featureHelpBody" class="text-xs" style="color:#44322a;line-height:1.7;display:flex;flex-direction:column;gap:10px;"></div>
+      <div class="flex-between" style="justify-content:flex-end;gap:8px;padding-top:6px;border-top:1px solid var(--border);">
+        <button type="button" class="btn btn-primary btn-sm" onclick="closeFeatureHelpModal()">我知道了</button>
       </div>
     </div>
   </div>
@@ -3733,8 +3670,53 @@
       else if (activeFoodAiSubTab === 'chat') renderAiChatMessages();
     }
 
+    function openFeatureHelpModal(topic) {
+      const modal = document.getElementById('featureHelpModal');
+      const badge = document.getElementById('featureHelpBadge');
+      const title = document.getElementById('featureHelpTitle');
+      const body = document.getElementById('featureHelpBody');
+      if (!modal || !body) return;
+
+      if (topic === 'apple_health') {
+        if (badge) { badge.textContent = '🏃 Apple 健康同步'; badge.className = 'badge badge-blue'; }
+        if (title) title.textContent = 'iOS「捷徑 (Shortcuts)」自動同步 Apple 健康／健身數據';
+        body.innerHTML = `
+          <div class="card-soft">因 iOS 安全政策限制網頁無法直讀 HealthKit，但透過 iPhone 內建免費「捷徑」App 只需設定一次，以後點一下就能把今日步數與活動能量帶入 NutriFit 自動上調運動日營養目標：</div>
+          <ol style="margin:0 0 0 18px;display:flex;flex-direction:column;gap:6px;">
+            <li>開啟 iPhone <strong>「捷徑」App</strong> → 右上角「+」新增捷徑 → 加入動作<strong>「尋找健康樣本」</strong>（類型選<strong>步數</strong>，開始日期為<strong>今天</strong>）與<strong>「計算統計資料（總和）」</strong>。</li>
+            <li>再加入一組<strong>「尋找健康樣本」</strong>（類型選<strong>動態能量</strong>，開始日期為<strong>今天</strong>）與<strong>「計算統計資料（總和）」</strong>。</li>
+            <li>加入動作<strong>「打開 URL」</strong>，填入你的 NutriFit 固定網址並接上參數：<code>?activeKcal=[動態能量總和]&amp;steps=[步數總和]</code>。</li>
+            <li>運動完點一下該捷徑，App 就會自動開啟並補償 55% 運動消耗至今日蛋白質、碳水與飲水目標！</li>
+          </ol>
+          <button type="button" class="btn btn-sm btn-slate-soft" style="width:100%;" onclick="copyShortcutParamSample()">📋 複製 URL 參數格式 (?activeKcal=320&amp;steps=9500)</button>
+        `;
+      } else if (topic === 'gemini_key') {
+        if (badge) { badge.textContent = '🔑 AI 金鑰設定'; badge.className = 'badge badge-emerald'; }
+        if (title) title.textContent = 'Gemini API Key 免費申請與綁定步驟';
+        body.innerHTML = `
+          <ol style="margin:0 0 0 18px;display:flex;flex-direction:column;gap:6px;">
+            <li>前往 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--blue);font-weight:800;text-decoration:underline;">Google AI Studio API Key 頁面 ↗</a>，登入 Google 帳號點 <strong>Create API key</strong> 免費建立一組金鑰並複製。</li>
+            <li>回到本 App 的 <strong>「⚙️ 系統設置」→「🔑 個人免費 Gemini API Key」</strong> 貼上並點 <strong>「💾 儲存」</strong>（僅保存在你手機本機，絕不上傳第三方）。</li>
+            <li>若使用中遇到 HTTP 429 免費額度達上限或模型更新，直接點下方 <strong>「🔧 一鍵排除問題」</strong>，系統會自動依序執行診斷、切換尚有額度模型、二次診斷與自動修復。</li>
+          </ol>
+        `;
+      } else {
+        if (badge) { badge.textContent = '📸 拍照辨識技巧'; badge.className = 'badge badge-amber'; }
+        if (title) title.textContent = '拍照辨識與日常減脂操作訣竅';
+        body.innerHTML = `
+          <div class="card-soft"><strong>🏷️ 拍超商／食品包裝營養標示：</strong><br/>選取相簿或開啟相機拍清楚「營養標示表格」→ 點「辨識包裝營養標示 (OCR)」，內建 1600px 高清雙欄驗算，自動校正小數點漏讀或誤抓每 100g 欄位。</div>
+          <div class="card-soft"><strong>🍱 拍便當／自助餐無標示外食：</strong><br/>正上方俯拍整盤餐點 → 點「辨識外食餐點＆估算份量」，AI 會拆解盤中每道菜與預估克數，並支援自訂修改品項名稱與 ±10g 微調。</div>
+          <div class="card-soft"><strong>💡 常用食物快速帶入：</strong><br/>點一下「食物名稱」輸入框即會自動展開你記憶過的常用食物，點選即可秒帶入營養標示！</div>
+        `;
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function closeFeatureHelpModal() {
+      document.getElementById('featureHelpModal')?.classList.add('hidden');
+    }
+
     function switchTab(tabId) {
-      // 向下相容：dashboard/plan 整合進主控台；chat/store/camera 整合進 food_ai；ios 整合進 system
       let hub = tabId;
       if (tabId === 'plan') {
         activeDashPlanSubTab = 'plan';
@@ -3745,29 +3727,31 @@
       } else if (tabId === 'camera') {
         openCustomFoodModal('ai');
         return;
-      } else if (tabId === 'chat' || tabId === 'store') {
-        activeFoodAiSubTab = tabId;
+      } else if (tabId === 'chat' || tabId === 'food_ai') {
         hub = 'food_ai';
-      } else if (tabId === 'ios') {
+      } else if (tabId === 'store' || tabId === 'tips' || tabId === 'guide') {
+        hub = 'tips';
+      } else if (tabId === 'ios' || tabId === 'system') {
         hub = 'system';
       }
       appState.currentTab = hub;
 
-      const allViews = ['dashboard', 'plan', 'camera', 'store', 'chat', 'guide', 'ios'];
+      const allViews = ['dashboard', 'plan', 'camera', 'store', 'chat', 'ios'];
       for (const vId of allViews) {
         const v = document.getElementById('view-' + vId);
         if (v) v.classList.add('hidden');
       }
 
       document.getElementById('dashPlanSubBar')?.classList.toggle('hidden', hub !== 'dashboard');
-      document.getElementById('foodAiSubBar')?.classList.toggle('hidden', hub !== 'food_ai');
 
       if (hub === 'dashboard') {
         switchDashPlanSubTab(activeDashPlanSubTab);
       } else if (hub === 'food_ai') {
-        switchFoodAiSubTab(activeFoodAiSubTab);
-      } else if (hub === 'guide') {
-        document.getElementById('view-guide')?.classList.remove('hidden');
+        document.getElementById('view-chat')?.classList.remove('hidden');
+        renderAiChatMessages();
+      } else if (hub === 'tips') {
+        document.getElementById('view-store')?.classList.remove('hidden');
+        renderStoreCatalog();
       } else if (hub === 'system') {
         document.getElementById('view-ios')?.classList.remove('hidden');
         renderIosMemoryCenter();
@@ -3778,7 +3762,7 @@
         updateSeafoodPrefUi();
       }
 
-      for (const h of ['dashboard', 'food_ai', 'guide', 'system']) {
+      for (const h of ['dashboard', 'food_ai', 'tips', 'system']) {
         document.getElementById('tabBtn-' + h)?.classList.toggle('active', h === hub);
         document.getElementById('bNavBtn-' + h)?.classList.toggle('active', h === hub);
       }
@@ -5213,7 +5197,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.0.2';
+    const APP_VERSION = 'v4.1.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -6611,11 +6595,12 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.0.1',
+      version: 'v4.1.0',
       date: '2026-11-21',
       items: [
-        '💾 強化本機寫入容錯與自動救援：當手機瀏覽器儲存空間（localStorage）因相片縮圖累積達上限導致寫入異常時，系統會自動壓縮清理舊相片縮圖並重試寫入，完整保留所有飲食、體態與歷史紀錄。',
-        '👁️ 延續 v4.0.0 全站高對比字體與「一鍵排除問題」功能。'
+        '🧭 分頁全面重整更直覺：主分頁更名為「營養資訊」、「AI 營養師」，原超商餐點庫獨立升格為「減脂秘訣」分頁取代原說明分頁。',
+        '🎬 「動態新手教學」重播按鈕移至最上方手機／平板介面切換列旁，隨時一鍵啟動。',
+        '❓ Apple 健康同步教學、Gemini API Key 申請步驟與拍照辨識技巧全數整合進各對應功能中，點擊說明按鈕即可彈出專屬說明視窗。'
       ]
     };
 
@@ -6654,7 +6639,7 @@
       {
         tabLabel: '⚙️ 系統｜體態設定',
         title: '1. 先完成個人體態與目標設定',
-        body: '進入「⚙️ 系統」設定您的生理性別、年齡、身高、目前體重、目標減脂體重與活動強度，系統會即時換算 BMI、BMR/TDEE 與每日熱量及五大營養素目標。',
+        body: '進入「⚙️ 系統設置」設定您的生理性別、年齡、身高、目前體重、目標減脂體重與活動強度，系統會即時換算 BMI、BMR/TDEE 與每日熱量及五大營養素目標。',
         prepare: () => { switchTab('system'); },
         getTarget: () => document.querySelector('#view-ios .card'),
         isFixed: false
@@ -6696,19 +6681,19 @@
         isFixed: false
       },
       {
-        tabLabel: '🍱 飲食與 AI',
-        title: '6. AI 減脂營養師問答 × 超商餐點庫',
-        body: '不知道下一餐吃什麼？直接問 AI 營養師，系統會自動讀取您今日剩餘熱量與蛋白質缺口推薦搭配，也可切換至「超商無海鮮餐點」一鍵套用。',
-        prepare: () => { switchTab('food_ai'); switchFoodAiSubTab('chat'); },
+        tabLabel: '🎅 AI 營養師',
+        title: '6. AI 減脂營養師即時問答',
+        body: '不知道下一餐吃什麼或外食如何補救？直接問 AI 營養師，系統會即時讀取您今日剩餘熱量、蛋白質缺口與運動消耗給予客製搭配建議。',
+        prepare: () => { switchTab('food_ai'); },
         getTarget: () => document.querySelector('#view-chat .card'),
         isFixed: false
       },
       {
-        tabLabel: '📖 操作說明',
-        title: '7. 操作手冊與隨時重播教學',
-        body: '想串接 iOS 健康步數捷徑、查詢進階功能，或之後想再看一次這套動態導覽，隨時都可以到「📖 操作說明」點上方按鈕重新播放！',
-        prepare: () => { switchTab('guide'); },
-        getTarget: () => document.querySelector('#view-guide .card'),
+        tabLabel: '🧦 減脂秘訣',
+        title: '7. 超商減脂高蛋白餐點庫與秘訣',
+        body: '在「減脂秘訣」可依 7-11／全家篩選實測低卡高蛋白餐點並一鍵加入今日紀錄；各功能的說明按鈕也已整合進對應頁面，並可隨時從最上方「🎬 動態新手教學」重播導覽！',
+        prepare: () => { switchTab('tips'); },
+        getTarget: () => document.querySelector('#view-store .card'),
         isFixed: false
       }
     ];
@@ -6872,7 +6857,7 @@
           switchDashPlanSubTab('today');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (e) {}
-        showToast('🎉 動態新手教學完成！隨時可至「📖 說明」重播', '✨');
+        showToast('🎉 動態新手教學完成！隨時可點頂部「🎬 動態新手教學」重播', '✨');
       } else if (dontShowAgain) {
         showToast('已結束教學並設為不再自動顯示', '🔕');
       }
