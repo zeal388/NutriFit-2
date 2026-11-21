@@ -2481,7 +2481,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.1.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.1.1・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2515,7 +2515,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.1.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.1.1・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -5197,7 +5197,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.1.0';
+    const APP_VERSION = 'v4.1.1';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -6350,7 +6350,7 @@
         generationConfig: {
           responseMimeType: 'application/json',
           thinkingConfig: { thinkingLevel: 'LOW' },
-          maxOutputTokens: 512
+          maxOutputTokens: 1536
         }
       });
       const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || '';
@@ -6595,12 +6595,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.1.0',
+      version: 'v4.1.1',
       date: '2026-11-21',
       items: [
-        '🧭 分頁全面重整更直覺：主分頁更名為「營養資訊」、「AI 營養師」，原超商餐點庫獨立升格為「減脂秘訣」分頁取代原說明分頁。',
-        '🎬 「動態新手教學」重播按鈕移至最上方手機／平板介面切換列旁，隨時一鍵啟動。',
-        '❓ Apple 健康同步教學、Gemini API Key 申請步驟與拍照辨識技巧全數整合進各對應功能中，點擊說明按鈕即可彈出專屬說明視窗。'
+        '💬 修復「AI 營養師」回覆字句截斷問題：將雲端輸出上限從 420 提升至 2048 tokens，並正確合併多段回覆內容與過濾內部思考片段，確保每次回覆完整不中斷。',
+        '✨ 優化 AI 營養師對話排版：自動轉換粗體與乾淨條列符號（•），不再顯示零散的星號標記。'
       ]
     };
 
@@ -7040,7 +7039,7 @@
         generationConfig: {
           responseMimeType: 'application/json',
           thinkingConfig: { thinkingLevel: 'LOW' },
-          maxOutputTokens: 640,
+          maxOutputTokens: 1536,
           responseSchema: {
             type: 'OBJECT',
             properties: {
@@ -7180,10 +7179,23 @@
       showToast(val ? '已啟用 Gemini 3.8 Flash（問答＋標示＋外食辨識同步升級）' : '已清除 API Key', '✨');
     }
 
+    function formatChatBubbleHtml(rawText) {
+      let safe = String(rawText || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      // Convert markdown bold and clean up bullet markers cleanly
+      safe = safe.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      safe = safe.replace(/^[\t ]*[*-][\t ]+/gm, '• ');
+      safe = safe.replace(/^\s*•\s*$/gm, '');
+      safe = safe.replace(/\n{3,}/g, '\n\n').trim();
+      return safe;
+    }
+
     function renderAiChatMessages() {
       const box = document.getElementById('aiChatMessages');
       if (!box) return;
-      box.innerHTML = aiChatHistory.map(m => `<div class="chat-bubble ${m.role === 'user' ? 'user' : 'ai'}">${String(m.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`).join('');
+      box.innerHTML = aiChatHistory.map(m => `<div class="chat-bubble ${m.role === 'user' ? 'user' : 'ai'}">${formatChatBubbleHtml(m.text)}</div>`).join('');
       box.scrollTop = box.scrollHeight;
     }
 
@@ -7259,12 +7271,19 @@
 今日餐點清單：${logsText}。`;
 
         const json = await callGeminiGenerateContent(apiKey, {
-          system_instruction: { parts: [{ text: sysPrompt }] },
+          system_instruction: { parts: [{ text: sysPrompt + '\n請以完整句子作答，善用條列重點（每點 1–2 句），切勿在句子中途截斷，總字數控制在 150–350 字以內。' }] },
           contents: (() => { const recent = aiChatHistory.slice(-8); const firstUser = recent.findIndex(m => m.role === 'user'); const valid = firstUser >= 0 ? recent.slice(firstUser) : recent; return valid.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.text }] })); })(),
-          generationConfig: { thinkingConfig: { thinkingLevel: 'LOW' }, maxOutputTokens: 420 }
+          generationConfig: { thinkingConfig: { thinkingLevel: 'LOW' }, maxOutputTokens: 2048 }
         });
-        const reply = json?.candidates?.[0]?.content?.parts?.[0]?.text || buildLocalNutritionistReply(q);
-        aiChatHistory.push({ role: 'ai', text: reply.trim() });
+        const cand = json?.candidates?.[0];
+        const respParts = Array.isArray(cand?.content?.parts) ? cand.content.parts : [];
+        const visibleText = respParts
+          .filter(p => p && !p.thought && typeof p.text === 'string')
+          .map(p => p.text)
+          .join('')
+          .trim();
+        const reply = visibleText || buildLocalNutritionistReply(q);
+        aiChatHistory.push({ role: 'ai', text: reply });
       } catch (err) {
         aiChatHistory.push({ role: 'ai', text: '（Gemini 連線異常，已自動改用離線營養師回覆）\n' + buildLocalNutritionistReply(q) });
       } finally {
