@@ -1,9 +1,9 @@
 {
   "defaultAiModel": "gemini-3.5-flash-lite",
-  "minVersion": "v3.5.0",
+  "minVersion": "v3.8.1",
   "announcement": "",
   "defaultExcludeSeafood": true,
   "enableAiChat": true,
   "enablePlateVision": true,
-  "updatedAt": "2026/11/21 09:03:30"
+  "updatedAt": "2026/11/21 09:03:32"
 }
