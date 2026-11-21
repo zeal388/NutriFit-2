@@ -1226,6 +1226,21 @@
       margin-right: 4px;
     }
     .step-chip.green { background: #dcfce7; color: #15803d; }
+
+    /* === 👁️ Full-App High-Contrast Guardrail (v4.0.0) === */
+    #planTopSummaryDashboard { color: #2a1b14 !important; }
+    #planTopSummaryDashboard #planTopGoalPill { background: #dcfce7 !important; color: #14532d !important; border-color: #86efac !important; }
+    #planTopSummaryDashboard #planSumIntakeMain { color: #14532d !important; }
+    #planTopSummaryDashboard #planSumBlueprintMain { color: #1e3a8a !important; }
+    #planTopSummaryDashboard #planSumAuditMain { color: #78350f !important; }
+    #planTopSummaryDashboard #planSumIntakeSub,
+    #planTopSummaryDashboard #planSumBlueprintSub,
+    #planTopSummaryDashboard #planSumAuditSub { color: #5c4338 !important; }
+    .badge-emerald { background: #dcfce7 !important; color: #14532d !important; }
+    .badge-blue { background: #dbeafe !important; color: #1e3a8a !important; }
+    .badge-amber { background: #fef3c7 !important; color: #78350f !important; }
+    .badge-rose { background: #ffe4e6 !important; color: #9f1239 !important; }
+    .badge-slate { background: #f1f5f9 !important; color: #334155 !important; }
   </style>
 </head>
 <body>
@@ -1932,47 +1947,48 @@
       <!-- ==================== TAB 2: 體重與BMI飲食控制計劃表 ==================== -->
       <section id="view-plan" class="hidden" style="display:flex;flex-direction:column;gap:16px;">
         <!-- Top Executive Overview Dashboard for ⚖️ 減脂計畫 (單日營養攝取分析 × 減脂藍圖 × 單日營養健檢) -->
-        <div id="planTopSummaryDashboard" class="card" style="background:linear-gradient(135deg,#0f172a 0%,#064e3b 100%);color:#fff;border:none;display:flex;flex-direction:column;gap:12px;">
+        <div id="planTopSummaryDashboard" class="card" style="background:linear-gradient(135deg,#fff5f5 0%,#ffffff 50%,#f1faf5 100%);color:#3b261d;border:1.5px solid #f0d7d7;display:flex;flex-direction:column;gap:12px;">
           <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
             <div>
-              <div class="text-xs font-extrabold" style="color:#6ee7b7;">🎯 減脂計畫重點總覽儀表板</div>
-              <h2 style="font-size:18px;font-weight:900;margin-top:2px;">單日營養攝取分析・減脂藍圖・單日營養健檢</h2>
+              <div class="text-xs font-extrabold" style="color:#15803d;">🎯 減脂計畫重點總覽儀表板</div>
+              <h2 style="font-size:18px;font-weight:900;margin-top:2px;color:#2a1b14;">單日營養攝取分析・減脂藍圖・單日營養健檢</h2>
             </div>
-            <span id="planTopGoalPill" class="badge" style="background:rgba(16,185,129,0.28);color:#d1fae5;border:1px solid rgba(110,231,183,0.4);">70 → 63 kg</span>
+            <span id="planTopGoalPill" class="badge" style="background:#dcfce7;color:#14532d;border:1.5px solid #86efac;font-weight:900;">70 → 63 kg</span>
           </div>
 
           <div class="grid grid-3" style="gap:10px;">
             <!-- Card 1: 單日營養攝取分析 -->
-            <button type="button" onclick="scrollToPlanSection('planSectionIntake')" style="text-align:left;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);border-radius:12px;padding:12px;color:#fff;display:flex;flex-direction:column;gap:4px;cursor:pointer;">
+            <button type="button" onclick="scrollToPlanSection('planSectionIntake')" style="text-align:left;background:#ffffff;border:1.5px solid #dbece1;border-radius:14px;padding:12px;color:#2a1b14;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:0 3px 10px rgba(148,163,184,0.08);">
               <div class="flex-between" style="width:100%;">
-                <span class="text-xs font-extrabold" style="color:#6ee7b7;">🔍 單日營養攝取分析</span>
+                <span class="text-xs font-extrabold" style="color:#15803d;">🔍 單日營養攝取分析</span>
                 <span id="planSumIntakeBadge" class="badge badge-emerald" style="font-size:10px;">達標中</span>
               </div>
-              <div id="planSumIntakeMain" style="font-size:17px;font-weight:900;margin-top:2px;">0 / 1618 kcal</div>
-              <div id="planSumIntakeSub" class="text-xs" style="color:#cbd5e1;line-height:1.45;">尚餘 1618 kcal・蛋白缺 113g</div>
+              <div id="planSumIntakeMain" style="font-size:18px;font-weight:900;margin-top:2px;color:#14532d;">0 / 1618 kcal</div>
+              <div id="planSumIntakeSub" class="text-xs" style="color:#5c4338;line-height:1.45;">尚餘 1618 kcal・蛋白缺 113g</div>
             </button>
 
             <!-- Card 2: 減脂藍圖 -->
-            <button type="button" onclick="scrollToPlanSection('planSectionBlueprint')" style="text-align:left;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);border-radius:12px;padding:12px;color:#fff;display:flex;flex-direction:column;gap:4px;cursor:pointer;">
+            <button type="button" onclick="scrollToPlanSection('planSectionBlueprint')" style="text-align:left;background:#ffffff;border:1.5px solid #d7e6fb;border-radius:14px;padding:12px;color:#2a1b14;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:0 3px 10px rgba(148,163,184,0.08);">
               <div class="flex-between" style="width:100%;">
-                <span class="text-xs font-extrabold" style="color:#93c5fd;">🗓️ 減脂藍圖</span>
+                <span class="text-xs font-extrabold" style="color:#1d4ed8;">🗓️ 減脂藍圖</span>
                 <span id="planSumBlueprintBadge" class="badge badge-blue" style="font-size:10px;">穩健步調</span>
               </div>
-              <div id="planSumBlueprintMain" style="font-size:17px;font-weight:900;margin-top:2px;">預計 2027/03/28</div>
-              <div id="planSumBlueprintSub" class="text-xs" style="color:#cbd5e1;line-height:1.45;">約 18.7 週・每週 -0.37 kg</div>
+              <div id="planSumBlueprintMain" style="font-size:18px;font-weight:900;margin-top:2px;color:#1e3a8a;">預計 2027/03/28</div>
+              <div id="planSumBlueprintSub" class="text-xs" style="color:#5c4338;line-height:1.45;">約 18.7 週・每週 -0.37 kg</div>
             </button>
 
             <!-- Card 3: 單日營養健檢 -->
-            <button type="button" onclick="scrollToPlanSection('planSectionAudit')" style="text-align:left;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.16);border-radius:12px;padding:12px;color:#fff;display:flex;flex-direction:column;gap:4px;cursor:pointer;">
+            <button type="button" onclick="scrollToPlanSection('planSectionAudit')" style="text-align:left;background:#ffffff;border:1.5px solid #f7e1c2;border-radius:14px;padding:12px;color:#2a1b14;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:0 3px 10px rgba(148,163,184,0.08);">
               <div class="flex-between" style="width:100%;">
-                <span class="text-xs font-extrabold" style="color:#fcd34d;">📋 單日營養健檢</span>
+                <span class="text-xs font-extrabold" style="color:#b45309;">📋 單日營養健檢</span>
                 <span id="planSumAuditBadge" class="badge badge-amber" style="font-size:10px;">0 項餐點</span>
               </div>
-              <div id="planSumAuditMain" style="font-size:17px;font-weight:900;margin-top:2px;">尚無飲食紀錄</div>
-              <div id="planSumAuditSub" class="text-xs" style="color:#cbd5e1;line-height:1.45;">記錄餐點後自動標記高油/高碳與優質高蛋白</div>
+              <div id="planSumAuditMain" style="font-size:18px;font-weight:900;margin-top:2px;color:#78350f;">尚無飲食紀錄</div>
+              <div id="planSumAuditSub" class="text-xs" style="color:#5c4338;line-height:1.45;">記錄餐點後自動標記高油/高碳與優質高蛋白</div>
             </button>
           </div>
         </div>
+
         <div class="card" style="display:flex;flex-direction:column;gap:16px;">
           <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:12px;">
             <div>
@@ -2551,7 +2567,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v3.4.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.0.2・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2577,12 +2593,12 @@
             </div>
           </div>
 
-          <!-- Simple 1-Click User OTA Update & Health Check -->
+          <!-- Simple 1-Click User OTA Update -->
           <div class="card-soft" style="background:#eff6ff;border-color:#93c5fd;display:flex;flex-direction:column;gap:8px;">
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v3.4.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.0.2・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -2591,6 +2607,12 @@
               <button type="button" id="btnOtaApply" class="btn btn-sm btn-primary" onclick="applyOtaUpdateNow()">⚡ 立即無損更新</button>
               <button type="button" class="btn btn-sm btn-slate-soft" onclick="exportMemoryJson()">📤 備份紀錄 (.json)</button>
             </div>
+          </div>
+
+          <!-- Minimalist 1-Click Problem Resolver (Single Button + Single Compact Status Line) -->
+          <div class="card-soft" style="background:#f5fbf7;border-color:#c6ebd5;display:flex;flex-direction:column;gap:6px;">
+            <button type="button" id="btnUserOneClickFix" class="btn btn-primary" style="width:100%;" onclick="runUserOneClickFix()">🔧 一鍵排除問題</button>
+            <div id="userOneClickFixStatus" style="font-size:11px;color:#5c4338;text-align:center;line-height:1.4;">自動診斷系統、更新 AI 模組、二次診斷並修復異常</div>
           </div>
         </div>
         <!-- Compact History & JSON Backup (iOS Guide & Engine Status Removed from User Settings) -->
@@ -5191,7 +5213,7 @@
       }
     }
 
-    const APP_VERSION = 'v3.9.1';
+    const APP_VERSION = 'v4.0.2';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -5998,6 +6020,58 @@
       return fixes;
     }
 
+    async function runUserOneClickFix() {
+      const btn = document.getElementById('btnUserOneClickFix');
+      const statusEl = document.getElementById('userOneClickFixStatus');
+      const setLine = (txt, color = '#5c4338') => {
+        if (statusEl) { statusEl.textContent = txt; statusEl.style.color = color; }
+      };
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ 正在排除問題中...'; }
+
+      try {
+        // 1. 自動診斷問題
+        setLine('⏳ [1/4] 正在自動診斷系統、資料與連線狀態...', '#b45309');
+        await runSystemDiagnostics();
+
+        // 2. 自動更新 AI 模組與探測尚有額度模型
+        let aiSummary = '';
+        if (getSavedGeminiKey()) {
+          setLine('⏳ [2/4] 正在自動更新 AI 模組並探測可用額度...', '#1d4ed8');
+          const upRes = await autoUpdateAiModel(true);
+          const repAi = await repairAiModuleQuota(true);
+          if (repAi && repAi.ok) aiSummary = `AI 已鎖定 ${repAi.model}`;
+          else if (upRes && upRes.ok) aiSummary = `AI 模型 ${upRes.model}`;
+          else if (repAi && repAi.all429) aiSummary = 'AI 額度暫滿已切離線優先';
+        } else {
+          setLine('⏳ [2/4] 未綁定 Gemini Key，略過雲端 AI 探測...', '#64748b');
+        }
+
+        // 3. 二次自動診斷
+        setLine('⏳ [3/4] 正在執行二次自動診斷複檢...', '#1d4ed8');
+        await runSystemDiagnostics();
+
+        // 4. 自動修復問題
+        setLine('⏳ [4/4] 正在自動修復異常數值與清理快取...', '#15803d');
+        const fixes = await runSystemAutoRepair(true);
+        await runSystemDiagnostics();
+
+        const parts = [];
+        if (aiSummary) parts.push(aiSummary);
+        if (fixes && fixes.length) parts.push(`已修復 ${fixes.length} 項`);
+        const finalMsg = parts.length
+          ? `✅ 完成（${parts.join('・')}）`
+          : '✅ 完成：全系統與資料狀態皆健康正常';
+        setLine(finalMsg, '#15803d');
+        showToast(finalMsg, '🔧');
+      } catch (err) {
+        const msg = '⚠️ 執行異常：' + (err?.message || '請稍後再試');
+        setLine(msg, '#be123c');
+        showToast(msg, '⚠️');
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '🔧 一鍵排除問題'; }
+      }
+    }
+
     async function runOneClickSystemMaintenance() {
       const btn = document.getElementById('btnOneClickMaint');
       const setStep = (idx, state, label) => {
@@ -6537,11 +6611,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v3.9.1',
+      version: 'v4.0.1',
       date: '2026-11-21',
       items: [
-        '🍪 整合「系統」分頁中的「體態設定」與「BMI 減脂目標參數」為單一卡片，移除重複的性別、身高、體重與活動強度欄位，介面更精簡統一。',
-        '🧭 延續 v3.9.0 簡化版「記錄食物」3 步驟 AI 辨識引導與柔和雪白聖誕風格。'
+        '💾 強化本機寫入容錯與自動救援：當手機瀏覽器儲存空間（localStorage）因相片縮圖累積達上限導致寫入異常時，系統會自動壓縮清理舊相片縮圖並重試寫入，完整保留所有飲食、體態與歷史紀錄。',
+        '👁️ 延續 v4.0.0 全站高對比字體與「一鍵排除問題」功能。'
       ]
     };
 
@@ -7226,13 +7300,61 @@
       };
     }
 
+    let lastWriteWarnAt = 0;
+
+    function prunePhotoThumbsFromPayload(obj, keepTodayOnly = false) {
+      let pruned = 0;
+      const today = getLocalTodayDateStr();
+      if (obj && obj.historyByDate && typeof obj.historyByDate === 'object') {
+        for (const dKey of Object.keys(obj.historyByDate)) {
+          if (keepTodayOnly && dKey === today) continue;
+          const rec = obj.historyByDate[dKey];
+          if (rec && Array.isArray(rec.logs)) {
+            rec.logs.forEach(item => {
+              if (item && item.photoThumb) { delete item.photoThumb; pruned++; }
+            });
+          }
+        }
+      }
+      if (!keepTodayOnly && obj && Array.isArray(obj.logs)) {
+        obj.logs.forEach(item => {
+          if (item && item.photoThumb) { delete item.photoThumb; pruned++; }
+        });
+      }
+      return pruned;
+    }
+
     function persistAppState() {
       if (isRestoringMemory) return;
       const payload = buildPersistPayload();
-      try { localStorage.setItem('nutrifit_state_v2', JSON.stringify(payload)); } catch (e) {}
+      let savedOk = false;
+      try {
+        localStorage.setItem('nutrifit_state_v2', JSON.stringify(payload));
+        savedOk = true;
+      } catch (e) {
+        // 自動救援 QuotaExceededError：先清除歷史照片縮圖（保留所有飲食與營養文字數據）後重試寫入
+        try {
+          prunePhotoThumbsFromPayload(appState, true);
+          const retryPayload1 = buildPersistPayload();
+          localStorage.setItem('nutrifit_state_v2', JSON.stringify(retryPayload1));
+          savedOk = true;
+        } catch (e2) {
+          try {
+            prunePhotoThumbsFromPayload(appState, false);
+            const retryPayload2 = buildPersistPayload();
+            localStorage.setItem('nutrifit_state_v2', JSON.stringify(retryPayload2));
+            savedOk = true;
+          } catch (e3) {
+            if (Date.now() - lastWriteWarnAt > 8000) {
+              lastWriteWarnAt = Date.now();
+              showToast('⚠️ 瀏覽器封鎖本機寫入（請確認非無痕模式或從 Safari 固定網址開啟）', '⚠️');
+            }
+          }
+        }
+      }
       try { if (window.pageVault && typeof window.pageVault.save === 'function') window.pageVault.save('nutrifit.state', payload); } catch (e) {}
       const b = document.getElementById('memoryStatusBadge'); if (b) b.textContent = `💾 已記憶 (${appState.lastSavedAt})`;
-      const ls = document.getElementById('memLastSavedTime'); if (ls) ls.textContent = `今日 ${appState.lastSavedAt}`;
+      const ls = document.getElementById('memLastSavedTime'); if (ls) ls.textContent = savedOk ? `今日 ${appState.lastSavedAt}` : '寫入受限';
     }
 
     function applyRestoredState(parsed) {
