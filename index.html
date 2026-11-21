@@ -1130,6 +1130,102 @@
       transform-origin: center;
       animation: xmasTwinkle 3.4s ease-in-out 1.1s infinite;
     }
+
+    /* === 🍱 Guided Food Recording Modal UX (v3.9.0) === */
+    .food-flow-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      background: #fdf7f2;
+      border: 1.5px solid #f0e2d8;
+      border-radius: 16px;
+      padding: 6px;
+    }
+    .food-flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 7px 6px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #8a7367;
+      background: transparent;
+      text-align: center;
+      transition: all .22s ease;
+    }
+    .food-flow-step.active {
+      background: #ffffff;
+      color: #d95353;
+      border: 1.5px solid #f8c8c8;
+      box-shadow: 0 3px 10px rgba(239, 108, 108, 0.14);
+    }
+    .food-flow-step.running {
+      background: #fffbeb;
+      color: #b45309;
+      border: 1.5px solid #fcd34d;
+      animation: foodStepPulse 1.4s ease-in-out infinite;
+    }
+    .food-flow-step.done {
+      background: #ecfdf5;
+      color: #15803d;
+      border: 1.5px solid #bbf7d0;
+    }
+    @keyframes foodStepPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.25); }
+      50% { box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.08); }
+    }
+    .photo-action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .photo-action-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 92px;
+      padding: 14px 10px;
+      border-radius: 18px;
+      cursor: pointer;
+      text-align: center;
+      transition: transform .12s ease, box-shadow .18s ease;
+      user-select: none;
+    }
+    .photo-action-tile:active { transform: scale(0.97); }
+    .photo-action-tile.album {
+      background: linear-gradient(135deg, #f47676 0%, #e45b5b 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 16px rgba(239, 108, 108, 0.28);
+    }
+    .photo-action-tile.camera {
+      background: linear-gradient(135deg, #58be7f 0%, #3fa265 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 16px rgba(78, 171, 115, 0.28);
+    }
+    .photo-action-tile .tile-icon { font-size: 28px; line-height: 1; }
+    .photo-action-tile .tile-title { font-size: 14px; font-weight: 900; }
+    .photo-action-tile .tile-sub { font-size: 11px; opacity: 0.9; font-weight: 600; }
+    .saved-food-popover {
+      margin-top: 6px;
+      background: #f4faff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 0 8px 22px rgba(59, 130, 246, 0.12);
+    }
+    .step-chip {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 2px 7px; border-radius: 999px;
+      font-size: 10px; font-weight: 900;
+      background: #fee2e2; color: #b91c1c;
+      margin-right: 4px;
+    }
+    .step-chip.green { background: #dcfce7; color: #15803d; }
   </style>
 </head>
 <body>
@@ -2710,43 +2806,58 @@
     </div>
   </div>
 
-  <!-- Modal: Manual Entry & AI Auto-Recognition -->
+  <!-- Modal: Guided AI Food Recording (v3.9.0) -->
   <div id="customFoodModal" class="modal-backdrop hidden">
-    <div class="modal-sheet" style="display:flex;flex-direction:column;gap:14px;">
+    <div class="modal-sheet" style="display:flex;flex-direction:column;gap:12px;">
       <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;">
         <div>
-          <h3 style="font-size:16px;font-weight:800;">➕ 記錄食物（手動標示 / AI 自動辨識）</h3>
-          <div class="text-xs text-muted">支援手動填寫營養標示或 AI 語意/包裝照片自動推算</div>
+          <h3 style="font-size:17px;font-weight:900;">➕ 記錄食物</h3>
+          <div class="text-xs text-muted">依序完成 3 步驟：拍照或輸入品名 → AI 辨識 → 核對並加入</div>
         </div>
         <button type="button" onclick="closeCustomFoodModal()" style="font-size:18px;font-weight:800;color:#64748b;padding:4px 8px;">✕</button>
       </div>
 
-      <div class="grid grid-2" style="background:#f1f5f9;padding:4px;border-radius:12px;gap:6px;">
-        <button type="button" id="customModeBtn-manual" class="btn btn-sm" style="background:#fff;color:var(--text);" onclick="switchCustomFoodMode('manual')">✍️ 手動記錄營養標示</button>
-        <button type="button" id="customModeBtn-ai" class="btn btn-sm" style="color:#475569;" onclick="switchCustomFoodMode('ai')">🤖 AI 自動辨識營養標示</button>
+      <!-- 3-Step Guided Progress Tracker -->
+      <div id="foodFlowStepBar" class="food-flow-steps">
+        <div id="foodFlowStep1" class="food-flow-step active">
+          <span>步驟 1</span>
+          <span id="foodFlowStep1Sub" style="font-size:10px;font-weight:700;">拍照或輸入品名</span>
+        </div>
+        <div id="foodFlowStep2" class="food-flow-step">
+          <span>步驟 2</span>
+          <span id="foodFlowStep2Sub" style="font-size:10px;font-weight:700;">待觸發 AI 辨識</span>
+        </div>
+        <div id="foodFlowStep3" class="food-flow-step">
+          <span>步驟 3</span>
+          <span id="foodFlowStep3Sub" style="font-size:10px;font-weight:700;">核對數值並加入</span>
+        </div>
       </div>
 
-      <!-- Integrated Phone Photo Album & Camera Picker inside Manual Record Modal -->
-      <div class="card-soft" style="background:#f8fafc;border:1.5px dashed #94a3b8;display:flex;flex-direction:column;gap:10px;">
-        <div class="flex-between">
-          <div>
-            <div class="text-xs font-extrabold" style="color:#0f172a;">🖼️ 抓取手機相簿照片 / 拍攝餐點與營養標示</div>
-            <div style="font-size:11px;color:#64748b;">從相簿挑選照片後可直接對照輸入標示，或點 AI 自動辨識並隨餐留存縮圖</div>
-          </div>
+      <!-- STEP 1: Enlarged Album & Camera Picker + Food Name (with On-Focus Saved Foods) -->
+      <div class="card-soft" style="display:flex;flex-direction:column;gap:10px;">
+        <div>
+          <div class="text-xs font-extrabold" style="color:#44322a;"><span class="step-chip">步驟 1</span>選擇拍照／相簿，或直接輸入食物名稱</div>
+          <div style="font-size:11px;color:#8a7367;margin-top:2px;">支援包裝營養標示 OCR 與外食餐盤 AI 估重，辨識後皆可自由修改</div>
         </div>
-        <div class="grid grid-2" style="gap:8px;">
-          <label for="customModalAlbumInput" class="btn btn-sm btn-blue" style="cursor:pointer;width:100%;">
-            🖼️ 從手機相簿選取照片
+
+        <!-- Enlarged Touch-Friendly Album & Camera Tiles -->
+        <div class="photo-action-grid">
+          <label for="customModalAlbumInput" class="photo-action-tile album">
+            <span class="tile-icon">🖼️</span>
+            <span class="tile-title">從手機相簿選取</span>
+            <span class="tile-sub">挑選餐點或標示照</span>
             <input type="file" id="customModalAlbumInput" accept="image/*" onchange="handleModalAlbumOrCameraPhoto(event, 'album')" class="hidden" />
           </label>
-          <label for="customModalCameraInput" class="btn btn-sm btn-primary" style="cursor:pointer;width:100%;">
-            📷 直接開啟相機拍照
+          <label for="customModalCameraInput" class="photo-action-tile camera">
+            <span class="tile-icon">📷</span>
+            <span class="tile-title">直接開啟相機拍照</span>
+            <span class="tile-sub">即時拍攝食物或標示</span>
             <input type="file" id="customModalCameraInput" accept="image/*" capture="environment" onchange="handleModalAlbumOrCameraPhoto(event, 'camera')" class="hidden" />
           </label>
         </div>
 
         <!-- Live Preview of Selected Album/Camera Photo -->
-        <div id="customPhotoPreviewWrap" class="hidden" style="background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:10px;">
+        <div id="customPhotoPreviewWrap" class="hidden" style="background:#fff;border:1.5px solid #e6d8ce;border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:10px;">
           <div class="flex-between">
             <span id="customPhotoSourceLabel" class="badge badge-blue">🖼️ 已從手機相簿載入照片</span>
             <button type="button" class="btn btn-sm btn-rose-soft" onclick="clearModalSelectedPhoto()">移除相片</button>
@@ -2756,27 +2867,26 @@
           </div>
           <!-- Two Dedicated AI Photo Analysis Modes -->
           <div class="grid grid-2" style="gap:8px;">
-            <button type="button" id="btnRunPhotoPlateAi" class="btn btn-sm btn-primary" style="width:100%;" onclick="runPhotoPlateVisionAnalysis()">
+            <button type="button" id="btnRunPhotoPlateAi" class="btn btn-sm btn-primary" style="width:100%;min-height:44px;" onclick="runPhotoPlateVisionAnalysis()">
               🍱 辨識外食餐點＆估算份量
             </button>
-            <button type="button" id="btnRunPhotoOcr" class="btn btn-sm btn-dark" style="width:100%;" onclick="runPhotoOcrAnalysis()">
+            <button type="button" id="btnRunPhotoOcr" class="btn btn-sm btn-blue" style="width:100%;min-height:44px;" onclick="runPhotoOcrAnalysis()">
               🏷️ 辨識包裝營養標示 (OCR)
             </button>
           </div>
-          <!-- Clean Frontend Hint (All API Key, Test & Repair Controls Live in ⚙️ 系統與設定 後台儀表板) -->
-          <div class="flex-between" style="font-size:11px;color:#64748b;padding:0 2px;">
+          <div class="flex-between" style="font-size:11px;color:#8a7367;padding:0 2px;">
             <span>✨ 拍包裝請點「辨識包裝營養標示」，拍便當/餐盤請點「辨識外食餐點」</span>
             <button type="button" onclick="closeCustomFoodModal();switchTab('system');" style="color:var(--blue);font-weight:700;font-size:11px;">⚙️ 個人設定</button>
           </div>
 
           <!-- Interactive Plate Dish Breakdown & Portion Estimator -->
-          <div id="plateBreakdownBox" class="hidden" style="background:#ecfdf5;border:1.5px solid #34d399;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;">
+          <div id="plateBreakdownBox" class="hidden" style="background:#ecfdf5;border:1.5px solid #6ee7b7;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;">
             <div class="flex-between">
               <strong id="plateBreakdownHeader" class="text-xs" style="color:#065f46;">🍽️ AI 餐盤食材拆解與份量換算（可微調菜色與克數）</strong>
               <button type="button" class="btn btn-sm" style="background:#fff;border:1px solid #6ee7b7;color:#065f46;min-height:28px;padding:3px 8px;" onclick="addPlateDishRow()">＋ 加一道菜</button>
             </div>
             <div class="flex-gap" style="flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-              <span class="text-xs font-bold text-muted" style="width:100%;">⚡ 離線快速點選盤中食材（點一下即加入並可調克數）：</span>
+              <span class="text-xs font-bold text-muted" style="width:100%;">⚡ 快速點選盤中食材（點一下即加入並可調克數）：</span>
               <button type="button" class="workout-chip" onclick="quickAddPlatePreset('tw_boiled_egg', 110)">🥚 水煮蛋×2 (110g)</button>
               <button type="button" class="workout-chip" onclick="quickAddPlatePreset('tw_sweet_potato', 130)">🍠 地瓜 1條 (130g)</button>
               <button type="button" class="workout-chip" onclick="quickAddPlatePreset('tw_imei_soymilk', 250)">🥛 義美無糖豆奶 (250ml)</button>
@@ -2789,64 +2899,47 @@
             <div id="plateBreakdownSummary" class="text-xs font-extrabold" style="color:#064e3b;border-top:1px solid #a7f3d0;padding-top:6px;"></div>
           </div>
         </div>
-      </div>
 
-      <div class="grid grid-12" style="gap:8px;">
-        <div class="col-span-7">
-          <label for="customFoodName" class="text-xs font-bold">食物名稱（不得含海鮮）</label>
-          <div style="display:flex;gap:6px;margin-top:4px;">
-            <input type="text" id="customFoodName" oninput="handleCustomFoodNameInput()" placeholder="如：日式茶碗蒸、滷牛腱100g..." />
-            <button type="button" class="btn btn-sm btn-primary" style="flex-shrink:0;" onclick="runModalAiNutritionAnalysis()">🤖 AI</button>
+        <!-- Food Name Input + On-Focus Saved Custom Foods Drawer + Meal Selector -->
+        <div class="grid grid-12" style="gap:8px;">
+          <div class="col-span-7">
+            <label for="customFoodName" class="text-xs font-bold">食物名稱（點此可展開已記憶常用食物）</label>
+            <div style="display:flex;gap:6px;margin-top:4px;">
+              <input type="text" id="customFoodName" onfocus="openSavedCustomFoodsDrawer()" oninput="handleCustomFoodNameInput()" placeholder="輸入品名或點擊挑選常用食物..." autocomplete="off" />
+              <button type="button" class="btn btn-sm btn-primary" style="flex-shrink:0;" onclick="runModalAiNutritionAnalysis(true)">🤖 AI</button>
+            </div>
+            <!-- Contextual Saved Custom Foods Drawer (Shown ONLY when focusing/typing Food Name) -->
+            <div id="savedCustomFoodsDrawer" class="saved-food-popover hidden">
+              <div class="flex-between" style="margin-bottom:6px;">
+                <span class="text-xs font-extrabold" style="color:#1e3a8a;">💾 已記憶常用自訂食物（點擊即帶入）</span>
+                <button type="button" onclick="closeSavedCustomFoodsDrawer()" style="font-size:11px;font-weight:800;color:#64748b;padding:2px 6px;">✕ 收合</button>
+              </div>
+              <div id="savedCustomFoodsList" class="flex-gap" style="gap:6px;"></div>
+            </div>
           </div>
-        </div>
-        <div class="col-span-5">
-          <label for="customFoodMeal" class="text-xs font-bold">記錄餐別</label>
-          <select id="customFoodMeal" style="margin-top:4px;">
-            <option value="breakfast">🌅 早餐</option>
-            <option value="lunch" selected>☀️ 午餐</option>
-            <option value="dinner">🌙 晚餐</option>
-            <option value="snack">🍎 點心</option>
-          </select>
+          <div class="col-span-5">
+            <label for="customFoodMeal" class="text-xs font-bold">記錄餐別</label>
+            <select id="customFoodMeal" style="margin-top:4px;">
+              <option value="breakfast">🌅 早餐</option>
+              <option value="lunch" selected>☀️ 午餐</option>
+              <option value="dinner">🌙 晚餐</option>
+              <option value="snack">🍎 點心</option>
+            </select>
+          </div>
         </div>
       </div>
 
       <div id="customSeafoodError" class="hidden card-soft" style="background:#fff1f2;border-color:#fecdd3;color:#be123c;font-size:12px;font-weight:700;">
-        🚫 偵測到海鮮類食材！本系統嚴格排除海鮮類食物，請改選雞肉、蛋、豆製品或牛豬肉類。
+        🚫 偵測到海鮮類食材！目前為無海鮮模式，請改選雞肉、蛋、豆製品或牛豬肉類。
       </div>
 
-      <div class="card-soft" style="background:#eff6ff;border-color:#bfdbfe;padding:10px;">
-        <div class="text-xs font-bold" style="color:#1e3a8a;margin-bottom:6px;">💾 已記憶常用自訂食物（點擊即帶入）：</div>
-        <div id="savedCustomFoodsList" class="flex-gap" style="gap:6px;"></div>
-      </div>
-
-      <div id="customAiModePanel" class="hidden card-soft" style="background:#ecfdf5;border-color:#a7f3d0;display:flex;flex-direction:column;gap:10px;">
-        <div class="flex-between">
-          <strong class="text-xs" style="color:#065f46;">🤖 AI 營養標示智慧辨識引擎（支援相簿照片與名稱推算）</strong>
-          <label for="customModalPhotoInput" class="btn btn-sm" style="background:#fff;color:#065f46;border:1px solid #6ee7b7;cursor:pointer;">
-            🖼️ 選相簿標示
-            <input type="file" id="customModalPhotoInput" accept="image/*" onchange="handleModalAlbumOrCameraPhoto(event, 'album')" class="hidden" />
-          </label>
-        </div>
-        <div class="flex-gap" style="gap:6px;">
-          <button type="button" class="btn btn-sm" style="background:#fff;border:1px solid #a7f3d0;" onclick="quickModalAiPick('石安牧場日式茶碗蒸')">🥣 茶碗蒸</button>
-          <button type="button" class="btn btn-sm" style="background:#fff;border:1px solid #a7f3d0;" onclick="quickModalAiPick('鹽味毛豆 (帶殼1包)')">🫛 鹽味毛豆</button>
-          <button type="button" class="btn btn-sm" style="background:#fff;border:1px solid #a7f3d0;" onclick="quickModalAiPick('無糖希臘式優格')">🥛 希臘優格</button>
-          <button type="button" class="btn btn-sm" style="background:#fff;border:1px solid #a7f3d0;" onclick="quickModalAiPick('石安牧場溫泉蛋 (1顆)')">🥚 溫泉蛋</button>
-          <button type="button" class="btn btn-sm" style="background:#fff;border:1px solid #a7f3d0;" onclick="quickModalAiPick('滷牛腱切片 (100g)')">🥩 滷牛腱</button>
-          <button type="button" class="btn btn-sm" style="background:#fff;border:1px solid #a7f3d0;" onclick="quickModalAiPick('香蕉 (1根)')">🍌 香蕉</button>
-        </div>
-        <div style="background:#fff;border:1px solid #a7f3d0;border-radius:10px;padding:10px;display:flex;gap:8px;align-items:flex-start;">
-          <span id="customAiStatusIcon">✨</span>
-          <div class="text-xs">
-            <div id="customAiStatusTitle" class="font-extrabold" style="color:#064e3b;">請輸入食物名稱並點擊「🤖 AI」</div>
-            <div id="customAiStatusDetail" class="text-muted mt-1">辨識完成後自動填入下方數值，仍可微調。</div>
+      <!-- STEP 2 & 3: Unified AI Recognition Status + Editable Result Macros -->
+      <div class="card-soft" style="display:flex;flex-direction:column;gap:10px;background:#ffffff;border:1.5px solid #dceee2;">
+        <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
+          <div class="flex-gap" style="gap:6px;align-items:center;">
+            <span id="nutritionSectionHeading" class="text-xs font-extrabold"><span class="step-chip green">步驟 2–3</span>🤖 AI 辨識結果（可微調）</span>
+            <span id="foodFlowStatusPill" class="badge badge-amber">⏳ 等待拍照或輸入</span>
           </div>
-        </div>
-      </div>
-
-      <div class="card-soft" style="display:flex;flex-direction:column;gap:10px;">
-        <div class="flex-between">
-          <span id="nutritionSectionHeading" class="text-xs font-extrabold">✍️ 手動輸入營養標示數值</span>
           <div class="flex-gap" style="gap:4px;">
             <button type="button" class="btn btn-sm btn-slate-soft" onclick="scaleCustomModalMacros(0.5)">0.5x</button>
             <button type="button" class="btn btn-sm btn-slate-soft" onclick="scaleCustomModalMacros(1.0)">1x</button>
@@ -2854,6 +2947,16 @@
             <button type="button" class="btn btn-sm btn-slate-soft" onclick="scaleCustomModalMacros(2.0)">2x</button>
           </div>
         </div>
+
+        <!-- Integrated AI Engine Status & Result Summary (Merged from old AI Engine Card) -->
+        <div id="customAiStatusBox" style="background:#f2fbf6;border:1.5px solid #c6ebd5;border-radius:12px;padding:10px;display:flex;gap:8px;align-items:flex-start;">
+          <span id="customAiStatusIcon" style="font-size:16px;line-height:1.2;">✨</span>
+          <div class="text-xs" style="flex:1;">
+            <div id="customAiStatusTitle" class="font-extrabold" style="color:#166534;">請先完成步驟 1：拍照、選相簿或輸入食物名稱</div>
+            <div id="customAiStatusDetail" class="text-muted mt-1">AI 辨識完成後會即時顯示進行狀態並自動填入下方營養標示，您仍可手動微調。</div>
+          </div>
+        </div>
+
         <div class="grid grid-5" style="gap:8px;">
           <div><label for="customFoodCal" class="text-xs font-bold">熱量</label><input type="number" id="customFoodCal" value="250" min="0" step="1" class="mt-1" /></div>
           <div><label for="customFoodPro" class="text-xs font-bold" style="color:var(--blue);">蛋白質g</label><input type="number" id="customFoodPro" value="20" min="0" step="0.5" class="mt-1" /></div>
@@ -2867,9 +2970,9 @@
         </div>
       </div>
 
-      <div class="flex-between" style="justify-content:flex-end;">
+      <div class="flex-between" style="justify-content:flex-end;gap:8px;">
         <button type="button" class="btn btn-slate-soft" onclick="closeCustomFoodModal()">取消</button>
-        <button type="button" id="customFoodSubmitBtn" class="btn btn-primary" onclick="submitCustomFood()">確認加入今日紀錄</button>
+        <button type="button" id="customFoodSubmitBtn" class="btn btn-primary" onclick="submitCustomFood()">✅ 確認加入今日紀錄</button>
       </div>
     </div>
   </div>
@@ -2964,7 +3067,7 @@
 
     let toastTimer = null;
     let activeMealFilter = 'all';
-    let customFoodEntryMode = 'manual';
+    let customFoodEntryMode = 'ai';
     let customBaseMacros = { calories: 250, protein: 20, carbs: 25, fat: 8, fiber: 3 };
     let pendingModalPhotoThumb = null;
     let isRestoringMemory = false;
@@ -4429,35 +4532,101 @@
       `).join('') : '<div class="card-soft text-sm text-muted">找不到符合條件的超商餐點。</div>';
     }
 
-    // Custom Food Modal (Manual & AI)
-    function openCustomFoodModal(mode = 'manual') {
-      const m = document.getElementById('customFoodModal');
-      if (m) { m.classList.remove('hidden'); switchCustomFoodMode(mode); }
+    // Custom Food Modal (Unified AI Auto-Recognition + Guided 3-Step Flow)
+    function setFoodFlowStage(stage, statusPillText = '') {
+      const s1 = document.getElementById('foodFlowStep1');
+      const s2 = document.getElementById('foodFlowStep2');
+      const s3 = document.getElementById('foodFlowStep3');
+      const s1Sub = document.getElementById('foodFlowStep1Sub');
+      const s2Sub = document.getElementById('foodFlowStep2Sub');
+      const s3Sub = document.getElementById('foodFlowStep3Sub');
+      const pill = document.getElementById('foodFlowStatusPill');
+      const box = document.getElementById('customAiStatusBox');
+      if (!s1 || !s2 || !s3) return;
+
+      if (stage === 'input') {
+        s1.className = 'food-flow-step active';
+        s2.className = 'food-flow-step';
+        s3.className = 'food-flow-step';
+        if (s1Sub) s1Sub.textContent = '拍照或輸入品名';
+        if (s2Sub) s2Sub.textContent = '待觸發 AI 辨識';
+        if (s3Sub) s3Sub.textContent = '核對數值並加入';
+        if (pill) { pill.textContent = statusPillText || '⏳ 等待拍照或輸入'; pill.className = 'badge badge-amber'; }
+        if (box) { box.style.background = '#f8fafc'; box.style.borderColor = '#e2e8f0'; }
+      } else if (stage === 'analyzing') {
+        s1.className = 'food-flow-step done';
+        s2.className = 'food-flow-step running';
+        s3.className = 'food-flow-step';
+        if (s1Sub) s1Sub.textContent = '已完成 ✓';
+        if (s2Sub) s2Sub.textContent = 'AI 辨識進行中...';
+        if (s3Sub) s3Sub.textContent = '即將帶入結果';
+        if (pill) { pill.textContent = statusPillText || '⏳ AI 辨識進行中...'; pill.className = 'badge badge-amber'; }
+        if (box) { box.style.background = '#fffbeb'; box.style.borderColor = '#fcd34d'; }
+      } else if (stage === 'warn') {
+        s1.className = 'food-flow-step done';
+        s2.className = 'food-flow-step active';
+        s3.className = 'food-flow-step active';
+        if (s1Sub) s1Sub.textContent = '已完成 ✓';
+        if (s2Sub) s2Sub.textContent = '需人工微調';
+        if (s3Sub) s3Sub.textContent = '請核對後加入';
+        if (pill) { pill.textContent = statusPillText || '⚠️ 請微調確認'; pill.className = 'badge badge-rose'; }
+        if (box) { box.style.background = '#fff7ed'; box.style.borderColor = '#fed7aa'; }
+      } else {
+        // stage === 'ready'
+        s1.className = 'food-flow-step done';
+        s2.className = 'food-flow-step done';
+        s3.className = 'food-flow-step active';
+        if (s1Sub) s1Sub.textContent = '已完成 ✓';
+        if (s2Sub) s2Sub.textContent = '辨識完成 ✓';
+        if (s3Sub) s3Sub.textContent = '核對並按加入';
+        if (pill) { pill.textContent = statusPillText || '✅ 辨識完成・可微調'; pill.className = 'badge badge-emerald'; }
+        if (box) { box.style.background = '#f2fbf6'; box.style.borderColor = '#a7f3d0'; }
+      }
     }
-    function closeCustomFoodModal() { editingLogId = null; const _sb = document.getElementById('customFoodSubmitBtn'); if (_sb) _sb.textContent = '確認加入今日紀錄';
+
+    function openSavedCustomFoodsDrawer() {
+      renderSavedCustomFoodsBar(document.getElementById('customFoodName')?.value || '');
+      document.getElementById('savedCustomFoodsDrawer')?.classList.remove('hidden');
+    }
+
+    function closeSavedCustomFoodsDrawer() {
+      document.getElementById('savedCustomFoodsDrawer')?.classList.add('hidden');
+    }
+
+    function openCustomFoodModal(mode = 'ai') {
+      customFoodEntryMode = 'ai';
+      const m = document.getElementById('customFoodModal');
+      if (m) {
+        m.classList.remove('hidden');
+        closeSavedCustomFoodsDrawer();
+        if (editingLogId) {
+          setFoodFlowStage('ready', '✏️ 編輯模式・可直接修改');
+        } else {
+          setFoodFlowStage('input', '⏳ 等待拍照或輸入');
+        }
+      }
+    }
+    function closeCustomFoodModal() {
+      editingLogId = null;
+      closeSavedCustomFoodsDrawer();
+      const _sb = document.getElementById('customFoodSubmitBtn');
+      if (_sb) _sb.textContent = '✅ 確認加入今日紀錄';
       const m = document.getElementById('customFoodModal');
       if (m) m.classList.add('hidden');
     }
     function switchCustomFoodMode(mode) {
-      customFoodEntryMode = mode === 'ai' ? 'ai' : 'manual';
-      const bm = document.getElementById('customModeBtn-manual');
-      const ba = document.getElementById('customModeBtn-ai');
-      const ap = document.getElementById('customAiModePanel');
-      const hd = document.getElementById('nutritionSectionHeading');
-      if (customFoodEntryMode === 'ai') {
-        ba.style.background = '#059669'; ba.style.color = '#fff';
-        bm.style.background = 'transparent'; bm.style.color = '#475569';
-        ap.classList.remove('hidden'); hd.textContent = '🤖 AI 辨識結果（已自動填入，可微調）';
-        if ((document.getElementById('customFoodName').value || '').trim()) runModalAiNutritionAnalysis(false);
-      } else {
-        bm.style.background = '#fff'; bm.style.color = '#0f172a';
-        ba.style.background = 'transparent'; ba.style.color = '#475569';
-        ap.classList.add('hidden'); hd.textContent = '✍️ 手動輸入營養標示數值';
-      }
+      customFoodEntryMode = 'ai';
     }
     function handleCustomFoodNameInput() {
-      if (!checkCustomSeafoodWarning() && customFoodEntryMode === 'ai' && document.getElementById('customFoodName').value.trim().length >= 2) {
+      const val = (document.getElementById('customFoodName')?.value || '').trim();
+      renderSavedCustomFoodsBar(val);
+      if (document.activeElement === document.getElementById('customFoodName')) {
+        document.getElementById('savedCustomFoodsDrawer')?.classList.remove('hidden');
+      }
+      if (!checkCustomSeafoodWarning() && val.length >= 2) {
         runModalAiNutritionAnalysis(false);
+      } else if (!val) {
+        setFoodFlowStage('input', '⏳ 等待拍照或輸入');
       }
     }
     function checkCustomSeafoodWarning() {
@@ -4576,6 +4745,7 @@
         const fFib = Math.round(base.fiber * mult * 10) / 10;
         setCustomModalMacroFields(fCal, fPro, fCarb, fFat, fFib);
         si.textContent = '🤖'; st.textContent = `AI 估算完成：「${raw}」`;
+        setFoodFlowStage('ready', '🤖 AI 估算完成');
         sd.textContent = `${base.ref} → 熱量 ${fCal} kcal｜蛋白 ${fPro}g｜碳水 ${fCarb}g｜脂肪 ${fFat}g`;
         if (notify) showToast(`已推算「${raw}」營養數值（可核對包裝微調）`, '🤖');
         return;
@@ -4606,6 +4776,7 @@
       setCustomModalMacroFields(fCal, fPro, fCarb, fFat, fFib);
       si.textContent = '✅';
       st.textContent = `精準命中：「${matched.name}」(${scaleNote})`;
+      setFoodFlowStage('ready', '✅ 精準命中標示');
       sd.textContent = `來源：${matched.ref || matched.sourceTitle} → 熱量 ${fCal} kcal｜蛋白 ${fPro}g｜碳水 ${fCarb}g｜脂肪 ${fFat}g`;
       if (notify) showToast(`已精準換算「${matched.name}」：${fCal} kcal / 蛋白 ${fPro}g`, '✅');
     }
@@ -4767,6 +4938,7 @@
       if (btnOcr) { btnOcr.disabled = true; btnOcr.textContent = '⏳ 正在 OCR 辨識中...'; }
       si.textContent = '🔍';
       st.textContent = '正在啟動 AI 營養標示光學文字辨識 (OCR)...';
+      setFoodFlowStage('analyzing', '⏳ AI 標示辨識中...');
       sd.textContent = '正在裁切營養標示區域並進行高對比文字讀取，請稍候...';
 
       try {
@@ -4780,9 +4952,9 @@
             if (gLabel.name && ni) ni.value = gLabel.name;
             setCustomModalMacroFields(gLabel.calories, gLabel.protein, gLabel.carbs, gLabel.fat, gLabel.fiber);
             if (gLabel.isSeafood || containsSeafood(gLabel.name)) {
-              document.getElementById('customSeafoodAlert').classList.remove('hidden');
+              document.getElementById('customSeafoodError')?.classList.remove('hidden');
             } else {
-              document.getElementById('customSeafoodAlert').classList.add('hidden');
+              document.getElementById('customSeafoodError')?.classList.add('hidden');
             }
             const servHint = gLabel.servingSize ? `（每份 ${gLabel.servingSize}・本包裝含 ${gLabel.servingsPerPackage} 份）` : '';
             const fixHint = (gLabel.autoFixes && gLabel.autoFixes.length) ? `｜✨ 雙欄驗算自動校正：${gLabel.autoFixes.join('、')}` : '';
@@ -4791,6 +4963,7 @@
               : `｜✅ 通過雙欄與 4-4-9 檢核`;
             si.textContent = gLabel.mismatch ? '⚠️' : '✨';
             st.textContent = `${gLabel.usedModel || 'Gemini'} 辨識完成（⚡ ${gLabel.elapsedSec || 1}秒）：${gLabel.name || '包裝食品'}${servHint}`;
+            setFoodFlowStage(gLabel.mismatch ? 'warn' : 'ready', gLabel.mismatch ? '⚠️ 數值落差請微調' : '✅ AI 標示辨識完成');
             sd.textContent = `每份：熱量 ${gLabel.calories} kcal｜蛋白 ${gLabel.protein}g｜碳水 ${gLabel.carbs}g｜脂肪 ${gLabel.fat}g｜纖維 ${gLabel.fiber}g${checkHint}${fixHint}`;
             showToast(gLabel.mismatch ? '已帶入標示，但偵測到數值落差請微調確認' : `已精準讀取營養標示（⚡ ${gLabel.elapsedSec || 1}秒）！`, gLabel.mismatch ? '⚠️' : '✨');
             return;
@@ -4879,18 +5052,21 @@
             ? `📷 AI 相片 OCR ＋ 品牌資料庫校準成功！（${ni.value || '營養標示'}）`
             : `📷 AI 相片 OCR 辨識成功！${ni.value ? '（' + ni.value + '）' : ''}`;
           sd.textContent = `已擷取標示：熱量 ${finalCal} kcal｜蛋白 ${finalPro}g｜碳水 ${finalCarb}g｜脂肪 ${finalFat}g（已排除上方 CNS 百分比干擾並通過能量守恆驗證）`;
+          setFoodFlowStage('ready', '✅ 相片 OCR 完成');
           showToast(`辨識完成：熱量 ${finalCal} kcal / 蛋白質 ${finalPro}g`, '✅');
         } else if (ni.value && ni.value.trim()) {
           runModalAiNutritionAnalysis(true);
         } else {
           si.textContent = '⚠️';
           st.textContent = '相片字體反光或較小，OCR 未讀到完整數字';
+          setFoodFlowStage('warn', '⚠️ 未讀到完整數字');
           sd.textContent = '已清空舊數值避免誤記！請直接輸入品名與 ml/g（如「義美無糖豆漿250ml」）點 AI 換算，或對照上方照片手動填入。';
           showToast('照片字體較小未能自動讀出數字，請輸入品名+容量或對照照片手動輸入', '⚠️');
         }
       } catch (err) {
         si.textContent = '⚠️';
         st.textContent = '目前無法載入線上 OCR 模型（可能為離線狀態）';
+        setFoodFlowStage('warn', '⚠️ 離線請手動微調');
         sd.textContent = '已清空舊數值！請直接輸入「品牌+品名+ml/g」（如「義美無糖豆漿250ml」）使用內建精準資料庫換算，或對照上方照片手動填寫。';
         showToast('離線狀態無法執行相片 OCR，請輸入品名+容量或對照照片手動輸入', '⚠️');
       } finally {
@@ -4952,7 +5128,8 @@
           const st = document.getElementById('customAiStatusTitle');
           const sd = document.getElementById('customAiStatusDetail');
           if (si) si.textContent = '📸';
-          if (st) st.textContent = '相片已就緒！請選擇辨識模式：外食餐點 OR 包裝營養標示';
+          if (st) st.textContent = '相片已就緒！請選擇上方「辨識外食餐點」或「辨識包裝營養標示」';
+          setFoodFlowStage('input', '📸 相片已就緒・待辨識');
           if (sd) sd.textContent = '自助餐/便當請點「🍱 辨識外食餐點＆估算份量」；有印營養標示表格請點「🏷️ 辨識包裝營養標示 (OCR)」。';
           showToast('相片已載入！請點擊「🍱 辨識外食餐點」或「🏷️ 辨識包裝標示」', '📸');
         } else {
@@ -5065,7 +5242,7 @@
       }
     }
 
-    const APP_VERSION = 'v3.8.1';
+    const APP_VERSION = 'v3.9.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -6193,6 +6370,7 @@
       if (btn) { btn.disabled = true; btn.textContent = '⏳ 正在分析餐盤食材與份量...'; }
       si.textContent = '🍱';
       st.textContent = 'AI 正在拆解照片中的台灣外食料理並預估各類食材克數...';
+      setFoodFlowStage('analyzing', '⏳ AI 餐盤辨識中...');
       sd.textContent = '將依據每道菜的份量換算總熱量、蛋白質、碳水與脂肪...';
 
       const apiKey = getSavedGeminiKey();
@@ -6236,6 +6414,7 @@
         renderPlateBreakdown();
         si.textContent = '⚠️';
         st.textContent = 'Gemini 視覺辨識未能連線（已停止亂猜）';
+        setFoodFlowStage('warn', '⚠️ 連線失敗請點選食材');
         sd.textContent = '失敗原因：' + msg + '。您可先使用上方「⚡ 離線快速點選盤中食材」直接勾選（如水煮蛋×2＋地瓜）！';
         showToast('Gemini 連線失敗：' + msg.slice(0, 70), '⚠️');
       } finally {
@@ -6314,6 +6493,7 @@
       } else {
         si.textContent = '🍱';
         st.textContent = `外食餐盤份量換算完成（共 ${plateBreakdownItems.length} 道菜）`;
+        setFoodFlowStage('ready', '✅ 餐盤辨識完成');
         sd.textContent = `總熱量 ${totCal} kcal｜蛋白 ${totPro}g｜碳水 ${totCarb}g｜脂肪 ${totFat}g（已同步填入下方欄位）`;
       }
     }
@@ -6391,7 +6571,7 @@
       const it = (appState.logs || []).find(l => l.logId === logId);
       if (!it) return;
       editingLogId = logId;
-      openCustomFoodModal('manual');
+      openCustomFoodModal('ai');
       const mult = Number(it.portion) || 1;
       document.getElementById('customFoodName').value = it.name || '';
       document.getElementById('customFoodMeal').value = it.meal || 'lunch';
@@ -6408,11 +6588,12 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v3.8.1',
+      version: 'v3.9.0',
       date: '2026-11-21',
       items: [
-        '🎀 頂部導覽飾條升級為「微光聖誕燈串 × 粉彩彩球 × 柊葉金鈴」可愛掛飾花環，保留柔和雪白色調。',
-        '❄️ 「今日攝取營養即時總覽」卡片頂緣升級為「蓬鬆雪花波浪屋簷 × 垂墜彩球、小聖誕樹、微笑星星與迷你禮物盒」裝飾邊條，整體更豐富可愛。'
+        '🧭 「記錄食物」全新 3 步驟填寫引導與即時狀態追蹤：清楚標示「步驟 1 拍照或輸入 → 步驟 2 AI 辨識中 → 步驟 3 核對並加入」。',
+        '📷 放大「從手機相簿選取」與「直接開啟相機拍照」雙格大按鈕，單手操作更直覺；默認 AI 自動辨識（皆可自由微調），移除多餘的模式切換與食物類別按鈕。',
+        '💾 「已記憶常用自訂食物」改為點擊食物名稱輸入框時才動態展開並支援即時篩選，AI 辨識引擎結果直接整合進「AI 辨識結果」卡片。'
       ]
     };
 
@@ -7148,12 +7329,27 @@
       renderAll(); showToast(`已切換至 ${d}`, '📅');
     }
 
-    function renderSavedCustomFoodsBar() {
+    function renderSavedCustomFoodsBar(filterText = '') {
       const el = document.getElementById('savedCustomFoodsList'); if (!el) return;
-      if (!appState.savedCustomFoods || !appState.savedCustomFoods.length) { el.innerHTML = '<span class="text-xs text-muted">尚無記憶項目</span>'; return; }
-      el.innerHTML = appState.savedCustomFoods.map((it, idx) => `<div style="display:inline-flex;background:#fff;border:1px solid #bfdbfe;border-radius:8px;overflow:hidden;"><button type="button" onclick="loadSavedCustomFood(${idx})" style="padding:4px 8px;font-size:11px;font-weight:700;color:#1e3a8a;">${it.name} (${it.calories}kcal)</button><button type="button" onclick="deleteSavedCustomFood(${idx})" style="padding:4px 6px;font-size:10px;color:#94a3b8;border-left:1px solid #dbeafe;">✕</button></div>`).join('');
+      const list = Array.isArray(appState.savedCustomFoods) ? appState.savedCustomFoods : [];
+      if (!list.length) { el.innerHTML = '<span class="text-xs text-muted">尚無記憶項目，新增過自訂食物後會自動記住</span>'; return; }
+      const q = String(filterText || '').trim().toLowerCase();
+      const matched = list.map((it, idx) => ({ it, idx })).filter(({ it }) => !q || String(it.name || '').toLowerCase().includes(q));
+      if (!matched.length) { el.innerHTML = '<span class="text-xs text-muted">沒有符合此關鍵字的常用食物，可直接點右側「🤖 AI」推算</span>'; return; }
+      el.innerHTML = matched.map(({ it, idx }) => `<div style="display:inline-flex;background:#fff;border:1px solid #bfdbfe;border-radius:10px;overflow:hidden;"><button type="button" onclick="loadSavedCustomFood(${idx})" style="padding:5px 9px;font-size:11px;font-weight:700;color:#1e3a8a;text-align:left;">${it.name} (${it.calories}kcal)</button><button type="button" onclick="deleteSavedCustomFood(${idx})" style="padding:5px 7px;font-size:10px;color:#94a3b8;border-left:1px solid #dbeafe;">✕</button></div>`).join('');
     }
-    function loadSavedCustomFood(idx) { const it = appState.savedCustomFoods[idx]; if (!it) return; document.getElementById('customFoodName').value = it.name; setCustomModalMacroFields(it.calories, it.protein, it.carbs, it.fat, it.fiber || 0); checkCustomSeafoodWarning(); }
+    function loadSavedCustomFood(idx) {
+      const it = appState.savedCustomFoods[idx]; if (!it) return;
+      document.getElementById('customFoodName').value = it.name;
+      setCustomModalMacroFields(it.calories, it.protein, it.carbs, it.fat, it.fiber || 0);
+      checkCustomSeafoodWarning();
+      closeSavedCustomFoodsDrawer();
+      const si = document.getElementById('customAiStatusIcon'), st = document.getElementById('customAiStatusTitle'), sd = document.getElementById('customAiStatusDetail');
+      if (si) si.textContent = '💾';
+      if (st) st.textContent = `已帶入常用食物：「${it.name}」`;
+      if (sd) sd.textContent = `熱量 ${it.calories} kcal｜蛋白 ${it.protein}g｜碳水 ${it.carbs}g｜脂肪 ${it.fat}g（可直接微調或按下方加入）`;
+      setFoodFlowStage('ready', '💾 已帶入常用食物');
+    }
     function deleteSavedCustomFood(idx) { appState.savedCustomFoods.splice(idx, 1); renderAll(); }
 
     function renderIosMemoryCenter() {
