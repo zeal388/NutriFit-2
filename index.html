@@ -1701,11 +1701,31 @@
             </div>
           </div>
 
-          <div class="header-pill">
-            <div><span id="headerGenderBadge" class="badge badge-blue" style="margin-right:4px;">♂ 男性</span><strong id="headerHeightText">170 cm</strong> / <strong id="headerWeightText">70 kg</strong></div>
-            <div><span class="text-muted">BMI：</span><strong id="headerBmiText">24.2</strong> <span id="headerBmiBadge" class="badge badge-amber">過重</span></div>
-            <div><span class="text-muted">今日熱量：</span><strong id="headerCalText" style="color:var(--emerald);">0 / 1575 kcal</strong></div>
-            <div><span class="text-muted">蛋白質：</span><strong id="headerProText" style="color:var(--blue);">0 / 110 g</strong></div>
+          <div class="header-pill" style="flex-direction:column;align-items:stretch;gap:6px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;">
+              <div><span id="headerGenderBadge" class="badge badge-blue" style="margin-right:4px;">♂ 男性</span><strong id="headerHeightText">170 cm</strong> / <strong id="headerWeightText">70 kg</strong></div>
+              <div><span class="text-muted">BMI：</span><strong id="headerBmiText">24.2</strong> <span id="headerBmiBadge" class="badge badge-amber">過重</span></div>
+              <div><span class="text-muted">今日熱量：</span><strong id="headerCalText" style="color:var(--emerald);">0 / 1575 kcal</strong></div>
+              <div><span class="text-muted">蛋白質：</span><strong id="headerProText" style="color:var(--blue);">0 / 110 g</strong></div>
+            </div>
+            <!-- Compact Live BMI Spectrum Distribution Bar -->
+            <div style="width:100%;padding-top:4px;border-top:1px dashed #efe2d8;">
+              <div class="flex-between" style="font-size:10px;font-weight:800;color:#7c6357;gap:4px;">
+                <span>過輕 &lt;18.5</span>
+                <span style="color:var(--emerald);">正常 18.5–23.9</span>
+                <span style="color:var(--amber);">過重 24–26.9</span>
+                <span style="color:#ea580c;">輕胖 27–29.9</span>
+                <span style="color:var(--rose);">肥胖 ≥30</span>
+              </div>
+              <div style="position:relative;height:10px;border-radius:999px;overflow:hidden;display:flex;margin-top:4px;border:1px solid rgba(124,88,70,0.18);">
+                <div style="width:18%;background:#7dd3fc;"></div>
+                <div style="width:28%;background:#4ade80;"></div>
+                <div style="width:18%;background:#fbbf24;"></div>
+                <div style="width:18%;background:#fb923c;"></div>
+                <div style="width:18%;background:#f87171;"></div>
+                <div id="bmiSpectrumMarker" style="position:absolute;top:-2px;left:50%;transform:translateX(-50%);width:8px;height:14px;border-radius:999px;background:#2a1b14;border:2px solid #ffffff;box-shadow:0 1px 4px rgba(0,0,0,0.4);transition:left .3s ease;"></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1914,9 +1934,16 @@
 
           <!-- Integrated Macro Calorie Split Donut Chart -->
           <div style="background:#ffffff;color:#44322a;border-radius:16px;padding:12px 14px;border:1.5px solid #f2e4da;">
-            <div class="flex-between" style="flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-              <div class="text-xs font-extrabold" style="color:#4a2818;display:inline-flex;align-items:center;gap:5px;"><svg class="xmas-ic" style="width:19px;height:19px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-gift"/></svg> 三大營養素熱量結構佔比</div>
-              <div id="macroTargetRatioLabel" class="text-xs" style="color:#786055;">目標比例：蛋白質 28% / 碳水 38% / 脂肪 34%</div>
+            <div class="flex-between" style="align-items:flex-start;gap:8px;margin-bottom:8px;">
+              <div style="min-width:0;flex:1;">
+                <div class="text-xs font-extrabold" style="color:#4a2818;display:inline-flex;align-items:center;gap:5px;"><svg class="xmas-ic" style="width:19px;height:19px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-gift"/></svg> 三大營養素熱量結構佔比</div>
+                <div id="macroTargetRatioLabel" class="text-xs" style="color:#786055;margin-top:3px;">目標比例：蛋白質 28% / 碳水 38% / 脂肪 34%</div>
+              </div>
+              <button type="button" id="btnOpenDailyMealLogModal" onclick="openDailyMealLogModal()" style="flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:linear-gradient(135deg,#fff5f5,#fffbeb);color:#7c2d12;border:1.5px solid #f3c6c6;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 2px 6px rgba(180,83,9,0.08);white-space:nowrap;">
+                <svg class="xmas-ic" style="width:16px;height:16px;display:inline-block;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-stocking"/></svg>
+                <span>單日飲食明細</span>
+                <span id="dailyMealCountBadge" style="display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#e11d48;color:#ffffff;font-size:11px;font-weight:900;line-height:1;">0</span>
+              </button>
             </div>
             <div id="svgMacroDonutChart"></div>
           </div>
@@ -1997,33 +2024,7 @@
           </div>
         </div>
 
-        <!-- Daily Log -->
-        <div>
-          <div class="card" style="display:flex;flex-direction:column;gap:12px;">
-            <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;">
-              <div>
-                <h3 style="font-size:16px;font-weight:900;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:22px;height:22px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-stocking"/></svg> 單日飲食明細</h3>
-                <div class="text-xs text-muted">支援單指調整份量、餐別快篩與手動／AI 辨識新增</div>
-              </div>
-              <div class="flex-gap">
-                <button type="button" class="btn btn-sm btn-dark" onclick="openCustomFoodModal('manual')">＋ 手動 / 相簿記錄</button>
-                <button type="button" class="btn btn-sm btn-rose-soft" onclick="clearAllLogs()">清空今日</button>
-              </div>
-            </div>
-
-            <div class="pill-row">
-              <button type="button" id="mealFilterBtn-all" class="pill-btn active" onclick="setMealLogFilter('all')">📋 全部餐別</button>
-              <button type="button" id="mealFilterBtn-breakfast" class="pill-btn" onclick="setMealLogFilter('breakfast')">🌅 早餐</button>
-              <button type="button" id="mealFilterBtn-lunch" class="pill-btn" onclick="setMealLogFilter('lunch')">☀️ 午餐</button>
-              <button type="button" id="mealFilterBtn-dinner" class="pill-btn" onclick="setMealLogFilter('dinner')">🌙 晚餐</button>
-              <button type="button" id="mealFilterBtn-snack" class="pill-btn" onclick="setMealLogFilter('snack')">🍎 點心</button>
-            </div>
-
-            <div id="mealLogContainer" style="display:flex;flex-direction:column;gap:12px;"></div>
-          </div>
-
-
-        </div>
+        <!-- Daily Log moved to #dailyMealLogModal popup -->
       </section>
 
       <!-- ==================== TAB 2: 體重與BMI飲食控制計劃表 ==================== -->
@@ -2040,7 +2041,7 @@
 
           <div class="grid grid-3" style="gap:10px;">
             <!-- Card 1: 單日營養攝取分析 -->
-            <button type="button" onclick="scrollToPlanSection('planSectionIntake')" style="text-align:left;background:#ffffff;border:1.5px solid #dbece1;border-radius:14px;padding:12px;color:#2a1b14;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:0 3px 10px rgba(148,163,184,0.08);">
+            <button type="button" onclick="openPlanReportModal('intake')" style="text-align:left;background:#ffffff;border:1.5px solid #dbece1;border-radius:14px;padding:12px;color:#2a1b14;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:0 3px 10px rgba(148,163,184,0.08);">
               <div class="flex-between" style="width:100%;">
                 <span class="text-xs font-extrabold" style="color:#15803d;">🔍 單日營養攝取分析</span>
                 <span id="planSumIntakeBadge" class="badge badge-emerald" style="font-size:10px;">達標中</span>
@@ -2050,7 +2051,7 @@
             </button>
 
             <!-- Card 2: 減脂藍圖 -->
-            <button type="button" onclick="scrollToPlanSection('planSectionBlueprint')" style="text-align:left;background:#ffffff;border:1.5px solid #d7e6fb;border-radius:14px;padding:12px;color:#2a1b14;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:0 3px 10px rgba(148,163,184,0.08);">
+            <button type="button" onclick="openPlanReportModal('blueprint')" style="text-align:left;background:#ffffff;border:1.5px solid #d7e6fb;border-radius:14px;padding:12px;color:#2a1b14;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:0 3px 10px rgba(148,163,184,0.08);">
               <div class="flex-between" style="width:100%;">
                 <span class="text-xs font-extrabold" style="color:#1d4ed8;">🗓️ 減脂藍圖</span>
                 <span id="planSumBlueprintBadge" class="badge badge-blue" style="font-size:10px;">穩健步調</span>
@@ -2060,7 +2061,7 @@
             </button>
 
             <!-- Card 3: 單日營養健檢 -->
-            <button type="button" onclick="scrollToPlanSection('planSectionAudit')" style="text-align:left;background:#ffffff;border:1.5px solid #f7e1c2;border-radius:14px;padding:12px;color:#2a1b14;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:0 3px 10px rgba(148,163,184,0.08);">
+            <button type="button" onclick="openPlanReportModal('audit')" style="text-align:left;background:#ffffff;border:1.5px solid #f7e1c2;border-radius:14px;padding:12px;color:#2a1b14;display:flex;flex-direction:column;gap:4px;cursor:pointer;box-shadow:0 3px 10px rgba(148,163,184,0.08);">
               <div class="flex-between" style="width:100%;">
                 <span class="text-xs font-extrabold" style="color:#b45309;">📋 單日營養健檢</span>
                 <span id="planSumAuditBadge" class="badge badge-amber" style="font-size:10px;">0 項餐點</span>
@@ -2110,210 +2111,6 @@
             <div class="trend-footer-box">
               <span id="trendSummaryText" class="font-bold" style="color:#44322a;">尚無歷史趨勢紀錄</span>
               <span id="trendTargetBadge" class="badge badge-emerald" style="font-size:10px;">目標 —</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="display:flex;flex-direction:column;gap:16px;">
-          <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:12px;">
-            <div>
-              <div class="text-xs font-extrabold" style="color:var(--emerald);">功能一：個人化減脂飲食控制計劃與 BMI 自動換算</div>
-              <h2 style="font-size:20px;font-weight:800;margin-top:2px;">不同體重下每日建議攝取營養項目與基準量</h2>
-            </div>
-            <button type="button" class="btn btn-sm btn-primary" onclick="switchTab('dashboard')">返回今日監控 →</button>
-          </div>
-
-          <!-- Body Parameters Moved to ⚙️ 系統 -> 體態設定 -->
-          <div class="card-soft flex-between" style="background:#f8fafc;flex-wrap:wrap;gap:8px;padding:10px 14px;">
-            <div class="text-xs font-bold" style="color:var(--slate-700);">
-              ⚖️ 身形、性別、年齡、目標體重與活動量參數已整合至「⚙️ 系統 → 體態設定」統一管理
-            </div>
-            <button type="button" class="btn btn-sm btn-blue" onclick="switchTab('system')">✏️ 前往體態設定修改</button>
-          </div>
-
-          <!-- BMI Assessment Card -->
-          <div class="card-soft" style="background:#fff;">
-            <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
-              <div>
-                <h3 class="text-sm font-extrabold">📏 性別 × 身高 × 體重 自動換算 BMI 與衛福部國健署體位評估</h3>
-                <div id="bmiCardGenderSubtitle" class="text-xs text-muted">台灣成人健康體位：18.5 ≤ BMI &lt; 24.0 ｜ 男性理想腰圍：&lt; 90 cm (35吋)</div>
-              </div>
-              <button type="button" id="applyIdealWeightBtn" class="btn btn-sm" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;" onclick="applyIdealWeightAsTarget()">🎯 設男性標準體重 (BMI 22) 為目標</button>
-            </div>
-
-            <div class="grid grid-4 mt-3">
-              <div class="card-soft">
-                <div class="text-xs text-muted">目前 BMI</div>
-                <div class="flex-gap mt-1"><strong id="bmiCardCurrentVal" style="font-size:22px;">24.2</strong><span id="bmiCardCategoryBadge" class="badge badge-amber">過重</span></div>
-                <div id="bmiCardFormulaText" class="text-xs text-muted mt-1">70 ÷ 1.70² = 24.22</div>
-              </div>
-              <div class="card-soft">
-                <div class="text-xs text-muted">目標體重對應 BMI</div>
-                <div class="flex-gap mt-1"><strong id="bmiCardTargetVal" style="font-size:22px;color:var(--blue);">21.8</strong><span id="bmiCardTargetBadge" class="badge badge-emerald">正常</span></div>
-                <div id="bmiCardTargetText" class="text-xs text-muted mt-1">目標 63 kg 對應體位</div>
-              </div>
-              <div class="card-soft">
-                <div class="text-xs text-muted">健康正常體重 &amp; 理想腰圍</div>
-                <div id="bmiCardHealthyRange" class="font-extrabold mt-1" style="font-size:16px;color:var(--emerald);">53.5 ～ 69.4 kg</div>
-                <div id="bmiCardIdealStandard" class="text-xs text-muted mt-1">男性標準體重 (BMI 22)：63.6 kg</div>
-              </div>
-              <div class="card-soft">
-                <div class="text-xs text-muted">性別專屬 BMR / TDEE</div>
-                <div id="bmiCardCalorieAdvice" class="text-sm font-extrabold mt-1">BMR 1648 / TDEE 2060</div>
-                <div id="bmiCardActionHint" class="text-xs text-muted mt-1">每日赤字 412 大卡（男安全下限 ≥1500）</div>
-              </div>
-            </div>
-
-            <div class="mt-3">
-              <div class="flex-between text-xs text-muted" style="font-size:11px;font-weight:700;">
-                <span>過輕 &lt;18.5</span><span style="color:var(--emerald);">正常 18.5-23.9</span><span style="color:var(--amber);">過重 24-26.9</span><span style="color:#ea580c;">輕度肥胖 27-29.9</span><span style="color:var(--rose);">肥胖 ≥30</span>
-              </div>
-              <div style="position:relative;height:14px;border-radius:999px;overflow:hidden;display:flex;margin-top:6px;">
-                <div style="width:18%;background:#7dd3fc;"></div>
-                <div style="width:28%;background:#34d399;"></div>
-                <div style="width:18%;background:#fbbf24;"></div>
-                <div style="width:18%;background:#fb923c;"></div>
-                <div style="width:18%;background:#f43f5e;"></div>
-                <div id="bmiSpectrumMarker" style="position:absolute;top:0;bottom:0;width:10px;background:#0f172a;border:2px solid #fff;border-radius:999px;left:48%;transition:left 0.3s ease;"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Personal Prescription -->
-          <div style="background:#022c22;color:#fff;border-radius:16px;padding:16px;">
-            <div class="flex-between">
-              <div>
-                <div class="text-xs font-bold" style="color:#6ee7b7;">您的專屬每日減脂營養處方</div>
-                <h3 id="personalPlanHeading" style="font-size:17px;font-weight:800;margin-top:2px;">170 cm / 70 kg・每日建議攝取量</h3>
-              </div>
-              <span id="personalEnergyDeficitBadge" class="badge" style="background:rgba(16,185,129,0.22);color:#a7f3d0;">穩健減脂不掉肌</span>
-            </div>
-            <div class="grid grid-6 mt-3" style="gap:10px;">
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">目標熱量</div><div id="pCardCal" style="font-size:18px;font-weight:800;margin-top:4px;">1575 kcal</div></div>
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">蛋白質</div><div id="pCardPro" style="font-size:18px;font-weight:800;color:#93c5fd;margin-top:4px;">110 g</div><div id="pCardProEq" style="font-size:11px;color:#6ee7b7;">1.57 g/kg</div></div>
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">碳水化合物</div><div id="pCardCarb" style="font-size:18px;font-weight:800;color:#fcd34d;margin-top:4px;">150 g</div></div>
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">優質脂肪</div><div id="pCardFat" style="font-size:18px;font-weight:800;color:#fda4af;margin-top:4px;">60 g</div></div>
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">膳食纖維</div><div id="pCardFib" style="font-size:18px;font-weight:800;color:#5eead4;margin-top:4px;">25 g</div></div>
-              <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:12px;"><div class="text-xs" style="color:#a7f3d0;">每日飲水</div><div id="pCardWater" style="font-size:18px;font-weight:800;color:#67e8f9;margin-top:4px;">2450 ml</div></div>
-            </div>
-          </div>
-
-          <!-- Today's Intake Integration, Nutrition Label Audit & Improvement Advice -->
-          <div id="planSectionIntake" class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:14px;">
-            <div class="flex-between" style="flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--border);padding-bottom:10px;">
-              <div>
-                <div class="text-xs font-extrabold" style="color:var(--emerald);">計畫與實戰整合：今日攝取食物 × 營養標示診斷與改善建議</div>
-                <h3 style="font-size:17px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:22px;height:22px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-ornament"/></svg> 單日營養攝取分析</h3>
-              </div>
-              <div class="flex-gap" style="gap:6px;">
-                <span id="planAuditDateBadge" class="badge badge-blue">📅 2026-11-18</span>
-              </div>
-            </div>
-
-            <!-- Actual vs Target Comparison Strip -->
-            <div id="planIntakeGapGrid" class="grid grid-5" style="gap:8px;"></div>
-
-            <!-- Logged Foods Per-Item Nutrition Label Audit -->
-            <div>
-              <div class="flex-between" style="margin-bottom:8px;">
-                <div id="planSectionAudit" class="text-xs font-extrabold" style="color:var(--slate-700);">📋 單日營養健檢</div>
-                <span id="planAuditItemCount" class="text-xs text-muted">共 0 項餐點</span>
-              </div>
-              <div id="planLoggedFoodAuditList" style="display:flex;flex-direction:column;gap:8px;"></div>
-            </div>
-
-            <!-- Actionable Improvement Recommendations -->
-            <div>
-              <div class="text-xs font-extrabold" style="color:var(--slate-700);margin-bottom:8px;">💡 營養標示分析結果與具體改善建議（100% 無海鮮）</div>
-              <div id="planImprovementAdviceList" style="display:flex;flex-direction:column;gap:8px;"></div>
-            </div>
-          </div>
-
-          <!-- Timeline Forecast & Actionable Execution Guide -->
-          <div id="planSectionBlueprint" class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:14px;">
-            <div class="flex-between" style="flex-wrap:wrap;gap:10px;border-bottom:1px solid var(--border);padding-bottom:10px;">
-              <div>
-                <div class="text-xs font-extrabold" style="color:var(--blue);">功能進階：預計達成時間推估 × 階段式執行引導</div>
-                <h3 style="font-size:17px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:22px;height:22px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-tree"/></svg> 減脂藍圖</h3>
-              </div>
-              <div class="flex-gap" style="gap:6px;">
-                <label for="planExerciseSelect" class="text-xs font-bold text-muted">搭配額外運動：</label>
-                <select id="planExerciseSelect" onchange="setExtraExerciseKcal(this.value)" style="width:auto;padding:6px 10px;font-size:12px;font-weight:700;">
-                  <option value="0">純飲食控制 (+0 kcal/日)</option>
-                  <option value="150">每日快走 30 分 (+150 kcal/日)</option>
-                  <option value="250">規律有氧/重訓 (+250 kcal/日)</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- 4 KPI Forecast Cards -->
-            <div class="grid grid-4" style="gap:10px;">
-              <div class="card-soft" style="background:#eff6ff;border-color:#bfdbfe;">
-                <div class="text-xs font-bold" style="color:#1d4ed8;">預計達成日期</div>
-                <div id="etaTargetDate" style="font-size:20px;font-weight:900;color:#1e3a8a;margin-top:4px;">2027/03/28</div>
-                <div id="etaDurationText" class="text-xs text-muted mt-1">約 18.7 週（131 天）</div>
-              </div>
-              <div class="card-soft" style="background:#ecfdf5;border-color:#a7f3d0;">
-                <div class="text-xs font-bold" style="color:#047857;">每週預估減重速率</div>
-                <div id="etaWeeklyRate" style="font-size:20px;font-weight:900;color:#065f46;margin-top:4px;">-0.37 kg / 週</div>
-                <div id="etaPaceBadgeWrap" class="mt-1"><span id="etaPaceBadge" class="badge badge-emerald">✅ 穩健安全速率</span></div>
-              </div>
-              <div class="card-soft">
-                <div class="text-xs font-bold text-muted">每日總熱量缺口</div>
-                <div id="etaDailyDeficit" style="font-size:20px;font-weight:900;color:var(--slate-900);margin-top:4px;">405 kcal</div>
-                <div id="etaDeficitBreakdown" class="text-xs text-muted mt-1">飲食赤字 405 + 運動 0 kcal</div>
-              </div>
-              <div class="card-soft">
-                <div class="text-xs font-bold text-muted">目標累計需消耗熱量</div>
-                <div id="etaTotalKcalBurn" style="font-size:20px;font-weight:900;color:var(--amber);margin-top:4px;">53,900 kcal</div>
-                <div id="etaWeightGoalSummary" class="text-xs text-muted mt-1">70 → 63 kg（共 7.0 kg × 7700）</div>
-              </div>
-            </div>
-
-            <!-- 3-Phase Roadmap -->
-            <div>
-              <div class="text-xs font-extrabold" style="color:var(--slate-700);margin-bottom:8px;">📍 三階段減脂里程碑與防停滯指引</div>
-              <div id="planPhasesGrid" class="grid grid-3" style="gap:10px;"></div>
-            </div>
-
-            <!-- Concrete Office Worker Daily Meal Schedule Guide -->
-            <div>
-              <div class="flex-between" style="flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-                <div class="text-xs font-extrabold" style="color:var(--slate-700);">🍱 上班族一日四時段具體執行引導（依您的目標熱量自動拆解・100% 無海鮮）</div>
-                <button type="button" class="btn btn-sm btn-primary" onclick="applyDayTemplate('day_classic');switchTab('dashboard');">⚡ 直接套用今日範本開吃</button>
-              </div>
-              <div id="planMealGuideGrid" class="grid grid-4" style="gap:10px;"></div>
-            </div>
-
-            <!-- Interactive Daily Habit Execution Checklist -->
-            <div class="card-soft" style="background:#f8fafc;">
-              <div class="flex-between" style="flex-wrap:wrap;gap:8px;margin-bottom:8px;">
-                <div>
-                  <div class="text-xs font-extrabold" style="color:var(--emerald);">✅ 今日飲食控制與減脂行為檢核（點擊勾選・自動記憶）</div>
-                  <div class="text-xs text-muted">跟隨衛福部國健署「聰明吃、快樂動、天天量體重」原則落實每日行動</div>
-                </div>
-                <span id="checklistProgressBadge" class="badge badge-emerald">今日完成 0 / 5 項</span>
-              </div>
-              <div style="height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-bottom:10px;">
-                <div id="checklistProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#10b981,#0d9488);transition:width .25s ease;"></div>
-              </div>
-              <div id="dailyChecklistContainer" style="display:flex;flex-direction:column;gap:8px;"></div>
-            </div>
-          </div>
-
-          <!-- Weight Tier Cards & Table -->
-          <div>
-            <h3 id="weightMatrixHeading" class="text-sm font-extrabold">📋 不同體重階梯（45kg–100kg）每日營養攝取建議量（目前：♂ 男性・30歲・170cm）</h3>
-            <div id="weightMobileCardsGrid" class="grid grid-4 compact-2 mt-3"></div>
-            <div class="table-wrap mt-3">
-              <table>
-                <thead>
-                  <tr>
-                    <th>體重</th><th>對應 BMI</th><th>基礎代謝 BMR</th><th>維持 TDEE</th><th>減脂建議</th><th>蛋白質</th><th>碳水</th><th>脂肪</th><th>纖維</th><th>飲水</th><th>操作</th>
-                  </tr>
-                </thead>
-                <tbody id="weightMatrixBody"></tbody>
-              </table>
             </div>
           </div>
         </div>
@@ -2618,7 +2415,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.2.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.4.0・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2652,7 +2449,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.2.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.4.0・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -2988,6 +2785,159 @@
       <div class="flex-between" style="justify-content:flex-end;gap:8px;">
         <button type="button" class="btn btn-slate-soft" onclick="closeCustomFoodModal()">取消</button>
         <button type="button" id="customFoodSubmitBtn" class="btn btn-primary" onclick="submitCustomFood()">✅ 確認加入今日紀錄</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Daily Meal Log Popup (單日飲食明細) -->
+  <div id="dailyMealLogModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeDailyMealLogModal()">
+    <div class="modal-sheet" style="max-width:680px;display:flex;flex-direction:column;gap:12px;">
+      <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;gap:8px;">
+        <div>
+          <h3 style="font-size:17px;font-weight:900;display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;"><svg class="xmas-ic" style="width:22px;height:22px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-stocking"/></svg> 單日飲食明細 <span id="dailyMealModalDateBadge" class="badge badge-blue" style="font-size:11px;">📅 今日</span></h3>
+          <div class="text-xs text-muted" style="margin-top:2px;">支援單指調整份量、餐別快篩與手動／AI 辨識新增</div>
+        </div>
+        <button type="button" onclick="closeDailyMealLogModal()" style="font-size:18px;font-weight:800;color:#64748b;padding:4px 8px;">✕</button>
+      </div>
+
+      <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
+        <div class="pill-row" style="margin:0;">
+          <button type="button" id="mealFilterBtn-all" class="pill-btn active" onclick="setMealLogFilter('all')">📋 全部餐別</button>
+          <button type="button" id="mealFilterBtn-breakfast" class="pill-btn" onclick="setMealLogFilter('breakfast')">🌅 早餐</button>
+          <button type="button" id="mealFilterBtn-lunch" class="pill-btn" onclick="setMealLogFilter('lunch')">☀️ 午餐</button>
+          <button type="button" id="mealFilterBtn-dinner" class="pill-btn" onclick="setMealLogFilter('dinner')">🌙 晚餐</button>
+          <button type="button" id="mealFilterBtn-snack" class="pill-btn" onclick="setMealLogFilter('snack')">🍎 點心</button>
+        </div>
+        <div class="flex-gap" style="gap:6px;">
+          <button type="button" class="btn btn-sm btn-dark" onclick="closeDailyMealLogModal();openCustomFoodModal('ai');">＋ 記食物</button>
+          <button type="button" class="btn btn-sm btn-rose-soft" onclick="clearAllLogs()">清空今日</button>
+        </div>
+      </div>
+
+      <div id="mealLogContainer" style="display:flex;flex-direction:column;gap:12px;"></div>
+
+      <div style="display:flex;justify-content:flex-end;border-top:1px solid var(--border);padding-top:10px;">
+        <button type="button" class="btn btn-sm btn-slate-soft" onclick="closeDailyMealLogModal()">關閉明細</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Plan Detail Report Popup (單日營養攝取分析 / 減脂藍圖 / 單日營養健檢) -->
+  <div id="planReportModal" class="modal-backdrop hidden">
+    <div class="modal-sheet" style="max-width:680px;display:flex;flex-direction:column;gap:12px;">
+      <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;gap:8px;">
+        <div>
+          <span id="planReportModalBadge" class="badge badge-emerald">📊 減脂計畫分析報告</span>
+          <h3 id="planReportModalTitle" style="font-size:18px;font-weight:900;margin-top:4px;">分析報告</h3>
+        </div>
+        <button type="button" onclick="closePlanReportModal()" style="font-size:18px;font-weight:800;color:#64748b;padding:4px 8px;">✕</button>
+      </div>
+
+      <!-- Quick Report Topic Switcher inside Modal -->
+      <div class="trend-seg-bar" style="grid-template-columns:repeat(3,1fr);">
+        <button type="button" id="planModalTab-intake" class="trend-seg-btn active" onclick="openPlanReportModal('intake')">🔍 單日營養攝取</button>
+        <button type="button" id="planModalTab-blueprint" class="trend-seg-btn" onclick="openPlanReportModal('blueprint')">🗓️ 減脂藍圖</button>
+        <button type="button" id="planModalTab-audit" class="trend-seg-btn" onclick="openPlanReportModal('audit')">📋 單日營養健檢</button>
+      </div>
+
+      <!-- Pane 1: 單日營養攝取分析 -->
+      <div id="planReportPane-intake" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
+          <span class="text-xs font-extrabold" style="color:var(--emerald);">今日實際攝取 vs 個人減脂目標落差</span>
+          <span id="planAuditDateBadge" class="badge badge-blue">📅 今天</span>
+        </div>
+        <div id="planIntakeGapGrid" class="grid grid-5" style="gap:8px;"></div>
+        <div>
+          <div class="text-xs font-extrabold" style="color:#44322a;margin-bottom:8px;">💡 營養標示分析結果與具體改善建議</div>
+          <div id="planImprovementAdviceList" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+
+      <!-- Pane 2: 減脂藍圖 -->
+      <div id="planReportPane-blueprint" class="hidden" style="display:flex;flex-direction:column;gap:12px;">
+        <div id="planSectionBlueprint" class="card-soft" style="background:#fff;display:flex;flex-direction:column;gap:14px;">
+            <div class="flex-between" style="flex-wrap:wrap;gap:10px;border-bottom:1px solid var(--border);padding-bottom:10px;">
+              <div>
+                <div class="text-xs font-extrabold" style="color:var(--blue);">功能進階：預計達成時間推估 × 階段式執行引導</div>
+                <h3 style="font-size:17px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:22px;height:22px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-tree"/></svg> 減脂藍圖</h3>
+              </div>
+              <div class="flex-gap" style="gap:6px;">
+                <label for="planExerciseSelect" class="text-xs font-bold text-muted">搭配額外運動：</label>
+                <select id="planExerciseSelect" onchange="setExtraExerciseKcal(this.value)" style="width:auto;padding:6px 10px;font-size:12px;font-weight:700;">
+                  <option value="0">純飲食控制 (+0 kcal/日)</option>
+                  <option value="150">每日快走 30 分 (+150 kcal/日)</option>
+                  <option value="250">規律有氧/重訓 (+250 kcal/日)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 4 KPI Forecast Cards -->
+            <div class="grid grid-4" style="gap:10px;">
+              <div class="card-soft" style="background:#eff6ff;border-color:#bfdbfe;">
+                <div class="text-xs font-bold" style="color:#1d4ed8;">預計達成日期</div>
+                <div id="etaTargetDate" style="font-size:20px;font-weight:900;color:#1e3a8a;margin-top:4px;">2027/03/28</div>
+                <div id="etaDurationText" class="text-xs text-muted mt-1">約 18.7 週（131 天）</div>
+              </div>
+              <div class="card-soft" style="background:#ecfdf5;border-color:#a7f3d0;">
+                <div class="text-xs font-bold" style="color:#047857;">每週預估減重速率</div>
+                <div id="etaWeeklyRate" style="font-size:20px;font-weight:900;color:#065f46;margin-top:4px;">-0.37 kg / 週</div>
+                <div id="etaPaceBadgeWrap" class="mt-1"><span id="etaPaceBadge" class="badge badge-emerald">✅ 穩健安全速率</span></div>
+              </div>
+              <div class="card-soft">
+                <div class="text-xs font-bold text-muted">每日總熱量缺口</div>
+                <div id="etaDailyDeficit" style="font-size:20px;font-weight:900;color:var(--slate-900);margin-top:4px;">405 kcal</div>
+                <div id="etaDeficitBreakdown" class="text-xs text-muted mt-1">飲食赤字 405 + 運動 0 kcal</div>
+              </div>
+              <div class="card-soft">
+                <div class="text-xs font-bold text-muted">目標累計需消耗熱量</div>
+                <div id="etaTotalKcalBurn" style="font-size:20px;font-weight:900;color:var(--amber);margin-top:4px;">53,900 kcal</div>
+                <div id="etaWeightGoalSummary" class="text-xs text-muted mt-1">70 → 63 kg（共 7.0 kg × 7700）</div>
+              </div>
+            </div>
+
+            <!-- 3-Phase Roadmap -->
+            <div>
+              <div class="text-xs font-extrabold" style="color:var(--slate-700);margin-bottom:8px;">📍 三階段減脂里程碑與防停滯指引</div>
+              <div id="planPhasesGrid" class="grid grid-3" style="gap:10px;"></div>
+            </div>
+
+            <!-- Concrete Office Worker Daily Meal Schedule Guide -->
+            <div>
+              <div class="flex-between" style="flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+                <div class="text-xs font-extrabold" style="color:var(--slate-700);">🍱 上班族一日四時段具體執行引導（依您的目標熱量自動拆解・100% 無海鮮）</div>
+                <button type="button" class="btn btn-sm btn-primary" onclick="applyDayTemplate('day_classic');switchTab('dashboard');">⚡ 直接套用今日範本開吃</button>
+              </div>
+              <div id="planMealGuideGrid" class="grid grid-4" style="gap:10px;"></div>
+            </div>
+
+            <!-- Interactive Daily Habit Execution Checklist -->
+            <div class="card-soft" style="background:#f8fafc;">
+              <div class="flex-between" style="flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+                <div>
+                  <div class="text-xs font-extrabold" style="color:var(--emerald);">✅ 今日飲食控制與減脂行為檢核（點擊勾選・自動記憶）</div>
+                  <div class="text-xs text-muted">跟隨衛福部國健署「聰明吃、快樂動、天天量體重」原則落實每日行動</div>
+                </div>
+                <span id="checklistProgressBadge" class="badge badge-emerald">今日完成 0 / 5 項</span>
+              </div>
+              <div style="height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-bottom:10px;">
+                <div id="checklistProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#10b981,#0d9488);transition:width .25s ease;"></div>
+              </div>
+              <div id="dailyChecklistContainer" style="display:flex;flex-direction:column;gap:8px;"></div>
+            </div>
+          </div>
+      </div>
+
+      <!-- Pane 3: 單日營養健檢 -->
+      <div id="planReportPane-audit" class="hidden" style="display:flex;flex-direction:column;gap:10px;">
+        <div class="flex-between">
+          <div id="planSectionAudit" class="text-xs font-extrabold" style="color:#44322a;">📋 單日已攝取餐點逐項營養健檢</div>
+          <span id="planAuditItemCount" class="text-xs text-muted">共 0 項餐點</span>
+        </div>
+        <div id="planLoggedFoodAuditList" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+
+      <div class="flex-between" style="justify-content:flex-end;padding-top:8px;border-top:1px solid var(--border);">
+        <button type="button" class="btn btn-primary btn-sm" onclick="closePlanReportModal()">關閉報告</button>
       </div>
     </div>
   </div>
@@ -4528,6 +4478,8 @@
     }
 
     function renderMealLogs() {
+      const countBadge = document.getElementById('dailyMealCountBadge');
+      if (countBadge) countBadge.textContent = String((appState.logs || []).length);
       const container = document.getElementById('mealLogContainer');
       if (!container) return;
       const meals = [
@@ -4617,7 +4569,7 @@
       renderAll();
       showToast('已重置飲水', '↺');
     }
-    function quickPickForMeal(mealKey) { const s = document.getElementById('storeAddMealSelect'); if (s) s.value = mealKey; switchTab('store'); }
+    function quickPickForMeal(mealKey) { closeDailyMealLogModal(); const s = document.getElementById('storeAddMealSelect'); if (s) s.value = mealKey; switchTab('store'); }
 
     function addFoodToMealLog(foodId, mealKey, portion = 1.0) {
       const item = STORE_FOODS.find(f => f.id === foodId);
@@ -4687,49 +4639,60 @@
     function updatePlanParams() { appState.activityLevel = document.getElementById('planActivitySelect').value; appState.macroMode = document.getElementById('planMacroModeSelect').value; renderAll(); }
     function applyWeightFromMatrix(w) { appState.weightKg = Number(w); const _qw2 = document.getElementById('quickWeightInput'); if (_qw2) _qw2.value = w; document.getElementById('planWeightInput').value = w; renderAll(); showToast(`已套用 ${w} kg 飲食控制計劃`, '⚖️'); }
 
+    function openPlanReportModal(topic = 'intake') {
+      const modal = document.getElementById('planReportModal');
+      const badge = document.getElementById('planReportModalBadge');
+      const title = document.getElementById('planReportModalTitle');
+      if (!modal) return;
+      const meta = {
+        intake:    { badge: '🔍 單日營養攝取分析', title: '單日營養攝取分析報告', cls: 'badge-emerald' },
+        blueprint: { badge: '🗓️ 減脂藍圖', title: '減脂藍圖與每日跟練報告', cls: 'badge-blue' },
+        audit:     { badge: '📋 單日營養健檢', title: '單日飲食逐項營養健檢報告', cls: 'badge-amber' }
+      }[topic] || { badge: '📊 減脂計畫報告', title: '分析報告', cls: 'badge-emerald' };
+
+      if (badge) { badge.textContent = meta.badge; badge.className = 'badge ' + meta.cls; }
+      if (title) title.textContent = meta.title;
+
+      for (const k of ['intake', 'blueprint', 'audit']) {
+        document.getElementById('planReportPane-' + k)?.classList.toggle('hidden', k !== topic);
+        document.getElementById('planModalTab-' + k)?.classList.toggle('active', k === topic);
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function closePlanReportModal() {
+      document.getElementById('planReportModal')?.classList.add('hidden');
+    }
+
+    function openDailyMealLogModal() {
+      renderMealLogs();
+      const dateBadge = document.getElementById('dailyMealModalDateBadge');
+      if (dateBadge) {
+        const cur = appState.currentDate || getTodayStr();
+        dateBadge.textContent = cur === getTodayStr() ? '📅 今日' : ('📅 ' + cur);
+      }
+      document.getElementById('dailyMealLogModal')?.classList.remove('hidden');
+    }
+
+    function closeDailyMealLogModal() {
+      document.getElementById('dailyMealLogModal')?.classList.add('hidden');
+    }
+
     function renderWeightPlanSection(targets) {
       const b = targets.bmiInfo;
-      const tb = computeBmiInfo(appState.targetWeightKg, appState.heightCm, appState.gender);
-      const ageDisp = document.getElementById('planAgeDisplay');
-      if (ageDisp) ageDisp.textContent = targets.age + ' 歲';
-      document.getElementById('planHeightDisplay').textContent = appState.heightCm + ' cm';
-      document.getElementById('planWeightDisplay').textContent = appState.weightKg + ' kg';
-      document.getElementById('planTargetWeightDisplay').textContent = appState.targetWeightKg + ' kg';
+      const setT = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setT('planAgeDisplay', targets.age + ' 歲');
+      setT('planHeightDisplay', appState.heightCm + ' cm');
+      setT('planWeightDisplay', appState.weightKg + ' kg');
+      setT('planTargetWeightDisplay', appState.targetWeightKg + ' kg');
 
       const diff = Math.round((appState.targetWeightKg - appState.weightKg) * 10) / 10;
-      document.getElementById('planWeightDiffText').textContent = diff < 0 ? `預計減重 ${diff} kg` : (diff > 0 ? `預計增重 +${diff} kg` : '維持目前體重');
-      document.getElementById('planBmiCalFactorHint').textContent = `${b.genderIcon}${b.genderLabel} BMR ${targets.bmr} × 活動係數 ${targets.actMult} = TDEE ${targets.maintCalories} kcal`;
+      setT('planWeightDiffText', diff < 0 ? `預計減重 ${diff} kg` : (diff > 0 ? `預計增重 +${diff} kg` : '維持目前體重'));
+      setT('planBmiCalFactorHint', `${b.genderIcon}${b.genderLabel} BMR ${targets.bmr} × 活動係數 ${targets.actMult} = TDEE ${targets.maintCalories} kcal`);
 
-      const sub = document.getElementById('bmiCardGenderSubtitle');
-      if (sub) sub.textContent = `台灣成人健康體位：18.5 ≤ BMI < 24.0 ｜ ${b.genderLabel}理想腰圍：< ${b.waistLimitCm} cm (${b.waistLimitInch}吋)`;
-      const idealBtn = document.getElementById('applyIdealWeightBtn');
-      if (idealBtn) idealBtn.textContent = `🎯 設${b.genderLabel}標準體重 (BMI ${b.idealBmi}) 為目標`;
-
-      document.getElementById('bmiCardCurrentVal').textContent = b.bmi.toFixed(1);
-      const cb = document.getElementById('bmiCardCategoryBadge'); cb.textContent = b.shortLabel; cb.className = 'badge ' + b.badgeClass;
-      document.getElementById('bmiCardFormulaText').textContent = `${appState.weightKg} ÷ (${b.heightM.toFixed(2)})² = ${b.bmiExact.toFixed(2)}`;
-      document.getElementById('bmiCardTargetVal').textContent = tb.bmi.toFixed(1);
-      const tbg = document.getElementById('bmiCardTargetBadge'); tbg.textContent = tb.shortLabel; tbg.className = 'badge ' + tb.badgeClass;
-      document.getElementById('bmiCardTargetText').textContent = `目標 ${appState.targetWeightKg} kg 對應體位`;
-      document.getElementById('bmiCardHealthyRange').textContent = `${b.minHealthyWeight} ～ ${b.maxHealthyWeight} kg`;
-      document.getElementById('bmiCardIdealStandard').textContent = `${b.genderLabel}標準體重 (BMI ${b.idealBmi})：${b.idealWeight} kg｜腰圍 <${b.waistLimitCm}cm`;
-      document.getElementById('bmiCardCalorieAdvice').textContent = `BMR ${targets.bmr} / TDEE ${targets.maintCalories}`;
-      document.getElementById('bmiCardActionHint').textContent = targets.deficit >= 0
-        ? `每日赤字 ${targets.deficit} 大卡（${b.genderLabel}安全下限 ≥${targets.minSafeFloor} kcal）`
-        : `體重過輕建議每日盈餘 +${Math.abs(targets.deficit)} 大卡健康增肌`;
-      document.getElementById('bmiSpectrumMarker').style.left = b.markerPct + '%';
-
-      document.getElementById('personalPlanHeading').textContent = `${b.genderIcon} ${b.genderLabel} ${targets.age}歲・${appState.heightCm} cm / ${appState.weightKg} kg (BMI ${b.bmi.toFixed(1)})`;
-      document.getElementById('personalEnergyDeficitBadge').textContent = targets.deficit >= 0
-        ? `較 TDEE (${targets.maintCalories} kcal) 減少 ${targets.deficit} 大卡`
-        : `較 TDEE (${targets.maintCalories} kcal) 增加 ${Math.abs(targets.deficit)} 大卡`;
-      document.getElementById('pCardCal').textContent = targets.targetCalories + ' kcal';
-      document.getElementById('pCardPro').textContent = targets.targetProtein + ' g';
-      document.getElementById('pCardProEq').textContent = `${(targets.targetProtein / appState.weightKg).toFixed(2)} g/kg`;
-      document.getElementById('pCardCarb').textContent = targets.targetCarbs + ' g';
-      document.getElementById('pCardFat').textContent = targets.targetFat + ' g';
-      document.getElementById('pCardFib').textContent = targets.targetFiber + ' g';
-      document.getElementById('pCardWater').textContent = targets.targetWater + ' ml';
+      // Update Top Header BMI Spectrum Marker
+      const marker = document.getElementById('bmiSpectrumMarker');
+      if (marker) marker.style.left = b.markerPct + '%';
     }
 
     function renderWeightMatrix() {
@@ -5639,7 +5602,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.2.0';
+    const APP_VERSION = 'v4.4.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -7019,6 +6982,7 @@
     function openEditMealLogModal(logId) {
       const it = (appState.logs || []).find(l => l.logId === logId);
       if (!it) return;
+      closeDailyMealLogModal();
       editingLogId = logId;
       openCustomFoodModal('ai');
       const mult = Number(it.portion) || 1;
@@ -7037,11 +7001,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.2.0',
+      version: 'v4.4.0',
       date: '2026-11-23',
       items: [
-        '📈 「減脂計畫重點總覽儀表板」新增仿 Apple 健康風格的「各營養指標趨勢折線圖」：支援熱量、蛋白質、碳水、脂肪、膳食纖維、飲水 6 項指標一鍵切換。',
-        '🗓️ 支援「天／週／月／年」X 軸時間尺度切換、平均／當日數值大字顯示、每日目標虛線對照，點擊折線任一節點即可查看該期精確數值。'
+        '🧦 「單日飲食明細」移至彈出視窗：在「營養監控 → 三大營養素熱量結構佔比」右上方新增「單日飲食明細」按鈕（含即時筆數徽章），點擊即可展開完整餐別快篩、份量微調與編輯功能，主畫面更精簡。',
+        '🎯 延續 v4.4.0 減脂計畫彈出式報告與頂部 BMI 分佈色條設計，讓整體瀏覽與操作動線更一致。'
       ]
     };
 
