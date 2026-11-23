@@ -1241,6 +1241,92 @@
     .badge-amber { background: #fef3c7 !important; color: #78350f !important; }
     .badge-rose { background: #ffe4e6 !important; color: #9f1239 !important; }
     .badge-slate { background: #f1f5f9 !important; color: #334155 !important; }
+
+    /* === 📈 Apple-Health-Style Nutrition Trend Line Chart (v4.2.0) === */
+    .trend-panel {
+      background: #ffffff;
+      border: 1.5px solid #e8dcd4;
+      border-radius: 18px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.08);
+    }
+    .trend-seg-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      background: #f5efe9;
+      padding: 3px;
+      border-radius: 12px;
+      border: 1px solid #eadad0;
+    }
+    .trend-seg-btn {
+      padding: 6px 4px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #7c6357;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all .18s ease;
+    }
+    .trend-seg-btn.active {
+      background: #ffffff;
+      color: #d95353;
+      box-shadow: 0 2px 6px rgba(148, 163, 184, 0.16);
+    }
+    .trend-metric-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .trend-metric-pill {
+      flex-shrink: 0;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #5c4338;
+      background: #faf4ef;
+      border: 1.5px solid #efe2d8;
+      cursor: pointer;
+      transition: all .18s ease;
+    }
+    .trend-metric-pill.active {
+      background: #ef6c6c;
+      color: #ffffff;
+      border-color: #ef6c6c;
+      box-shadow: 0 3px 8px rgba(239, 108, 108, 0.24);
+    }
+    .trend-footer-box {
+      background: #faf7f4;
+      border: 1px solid #efe3da;
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: #44322a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* === 💬 Expanded AI Nutritionist Chat Room === */
+    #aiChatMessages {
+      min-height: 48vh !important;
+      max-height: 60vh !important;
+      padding: 14px !important;
+    }
+    #view-chat .card {
+      gap: 10px !important;
+      padding: 14px !important;
+    }
   </style>
 </head>
 <body>
@@ -1623,16 +1709,9 @@
           </div>
         </div>
 
-        <div class="header-nav">
-          <button type="button" id="tabBtn-dashboard" class="tab-btn active" onclick="switchTab('dashboard')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-tree"/></svg> 營養資訊</button>
-          <button type="button" id="tabBtn-food_ai" class="tab-btn" onclick="switchTab('food_ai')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-santa"/></svg> AI 營養師</button>
-          <button type="button" id="tabBtn-tips" class="tab-btn" onclick="switchTab('tips')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-stocking"/></svg> 減脂秘訣</button>
-          <button type="button" id="tabBtn-system" class="tab-btn" onclick="switchTab('system')"><svg class="xmas-ic" style="width:18px;height:18px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 系統設置</button>
-          <div class="nav-right">
-            <input type="date" id="activeDateInput" value="" onchange="switchActiveDate(this.value)" style="width:auto;padding:5px 8px;font-size:12px;font-weight:700;" />
-            <button type="button" id="jumpTodayBtn" class="btn btn-sm" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:5px 9px;" onclick="jumpToTodayDate()" title="立即切換至今天日期"><svg class="xmas-ic" style="width:15px;height:15px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-star"/></svg> 今天</button>
-            <button type="button" class="btn btn-sm btn-primary" onclick="openCustomFoodModal('ai')"><svg class="xmas-ic" style="width:16px;height:16px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-gift"/></svg> 記食物</button>
-          </div>
+        <div class="header-nav" style="justify-content:flex-end;gap:8px;">
+          <input type="date" id="activeDateInput" value="" onchange="switchActiveDate(this.value)" style="width:auto;padding:5px 10px;font-size:12px;font-weight:700;" />
+          <button type="button" id="jumpTodayBtn" class="btn btn-sm" style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:5px 10px;" onclick="jumpToTodayDate()" title="立即切換至今天日期"><svg class="xmas-ic" style="width:15px;height:15px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-star"/></svg> 今天</button>
         </div>
       </div>
     </header>
@@ -1989,6 +2068,49 @@
               <div id="planSumAuditMain" style="font-size:18px;font-weight:900;margin-top:2px;color:#78350f;">尚無飲食紀錄</div>
               <div id="planSumAuditSub" class="text-xs" style="color:#5c4338;line-height:1.45;">記錄餐點後自動標記高油/高碳與優質高蛋白</div>
             </button>
+          </div>
+
+          <!-- Apple-Health-Style Nutrition Metrics Line Chart (天 / 週 / 月 / 年) -->
+          <div id="planNutritionTrendCard" class="trend-panel">
+            <!-- Metric Selector Pills -->
+            <div class="trend-metric-bar" role="tablist" aria-label="營養趨勢指標切換">
+              <button type="button" id="trendMetricBtn-calories" class="trend-metric-pill active" onclick="setPlanTrendMetric('calories')">🔥 熱量</button>
+              <button type="button" id="trendMetricBtn-protein" class="trend-metric-pill" onclick="setPlanTrendMetric('protein')">🥩 蛋白質</button>
+              <button type="button" id="trendMetricBtn-carbs" class="trend-metric-pill" onclick="setPlanTrendMetric('carbs')">🍚 碳水</button>
+              <button type="button" id="trendMetricBtn-fat" class="trend-metric-pill" onclick="setPlanTrendMetric('fat')">🥑 脂肪</button>
+              <button type="button" id="trendMetricBtn-fiber" class="trend-metric-pill" onclick="setPlanTrendMetric('fiber')">🥬 纖維</button>
+              <button type="button" id="trendMetricBtn-water" class="trend-metric-pill" onclick="setPlanTrendMetric('water')">💧 飲水</button>
+            </div>
+
+            <!-- Timeframe Segmented Switcher: 天 / 週 / 月 / 年 -->
+            <div class="trend-seg-bar" role="tablist" aria-label="時間區間切換">
+              <button type="button" id="trendRangeBtn-day" class="trend-seg-btn" onclick="setPlanTrendRange('day')">天</button>
+              <button type="button" id="trendRangeBtn-week" class="trend-seg-btn active" onclick="setPlanTrendRange('week')">週</button>
+              <button type="button" id="trendRangeBtn-month" class="trend-seg-btn" onclick="setPlanTrendRange('month')">月</button>
+              <button type="button" id="trendRangeBtn-year" class="trend-seg-btn" onclick="setPlanTrendRange('year')">年</button>
+            </div>
+
+            <!-- Summary Readout (Apple Health style: 平均 / 總計 + 數值 + 日期區間) -->
+            <div class="flex-between" style="align-items:flex-end;flex-wrap:wrap;gap:6px;">
+              <div>
+                <div id="trendStatKindLabel" class="text-xs font-bold" style="color:#8a7367;">平均</div>
+                <div style="display:flex;align-items:baseline;gap:5px;">
+                  <strong id="trendStatMainVal" style="font-size:26px;font-weight:900;color:#2a1b14;line-height:1.1;">0</strong>
+                  <span id="trendStatUnit" class="text-xs font-extrabold" style="color:#6b5246;">大卡</span>
+                </div>
+                <div id="trendDateRangeText" class="text-xs" style="color:#8a7367;margin-top:2px;">載入日期區間...</div>
+              </div>
+              <div id="trendSelectedPointPill" class="badge badge-blue" style="font-size:11px;">點擊折線節點查看明細</div>
+            </div>
+
+            <!-- Interactive SVG Line Chart -->
+            <div id="planTrendSvgContainer" style="width:100%;overflow:hidden;"></div>
+
+            <!-- Bottom Trend Summary -->
+            <div class="trend-footer-box">
+              <span id="trendSummaryText" class="font-bold" style="color:#44322a;">尚無歷史趨勢紀錄</span>
+              <span id="trendTargetBadge" class="badge badge-emerald" style="font-size:10px;">目標 —</span>
+            </div>
           </div>
         </div>
 
@@ -2353,6 +2475,21 @@
 
           <div id="storeCatalogGrid" class="grid grid-3"></div>
         </div>
+
+      <!-- Sources Footer -->
+      <footer class="card text-xs text-muted">
+        <div class="font-bold" style="color:var(--text);margin-bottom:6px;">📚 營養計算基準與台灣超商鮮食數據來源：</div>
+        <div class="flex-gap" style="gap:12px;">
+          <a href="https://www.hpa.gov.tw/Pages/Detail.aspx?nodeid=544&pid=728" target="_blank" rel="noopener noreferrer">1. 衛福部國健署：每日飲食建議量</a>
+          <a href="https://www.hpa.gov.tw/Pages/EBook.aspx?nodeid=1208" target="_blank" rel="noopener noreferrer">2. 衛福部國健署：每日飲食指南手冊</a>
+          <a href="https://www.7-11.com.tw/event/20SF/index.html" target="_blank" rel="noopener noreferrer">3. 7-ELEVEN Simple Fit 營養標示</a>
+          <a href="https://foodsafety.family.com.tw/Web_FFD_2022/product/2946091" target="_blank" rel="noopener noreferrer">4. 全家食在購安心：光泉無加糖濃豆漿</a>
+          <a href="https://711go.7-11.com.tw/product/173043" target="_blank" rel="noopener noreferrer">5. 7-ELEVEN i預購：舒肥雞胸隨手包</a>
+          <a href="https://drchaoyang.com/tools/711/" target="_blank" rel="noopener noreferrer">6. 朝暘醫師：7-11 減脂菜單</a>
+          <a href="https://nuli.app/blog/711-breakfast/" target="_blank" rel="noopener noreferrer">7. Nüli 7-11 低卡早餐組合</a>
+          <a href="https://www.cynthiadietitian.com/home/%E4%B8%8A%E7%8F%AD%E6%97%8F%E6%80%8E%E9%BA%BC%E5%90%83%E6%B8%9B%E9%86%A3%E9%A4%90%EF%BC%9F%E8%B7%9F%E8%91%97%E7%87%9F%E9%A4%8A%E5%B8%AB%E5%9C%A8%E4%BE%BF%E5%88%A9%E5%95%86%E5%BA%97%E9%80%99%E6%A8%A3/" target="_blank" rel="noopener noreferrer">8. Cynthia 營養師全家減醣指南</a>
+        </div>
+      </footer>
       </section>
 
       <section id="view-ios" class="hidden" style="display:flex;flex-direction:column;gap:16px;">
@@ -2481,7 +2618,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.1.1・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.2.0・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2515,7 +2652,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.1.1・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.2.0・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -2553,20 +2690,7 @@
 
       </section>
 
-      <!-- Sources Footer -->
-      <footer class="card text-xs text-muted">
-        <div class="font-bold" style="color:var(--text);margin-bottom:6px;">📚 營養計算基準與台灣超商鮮食數據來源：</div>
-        <div class="flex-gap" style="gap:12px;">
-          <a href="https://www.hpa.gov.tw/Pages/Detail.aspx?nodeid=544&pid=728" target="_blank" rel="noopener noreferrer">1. 衛福部國健署：每日飲食建議量</a>
-          <a href="https://www.hpa.gov.tw/Pages/EBook.aspx?nodeid=1208" target="_blank" rel="noopener noreferrer">2. 衛福部國健署：每日飲食指南手冊</a>
-          <a href="https://www.7-11.com.tw/event/20SF/index.html" target="_blank" rel="noopener noreferrer">3. 7-ELEVEN Simple Fit 營養標示</a>
-          <a href="https://foodsafety.family.com.tw/Web_FFD_2022/product/2946091" target="_blank" rel="noopener noreferrer">4. 全家食在購安心：光泉無加糖濃豆漿</a>
-          <a href="https://711go.7-11.com.tw/product/173043" target="_blank" rel="noopener noreferrer">5. 7-ELEVEN i預購：舒肥雞胸隨手包</a>
-          <a href="https://drchaoyang.com/tools/711/" target="_blank" rel="noopener noreferrer">6. 朝暘醫師：7-11 減脂菜單</a>
-          <a href="https://nuli.app/blog/711-breakfast/" target="_blank" rel="noopener noreferrer">7. Nüli 7-11 低卡早餐組合</a>
-          <a href="https://www.cynthiadietitian.com/home/%E4%B8%8A%E7%8F%AD%E6%97%8F%E6%80%8E%E9%BA%BC%E5%90%83%E6%B8%9B%E9%86%A3%E9%A4%90%EF%BC%9F%E8%B7%9F%E8%91%97%E7%87%9F%E9%A4%8A%E5%B8%AB%E5%9C%A8%E4%BE%BF%E5%88%A9%E5%95%86%E5%BA%97%E9%80%99%E6%A8%A3/" target="_blank" rel="noopener noreferrer">8. Cynthia 營養師全家減醣指南</a>
-        </div>
-      </footer>
+
       <!-- ==================== TAB 6: AI 互動減脂營養師問答 ==================== -->
       <section id="view-chat" class="hidden" style="display:flex;flex-direction:column;gap:16px;">
         <div class="card" style="display:flex;flex-direction:column;gap:14px;">
@@ -3419,6 +3543,323 @@
       return { cal, pro, carb, fat, fib, proPct, carbPct, fatPct, tags, status };
     }
 
+
+    // === 📈 Nutrition Metrics Line Chart Engine (天 / 週 / 月 / 年) ===
+    let planTrendMetric = 'calories';
+    let planTrendRange = 'week';
+    let planTrendSelectedIdx = -1;
+    let planTrendLastPoints = [];
+
+    const TREND_METRIC_META = {
+      calories: { label: '熱量', unit: '大卡', color: '#e45d5d', fill: 'rgba(228,93,93,0.14)', targetKey: 'targetCalories' },
+      protein:  { label: '蛋白質', unit: 'g', color: '#43a368', fill: 'rgba(67,163,104,0.15)', targetKey: 'targetProtein' },
+      carbs:    { label: '碳水', unit: 'g', color: '#e69d2c', fill: 'rgba(230,157,44,0.16)', targetKey: 'targetCarbs' },
+      fat:      { label: '脂肪', unit: 'g', color: '#f27474', fill: 'rgba(242,116,116,0.15)', targetKey: 'targetFat' },
+      fiber:    { label: '膳食纖維', unit: 'g', color: '#389e95', fill: 'rgba(56,158,149,0.15)', targetKey: 'targetFiber' },
+      water:    { label: '飲水', unit: 'ml', color: '#2b95d6', fill: 'rgba(43,149,214,0.15)', targetKey: 'targetWater' }
+    };
+
+    function setPlanTrendMetric(metric) {
+      if (!TREND_METRIC_META[metric]) return;
+      planTrendMetric = metric;
+      planTrendSelectedIdx = -1;
+      for (const k of Object.keys(TREND_METRIC_META)) {
+        const b = document.getElementById('trendMetricBtn-' + k);
+        if (b) {
+          const active = (k === metric);
+          b.classList.toggle('active', active);
+          b.style.background = active ? TREND_METRIC_META[k].color : '';
+          b.style.borderColor = active ? TREND_METRIC_META[k].color : '';
+        }
+      }
+      const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+      renderPlanNutritionTrendChart(targets);
+    }
+
+    function setPlanTrendRange(range) {
+      if (!['day', 'week', 'month', 'year'].includes(range)) return;
+      planTrendRange = range;
+      planTrendSelectedIdx = -1;
+      for (const r of ['day', 'week', 'month', 'year']) {
+        document.getElementById('trendRangeBtn-' + r)?.classList.toggle('active', r === range);
+      }
+      const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+      renderPlanNutritionTrendChart(targets);
+    }
+
+    function selectPlanTrendPoint(idx) {
+      planTrendSelectedIdx = idx;
+      const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+      renderPlanNutritionTrendChart(targets);
+    }
+
+    function computeDayRecordMetric(rec, metric) {
+      if (!rec) return 0;
+      if (metric === 'water') return Math.round(Number(rec.waterMl) || 0);
+      const logs = Array.isArray(rec.logs) ? rec.logs : [];
+      let sum = 0;
+      for (const it of logs) {
+        const mult = Number(it.portion) || 1;
+        sum += (Number(it[metric]) || 0) * mult;
+      }
+      return Math.round(sum * 10) / 10;
+    }
+
+    function toYmdStr(dt) {
+      const y = dt.getFullYear();
+      const m = String(dt.getMonth() + 1).padStart(2, '0');
+      const d = String(dt.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function parseYmdDate(str) {
+      const p = String(str || '').split('-').map(Number);
+      if (p.length === 3 && !isNaN(p[0]) && !isNaN(p[1]) && !isNaN(p[2])) {
+        return new Date(p[0], p[1] - 1, p[2]);
+      }
+      return new Date();
+    }
+
+    function renderPlanNutritionTrendChart(targets) {
+      const svgWrap = document.getElementById('planTrendSvgContainer');
+      if (!svgWrap) return;
+
+      const meta = TREND_METRIC_META[planTrendMetric] || TREND_METRIC_META.calories;
+      const targetVal = Number(targets?.[meta.targetKey]) || 0;
+      const anchorDate = parseYmdDate(appState.activeDate || getLocalTodayDateStr());
+      const weekdays = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
+
+      // Build unified lookup map including current live activeDate
+      const hist = Object.assign({}, appState.historyByDate || {});
+      hist[appState.activeDate] = {
+        waterMl: appState.waterMl,
+        logs: appState.logs
+      };
+
+      const points = [];
+      let rangeLabel = '';
+      let kindLabel = '平均';
+      let footerScope = '';
+
+      if (planTrendRange === 'day') {
+        // Day view: 4 meal slots (or water total) for activeDate
+        kindLabel = '當日總計';
+        const rec = hist[appState.activeDate] || { waterMl: 0, logs: [] };
+        const slots = [
+          { key: 'breakfast', label: '早餐' },
+          { key: 'lunch', label: '午餐' },
+          { key: 'dinner', label: '晚餐' },
+          { key: 'snack', label: '點心' }
+        ];
+        if (planTrendMetric === 'water') {
+          const w = Math.round(Number(rec.waterMl) || 0);
+          points.push({ label: '早晨', detailLabel: `${appState.activeDate} 早晨`, value: Math.round(w * 0.25), hasData: w > 0 });
+          points.push({ label: '中午', detailLabel: `${appState.activeDate} 累計至中午`, value: Math.round(w * 0.55), hasData: w > 0 });
+          points.push({ label: '傍晚', detailLabel: `${appState.activeDate} 累計至傍晚`, value: Math.round(w * 0.85), hasData: w > 0 });
+          points.push({ label: '今日累計', detailLabel: `${appState.activeDate} 今日累計`, value: w, hasData: w > 0 });
+        } else {
+          for (const sl of slots) {
+            const items = (rec.logs || []).filter(l => l.meal === sl.key);
+            let sum = 0;
+            items.forEach(it => { sum += (Number(it[planTrendMetric]) || 0) * (Number(it.portion) || 1); });
+            sum = Math.round(sum * 10) / 10;
+            points.push({ label: sl.label, detailLabel: `${appState.activeDate} ${sl.label}`, value: sum, hasData: items.length > 0 });
+          }
+        }
+        rangeLabel = `${anchorDate.getFullYear()}年${anchorDate.getMonth() + 1}月${anchorDate.getDate()}日（各餐分布）`;
+        footerScope = '今日';
+      } else if (planTrendRange === 'week') {
+        // Week view: Last 7 days ending on anchorDate (Apple Health exact style!)
+        const startDt = new Date(anchorDate.getFullYear(), anchorDate.getMonth(), anchorDate.getDate() - 6);
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(startDt.getFullYear(), startDt.getMonth(), startDt.getDate() + i);
+          const key = toYmdStr(d);
+          const rec = hist[key];
+          const val = computeDayRecordMetric(rec, planTrendMetric);
+          const hasData = Boolean(rec && (planTrendMetric === 'water' ? Number(rec.waterMl) > 0 : (rec.logs && rec.logs.length > 0)));
+          points.push({
+            label: weekdays[d.getDay()],
+            detailLabel: `${d.getMonth() + 1}/${d.getDate()} (${weekdays[d.getDay()]})`,
+            value: val,
+            hasData
+          });
+        }
+        rangeLabel = `${startDt.getFullYear()}年${startDt.getMonth() + 1}月${startDt.getDate()}日至${anchorDate.getMonth() + 1}月${anchorDate.getDate()}日`;
+        footerScope = '過去 7 天';
+      } else if (planTrendRange === 'month') {
+        // Month view: Last 30 days ending on anchorDate
+        const startDt = new Date(anchorDate.getFullYear(), anchorDate.getMonth(), anchorDate.getDate() - 29);
+        for (let i = 0; i < 30; i++) {
+          const d = new Date(startDt.getFullYear(), startDt.getMonth(), startDt.getDate() + i);
+          const key = toYmdStr(d);
+          const rec = hist[key];
+          const val = computeDayRecordMetric(rec, planTrendMetric);
+          const hasData = Boolean(rec && (planTrendMetric === 'water' ? Number(rec.waterMl) > 0 : (rec.logs && rec.logs.length > 0)));
+          const showLbl = (i === 0 || i === 7 || i === 14 || i === 21 || i === 29) ? `${d.getMonth() + 1}/${d.getDate()}` : '';
+          points.push({
+            label: showLbl,
+            detailLabel: `${d.getMonth() + 1}/${d.getDate()}`,
+            value: val,
+            hasData
+          });
+        }
+        rangeLabel = `${startDt.getFullYear()}年${startDt.getMonth() + 1}月${startDt.getDate()}日至${anchorDate.getMonth() + 1}月${anchorDate.getDate()}日`;
+        footerScope = '過去 30 天';
+      } else {
+        // Year view: Last 12 months ending on anchorDate's month
+        const startM = new Date(anchorDate.getFullYear(), anchorDate.getMonth() - 11, 1);
+        for (let i = 0; i < 12; i++) {
+          const mDt = new Date(startM.getFullYear(), startM.getMonth() + i, 1);
+          const ymPrefix = `${mDt.getFullYear()}-${String(mDt.getMonth() + 1).padStart(2, '0')}-`;
+          let sum = 0, cnt = 0;
+          for (const k of Object.keys(hist)) {
+            if (!k.startsWith(ymPrefix)) continue;
+            const rec = hist[k];
+            const has = Boolean(rec && (planTrendMetric === 'water' ? Number(rec.waterMl) > 0 : (rec.logs && rec.logs.length > 0)));
+            if (has) {
+              sum += computeDayRecordMetric(rec, planTrendMetric);
+              cnt++;
+            }
+          }
+          const avg = cnt > 0 ? Math.round((sum / cnt) * 10) / 10 : 0;
+          points.push({
+            label: (i % 2 === 0 || i === 11) ? `${mDt.getMonth() + 1}月` : '',
+            detailLabel: `${mDt.getFullYear()}年${mDt.getMonth() + 1}月（${cnt}天紀錄平均）`,
+            value: avg,
+            hasData: cnt > 0
+          });
+        }
+        rangeLabel = `${startM.getFullYear()}年${startM.getMonth() + 1}月至${anchorDate.getFullYear()}年${anchorDate.getMonth() + 1}月`;
+        footerScope = '過去 12 個月';
+      }
+
+      planTrendLastPoints = points;
+
+      // Compute summary stat
+      const recordedPts = points.filter(p => p.hasData);
+      let mainStat = 0;
+      if (planTrendRange === 'day') {
+        mainStat = planTrendMetric === 'water'
+          ? (points.length ? points[points.length - 1].value : 0)
+          : Math.round(points.reduce((a, b) => a + b.value, 0) * 10) / 10;
+      } else {
+        mainStat = recordedPts.length
+          ? Math.round((recordedPts.reduce((a, b) => a + b.value, 0) / recordedPts.length) * 10) / 10
+          : 0;
+      }
+
+      const setT = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setT('trendStatKindLabel', kindLabel);
+      setT('trendStatMainVal', mainStat.toLocaleString());
+      setT('trendStatUnit', meta.unit);
+      setT('trendDateRangeText', rangeLabel);
+      setT('trendTargetBadge', targetVal > 0 ? `每日目標 ${targetVal.toLocaleString()} ${meta.unit}` : '目標 —');
+
+      const selPill = document.getElementById('trendSelectedPointPill');
+      if (selPill) {
+        if (planTrendSelectedIdx >= 0 && points[planTrendSelectedIdx]) {
+          const sp = points[planTrendSelectedIdx];
+          selPill.textContent = `${sp.detailLabel}：${sp.value} ${meta.unit}`;
+          selPill.className = 'badge badge-emerald';
+        } else {
+          selPill.textContent = '點擊節點看單日數值';
+          selPill.className = 'badge badge-blue';
+        }
+      }
+
+      const sumText = document.getElementById('trendSummaryText');
+      if (sumText) {
+        if (planTrendRange === 'day') {
+          sumText.textContent = `今日${meta.label}累計 ${mainStat} ${meta.unit}${targetVal > 0 ? `（達標率 ${Math.round((mainStat / targetVal) * 100)}%）` : ''}`;
+        } else if (recordedPts.length > 0) {
+          sumText.textContent = `在${footerScope}（有紀錄 ${recordedPts.length} 期），平均${meta.label}為 ${mainStat} ${meta.unit}`;
+        } else {
+          sumText.textContent = `${footerScope}尚無${meta.label}紀錄，開始記餐後即自動繪製趨勢折線`;
+        }
+      }
+
+      // Render crisp responsive inline SVG Line Chart (Apple Health right-aligned Y-axis)
+      const W = 360, H = 186;
+      const padL = 14, padR = 46, padT = 16, padB = 28;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+
+      const dataMax = Math.max(0, ...points.map(p => p.value));
+      const refMax = (planTrendRange === 'day' && planTrendMetric !== 'water') ? dataMax : Math.max(dataMax, targetVal);
+      const rawMax = Math.max(10, refMax * 1.18);
+      // Nice rounded top tick (3 intervals)
+      const stepBase = Math.pow(10, Math.floor(Math.log10(rawMax / 3)));
+      const niceStep = Math.ceil((rawMax / 3) / stepBase) * stepBase;
+      const yMax = Math.max(3, niceStep * 3);
+
+      const xFor = i => points.length <= 1 ? (padL + plotW / 2) : (padL + (i / (points.length - 1)) * plotW);
+      const yFor = v => padT + plotH - (Math.min(yMax, Math.max(0, v)) / yMax) * plotH;
+
+      // Grid lines & right Y-axis labels
+      let gridSvg = '';
+      for (let t = 0; t <= 3; t++) {
+        const yVal = Math.round(niceStep * t);
+        const y = yFor(yVal);
+        gridSvg += `<line x1="${padL}" y1="${y}" x2="${padL + plotW}" y2="${y}" stroke="#efe4dc" stroke-width="1" stroke-dasharray="${t === 0 ? '0' : '3 3'}" />`;
+        gridSvg += `<text x="${W - 4}" y="${y + 4}" text-anchor="end" font-size="10" font-weight="700" fill="#8a7367">${yVal}</text>`;
+      }
+
+      // Vertical light dividers
+      let xAxisSvg = '';
+      points.forEach((p, i) => {
+        const x = xFor(i);
+        if (points.length <= 12) {
+          gridSvg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + plotH}" stroke="#f6eee8" stroke-width="1" />`;
+        }
+        if (p.label) {
+          xAxisSvg += `<text x="${x}" y="${H - 7}" text-anchor="middle" font-size="10" font-weight="700" fill="#7c6357">${p.label}</text>`;
+        }
+      });
+
+      // Target reference dashed line (for week/month/year or water day)
+      let targetSvg = '';
+      if (targetVal > 0 && targetVal <= yMax && (planTrendRange !== 'day' || planTrendMetric === 'water')) {
+        const ty = yFor(targetVal);
+        targetSvg = `
+          <line x1="${padL}" y1="${ty}" x2="${padL + plotW}" y2="${ty}" stroke="#43a368" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.8" />
+          <text x="${padL + 4}" y="${Math.max(padT + 10, ty - 4)}" font-size="9" font-weight="800" fill="#2e7d32">目標 ${targetVal}</text>
+        `;
+      }
+
+      // Polyline & Area fill
+      const coords = points.map((p, i) => ({ x: xFor(i), y: yFor(p.value), p, i }));
+      const linePath = coords.map((c, idx) => `${idx === 0 ? 'M' : 'L'}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
+      const areaPath = coords.length
+        ? `${linePath} L${coords[coords.length - 1].x.toFixed(1)},${(padT + plotH).toFixed(1)} L${coords[0].x.toFixed(1)},${(padT + plotH).toFixed(1)} Z`
+        : '';
+
+      // Interactive Dots
+      const dotRadius = points.length > 15 ? 2.8 : 4.5;
+      const dotsSvg = coords.map(c => {
+        const isSel = (c.i === planTrendSelectedIdx);
+        const r = isSel ? dotRadius + 2.2 : dotRadius;
+        const fill = c.p.hasData ? (isSel ? '#2a1b14' : meta.color) : '#ffffff';
+        const stroke = isSel ? '#ffffff' : meta.color;
+        return `
+          <g style="cursor:pointer;" onclick="selectPlanTrendPoint(${c.i})">
+            <circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="12" fill="transparent" />
+            <circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${isSel ? 2.2 : 1.8}" />
+          </g>
+        `;
+      }).join('');
+
+      svgWrap.innerHTML = `
+        <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;overflow:visible;">
+          ${gridSvg}
+          ${targetSvg}
+          <path d="${areaPath}" fill="${meta.fill}" />
+          <path d="${linePath}" fill="none" stroke="${meta.color}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          ${dotsSvg}
+          ${xAxisSvg}
+        </svg>
+      `;
+    }
+
     function renderPlanIntakeAnalysis(totals, targets) {
       const dateBadge = document.getElementById('planAuditDateBadge');
       if (dateBadge) dateBadge.textContent = `📅 ${appState.activeDate}`;
@@ -3999,6 +4440,7 @@
       renderSvgCharts(totals, targets);
       renderWeightPlanSection(targets);
       renderPlanIntakeAnalysis(totals, targets);
+      renderPlanNutritionTrendChart(targets);
       renderTimelineAndGuide(targets);
       renderWeightMatrix();
       updateScanPortionPreview();
@@ -5197,7 +5639,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.1.1';
+    const APP_VERSION = 'v4.2.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -6595,11 +7037,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.1.1',
-      date: '2026-11-21',
+      version: 'v4.2.0',
+      date: '2026-11-23',
       items: [
-        '💬 修復「AI 營養師」回覆字句截斷問題：將雲端輸出上限從 420 提升至 2048 tokens，並正確合併多段回覆內容與過濾內部思考片段，確保每次回覆完整不中斷。',
-        '✨ 優化 AI 營養師對話排版：自動轉換粗體與乾淨條列符號（•），不再顯示零散的星號標記。'
+        '📈 「減脂計畫重點總覽儀表板」新增仿 Apple 健康風格的「各營養指標趨勢折線圖」：支援熱量、蛋白質、碳水、脂肪、膳食纖維、飲水 6 項指標一鍵切換。',
+        '🗓️ 支援「天／週／月／年」X 軸時間尺度切換、平均／當日數值大字顯示、每日目標虛線對照，點擊折線任一節點即可查看該期精確數值。'
       ]
     };
 
