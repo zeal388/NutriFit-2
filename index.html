@@ -2415,7 +2415,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.4.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.4.1・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2449,7 +2449,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.4.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.4.1・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -4665,13 +4665,14 @@
     }
 
     function openDailyMealLogModal() {
-      renderMealLogs();
+      const modal = document.getElementById('dailyMealLogModal');
+      if (!modal) return;
+      try { renderMealLogs(); } catch (e) { console.error('renderMealLogs error:', e); }
       const dateBadge = document.getElementById('dailyMealModalDateBadge');
       if (dateBadge) {
-        const cur = appState.currentDate || getTodayStr();
-        dateBadge.textContent = cur === getTodayStr() ? '📅 今日' : ('📅 ' + cur);
+        dateBadge.textContent = appState.activeDate ? ('📅 ' + appState.activeDate) : '📅 今日';
       }
-      document.getElementById('dailyMealLogModal')?.classList.remove('hidden');
+      modal.classList.remove('hidden');
     }
 
     function closeDailyMealLogModal() {
@@ -5602,7 +5603,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.4.0';
+    const APP_VERSION = 'v4.4.1';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -7001,11 +7002,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.4.0',
+      version: 'v4.4.1',
       date: '2026-11-23',
       items: [
         '🧦 「單日飲食明細」移至彈出視窗：在「營養監控 → 三大營養素熱量結構佔比」右上方新增「單日飲食明細」按鈕（含即時筆數徽章），點擊即可展開完整餐別快篩、份量微調與編輯功能，主畫面更精簡。',
-        '🎯 延續 v4.4.0 減脂計畫彈出式報告與頂部 BMI 分佈色條設計，讓整體瀏覽與操作動線更一致。'
+        '🎯 延續 v4.4.1 減脂計畫彈出式報告與頂部 BMI 分佈色條設計，讓整體瀏覽與操作動線更一致。'
       ]
     };
 
