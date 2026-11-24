@@ -2297,7 +2297,7 @@
               <h2 style="font-size:20px;font-weight:900;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-gingerbread"/></svg> 體態設定</h2>
               <div class="text-xs text-muted mt-1">整合身形、年齡、目標體重、活動強度與飲食策略，即時換算 BMI、BMR/TDEE 與每日營養目標</div>
             </div>
-            <span id="heroModeBadge" class="badge badge-emerald">營養師減醣高蛋白</span>
+            <span id="heroModeBadge" class="badge badge-emerald">一般族群減脂期建議</span>
           </div>
 
           <!-- Live BMI / BMR / TDEE / ETA Summary Strip -->
@@ -2390,10 +2390,11 @@
             <div style="display:flex;flex-direction:column;gap:6px;">
               <label for="planMacroModeSelect" class="text-xs font-bold">營養素分配策略</label>
               <select id="planMacroModeSelect" onchange="updatePlanParams()">
+                <option value="general_fat_loss">一般族群減脂期建議 (1.35g/kg・保肌好執行)</option>
                 <option value="high_protein">營養師減醣高蛋白 (P:28%/C:38%/F:34%)</option>
                 <option value="balanced">國健署均衡減重 (P:20%/C:50%/F:30%)</option>
               </select>
-              <div class="text-xs text-muted">高蛋白減醣能避免午後暈碳並保肌</div>
+              <div class="text-xs text-muted">依 ISSN 一般減脂 1.2–1.6 g/kg 採中位 1.35 g/kg，兼顧保肌與外食可行性</div>
             </div>
           </div>
 
@@ -2415,7 +2416,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.5.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.6.0・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2471,7 +2472,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.5.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.6.0・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -3048,7 +3049,7 @@
       weightKg: 70,
       targetWeightKg: 63,
       activityLevel: 'light',
-      macroMode: 'high_protein',
+      macroMode: 'general_fat_loss',
       extraExerciseKcal: 0,
       todayActiveKcal: 0,
       todaySteps: 0,
@@ -3231,15 +3232,35 @@
       const calFactor = Math.round((targetCalories / w) * 10) / 10;
       const maintFactor = Math.round((maintCalories / w) * 10) / 10;
 
-      let pRatio = 0.28, cRatio = 0.38, fRatio = 0.34;
-      if (macroMode === 'balanced') { pRatio = 0.20; cRatio = 0.50; fRatio = 0.30; }
+      let pRatio = 0.24, cRatio = 0.44, fRatio = 0.32;
+      let targetProtein, targetCarbs, targetFat;
+      if (macroMode === 'high_protein') {
+        pRatio = 0.28; cRatio = 0.38; fRatio = 0.34;
+        targetProtein = Math.round((targetCalories * pRatio) / 4);
+        targetCarbs = Math.round((targetCalories * cRatio) / 4);
+        targetFat = Math.round((targetCalories * fRatio) / 9);
+      } else if (macroMode === 'balanced') {
+        pRatio = 0.20; cRatio = 0.50; fRatio = 0.30;
+        targetProtein = Math.round((targetCalories * pRatio) / 4);
+        targetCarbs = Math.round((targetCalories * cRatio) / 4);
+        targetFat = Math.round((targetCalories * fRatio) / 9);
+      } else {
+        // general_fat_loss：依 ISSN 一般族群減脂建議 1.2–1.6 g/kg，採中位 1.35 g/kg（安全夾限於總熱量 20%–30%）
+        const rawPro = Math.round(w * 1.35);
+        const minPro = Math.round((targetCalories * 0.20) / 4);
+        const maxPro = Math.round((targetCalories * 0.30) / 4);
+        targetProtein = Math.max(minPro, Math.min(maxPro, rawPro));
+        const proKcal = targetProtein * 4;
+        const remKcal = Math.max(0, targetCalories - proKcal);
+        targetCarbs = Math.round((remKcal * 0.58) / 4);
+        targetFat = Math.round((remKcal * 0.42) / 9);
+        pRatio = proKcal / Math.max(1, targetCalories);
+        cRatio = (targetCarbs * 4) / Math.max(1, targetCalories);
+        fRatio = Math.max(0, 1 - pRatio - cRatio);
+      }
 
       const targetFiber = g === 'female' ? 24 : 28;
       let targetWater = Math.max(g === 'female' ? 1800 : 2000, Math.round(w * (g === 'female' ? 32 : 35)));
-
-      let targetProtein = Math.round((targetCalories * pRatio) / 4);
-      let targetCarbs = Math.round((targetCalories * cRatio) / 4);
-      let targetFat = Math.round((targetCalories * fRatio) / 9);
 
       // 當日活動量 / iOS 健康與健身動態調整（僅套用於使用者自身當日目標）
       let activityBurnKcal = 0, bonusCal = 0, bonusPro = 0, bonusCarb = 0, bonusFat = 0, bonusWater = 0;
@@ -4334,7 +4355,7 @@
       hb.textContent = bmiInfo.shortLabel; hb.className = 'badge ' + bmiInfo.badgeClass;
       document.getElementById('headerCalText').textContent = Math.round(totals.calories) + ' / ' + targets.targetCalories + ' kcal';
       document.getElementById('headerProText').textContent = Math.round(totals.protein) + ' / ' + targets.targetProtein + ' g';
-      document.getElementById('heroModeBadge').textContent = appState.macroMode === 'high_protein' ? '營養師減醣高蛋白' : '國健署均衡減重';
+      document.getElementById('heroModeBadge').textContent = appState.macroMode === 'high_protein' ? '營養師減醣高蛋白' : (appState.macroMode === 'balanced' ? '國健署均衡減重' : '一般族群減脂期建議');
 
       document.getElementById('heroBmiValue').textContent = bmiInfo.bmi.toFixed(1);
       const heroSt = document.getElementById('heroBmiStatus');
@@ -5626,7 +5647,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.5.0';
+    const APP_VERSION = 'v4.6.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -7275,11 +7296,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.5.0',
-      date: '2026-11-24',
+      version: 'v4.6.0',
+      date: '2026-11-25',
       items: [
-        '⏱️ 新增「定期自動更新有餘額 AI 模型」功能：於「系統設置」預設每 5 分鐘（可調 5／10／15／30 分鐘或關閉）自動巡檢目前模型配額；額度正常時僅做 1 次極小檢查省配額，額度滿即自動切換至尚有餘額的模型，背景自動省電暫停。',
-        '🤖 AI 營養師對話新增即時容錯切換：若提問當下遇到模型額度滿或連線失敗，會自動即刻搜尋尚有餘額的模型並無縫重試，大幅降低跳回離線回覆的機率。'
+        '🥩 新增並預設套用「一般族群減脂期建議」營養比例（蛋白質依體重 1.35 g/kg 計算，落在 ISSN 一般減脂 1.2–1.6 g/kg 中位，兼顧保肌與外食可行性）。',
+        '⚙️ 仍可隨時於「系統設置 → 營養素分配策略」自由切換「一般族群減脂期建議」、「營養師減醣高蛋白」或「國健署均衡減重」。'
       ]
     };
 
@@ -8069,6 +8090,12 @@
         if (parsed.targetWeightKg) appState.targetWeightKg = Number(parsed.targetWeightKg);
         if (parsed.activityLevel) appState.activityLevel = parsed.activityLevel;
         if (parsed.macroMode) appState.macroMode = parsed.macroMode;
+      try {
+        if (!localStorage.getItem('nutrifit_v460_macro_migrated')) {
+          appState.macroMode = 'general_fat_loss';
+          localStorage.setItem('nutrifit_v460_macro_migrated', '1');
+        }
+      } catch (e) {}
         if (typeof parsed.extraExerciseKcal === 'number') appState.extraExerciseKcal = parsed.extraExerciseKcal;
         if (typeof parsed.todayActiveKcal === 'number') appState.todayActiveKcal = parsed.todayActiveKcal;
         if (typeof parsed.todaySteps === 'number') appState.todaySteps = parsed.todaySteps;
@@ -8155,7 +8182,7 @@
       r.readAsText(file);
     }
     function resetAllMemoryToDefault() {
-      appState.gender = 'male'; appState.age = 30; appState.heightCm = 170; appState.weightKg = 70; appState.targetWeightKg = 63; appState.activityLevel = 'light'; appState.macroMode = 'high_protein'; appState.extraExerciseKcal = 0; appState.dailyChecklist = { weighIn: false, eatOrder: false, noSugarFried: false, waterGoal: false, postMealWalk: false };
+      appState.gender = 'male'; appState.age = 30; appState.heightCm = 170; appState.weightKg = 70; appState.targetWeightKg = 63; appState.activityLevel = 'light'; appState.macroMode = 'general_fat_loss'; appState.extraExerciseKcal = 0; appState.dailyChecklist = { weighIn: false, eatOrder: false, noSugarFried: false, waterGoal: false, postMealWalk: false };
       appState.activeDate = '2026-11-18'; appState.waterMl = 1500;
       appState.savedCustomFoods = JSON.parse(JSON.stringify(DEFAULT_SAVED_CUSTOM_FOODS));
       appState.logs = JSON.parse(JSON.stringify(DEFAULT_INITIAL_LOGS));
