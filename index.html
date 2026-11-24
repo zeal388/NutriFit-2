@@ -2415,7 +2415,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.4.1・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.5.0・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2444,12 +2444,34 @@
             </div>
           </div>
 
+          <!-- Scheduled Auto-Update Available-Quota AI Model (Default: Every 5 min) -->
+          <div class="card-soft" style="background:linear-gradient(135deg,#fffbeb,#f0fdf4);border-color:#fde68a;display:flex;flex-direction:column;gap:8px;">
+            <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
+              <div>
+                <div class="text-xs font-extrabold" style="color:#92400e;">⏱️ 定期自動更新有餘額 AI 模型</div>
+                <div class="text-xs text-muted mt-1">前景使用時定時檢查目前模型配額，額度滿即自動切換至尚有餘額的模型（背景自動省電暫停）。</div>
+              </div>
+              <span id="autoAiQuotaModelBadge" class="badge badge-emerald" style="font-size:11px;">🤖 模型待檢查</span>
+            </div>
+            <div class="flex-gap" style="gap:6px;flex-wrap:wrap;align-items:center;">
+              <button type="button" id="btnToggleAutoAiQuota" class="btn btn-sm btn-primary" onclick="toggleAutoAiQuotaEnabled()">🟢 自動巡檢：開啟中</button>
+              <select id="autoAiQuotaIntervalSelect" onchange="changeAutoAiQuotaInterval(this.value)" style="font-size:12px;padding:6px 10px;border-radius:10px;border:1px solid #d1d5db;background:#fff;color:#1e293b;font-weight:700;">
+                <option value="5" selected>每 5 分鐘</option>
+                <option value="10">每 10 分鐘</option>
+                <option value="15">每 15 分鐘</option>
+                <option value="30">每 30 分鐘</option>
+              </select>
+              <button type="button" id="btnRunAutoAiQuotaNow" class="btn btn-sm btn-blue" onclick="runScheduledAiQuotaCheck(false, true)">🔄 立即巡檢</button>
+            </div>
+            <div id="autoAiQuotaStatusText" style="font-size:11px;color:#5c4338;line-height:1.45;">尚未巡檢・綁定 Gemini API Key 後自動啟動</div>
+          </div>
+
           <!-- Simple 1-Click User OTA Update -->
           <div class="card-soft" style="background:#eff6ff;border-color:#93c5fd;display:flex;flex-direction:column;gap:8px;">
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.4.1・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.5.0・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -5583,6 +5605,7 @@
     }
 
     function updateSystemModelStatusUi() {
+      if (typeof updateAutoAiQuotaUi === 'function') { try { updateAutoAiQuotaUi(); } catch (e) {} }
       const active = getActiveAiModel();
       let checkedAt = '尚未檢查';
       try { checkedAt = localStorage.getItem('nutrifit_ai_model_checked_at') || '尚未檢查'; } catch (e) {}
@@ -5603,7 +5626,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.4.1';
+    const APP_VERSION = 'v4.5.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -6207,6 +6230,255 @@
       }
     }
 
+    // === Scheduled Auto-Update Available-Quota AI Model (Default: Every 5 min) ===
+    const AUTO_AI_QUOTA_CFG_KEY = 'nutrifit_auto_ai_quota_cfg';
+    let autoAiQuotaTimer = null;
+    let autoAiQuotaTickTimer = null;
+    let autoAiQuotaRunning = false;
+    let autoAiQuotaLastCheckedTs = 0;
+    let autoAiQuotaNextRunTs = 0;
+    let autoAiQuotaLastMsg = '';
+
+    function getAutoAiQuotaConfig() {
+      try {
+        const raw = localStorage.getItem(AUTO_AI_QUOTA_CFG_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const intervalMin = [5, 10, 15, 30].includes(Number(parsed.intervalMin)) ? Number(parsed.intervalMin) : 5;
+          return { enabled: parsed.enabled !== false, intervalMin };
+        }
+      } catch (e) {}
+      return { enabled: true, intervalMin: 5 };
+    }
+
+    function saveAutoAiQuotaConfig(cfg) {
+      try {
+        localStorage.setItem(AUTO_AI_QUOTA_CFG_KEY, JSON.stringify({
+          enabled: cfg.enabled !== false,
+          intervalMin: [5, 10, 15, 30].includes(Number(cfg.intervalMin)) ? Number(cfg.intervalMin) : 5
+        }));
+      } catch (e) {}
+    }
+
+    function formatClockTime(ts) {
+      if (!ts) return '尚未檢查';
+      const d = new Date(ts);
+      const pad = n => String(n).padStart(2, '0');
+      return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function updateAutoAiQuotaUi() {
+      const cfg = getAutoAiQuotaConfig();
+      const apiKey = getSavedGeminiKey();
+      const activeModel = getActiveAiModel();
+
+      const badge = document.getElementById('autoAiQuotaModelBadge');
+      if (badge) {
+        badge.textContent = apiKey ? `🤖 ${activeModel}` : '🔑 未綁定 Key';
+        badge.className = apiKey ? 'badge badge-emerald' : 'badge badge-slate';
+      }
+
+      const toggleBtn = document.getElementById('btnToggleAutoAiQuota');
+      if (toggleBtn) {
+        toggleBtn.textContent = cfg.enabled ? '🟢 自動巡檢：開啟中' : '⚪ 自動巡檢：已關閉';
+        toggleBtn.className = cfg.enabled ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-slate-soft';
+      }
+
+      const sel = document.getElementById('autoAiQuotaIntervalSelect');
+      if (sel) sel.value = String(cfg.intervalMin);
+
+      const statusEl = document.getElementById('autoAiQuotaStatusText');
+      if (!statusEl) return;
+
+      if (!apiKey) {
+        statusEl.textContent = '尚未設定 Gemini API Key（綁定後將依設定週期自動巡檢可用模型）';
+        statusEl.style.color = '#64748b';
+        return;
+      }
+      if (autoAiQuotaRunning) {
+        statusEl.textContent = '⏳ 正在探測目前與候選 AI 模型剩餘額度...';
+        statusEl.style.color = '#1d4ed8';
+        return;
+      }
+      if (!cfg.enabled) {
+        const lastTxt = autoAiQuotaLastCheckedTs ? `上次巡檢：${formatClockTime(autoAiQuotaLastCheckedTs)}` : '尚未巡檢';
+        statusEl.textContent = `已關閉定期巡檢（${lastTxt}）・可隨時點擊「立即巡檢」手動更新`;
+        statusEl.style.color = '#64748b';
+        return;
+      }
+
+      const lastTxt = autoAiQuotaLastCheckedTs ? `上次巡檢：${formatClockTime(autoAiQuotaLastCheckedTs)}` : '等待首次巡檢';
+      let nextTxt = '';
+      if (document.hidden) {
+        nextTxt = '・背景省電暫停中';
+      } else if (autoAiQuotaNextRunTs > Date.now()) {
+        const remSec = Math.max(1, Math.ceil((autoAiQuotaNextRunTs - Date.now()) / 1000));
+        const m = Math.floor(remSec / 60);
+        const s = remSec % 60;
+        nextTxt = `・下次巡檢：${m > 0 ? (m + ' 分 ') : ''}${s} 秒後`;
+      }
+      const extra = autoAiQuotaLastMsg ? `｜${autoAiQuotaLastMsg}` : '';
+      statusEl.textContent = `${lastTxt}${nextTxt}${extra}`;
+      statusEl.style.color = autoAiQuotaLastMsg.includes('滿') || autoAiQuotaLastMsg.includes('異常') ? '#b45309' : '#15803d';
+    }
+
+    function stopAutoAiQuotaScheduler() {
+      if (autoAiQuotaTimer) { clearTimeout(autoAiQuotaTimer); autoAiQuotaTimer = null; }
+      if (autoAiQuotaTickTimer) { clearInterval(autoAiQuotaTickTimer); autoAiQuotaTickTimer = null; }
+      autoAiQuotaNextRunTs = 0;
+    }
+
+    function scheduleNextAutoAiQuotaRun() {
+      if (autoAiQuotaTimer) { clearTimeout(autoAiQuotaTimer); autoAiQuotaTimer = null; }
+      const cfg = getAutoAiQuotaConfig();
+      if (!cfg.enabled || !getSavedGeminiKey()) {
+        autoAiQuotaNextRunTs = 0;
+        updateAutoAiQuotaUi();
+        return;
+      }
+      const delayMs = cfg.intervalMin * 60 * 1000;
+      autoAiQuotaNextRunTs = Date.now() + delayMs;
+      autoAiQuotaTimer = setTimeout(() => {
+        runScheduledAiQuotaCheck(true, false);
+      }, delayMs);
+      if (!autoAiQuotaTickTimer) {
+        autoAiQuotaTickTimer = setInterval(() => {
+          if (!document.hidden) updateAutoAiQuotaUi();
+        }, 1000);
+      }
+      updateAutoAiQuotaUi();
+    }
+
+    async function probeSingleModelQuota(apiKey, modelId) {
+      const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), 12000) : null;
+      try {
+        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: 'OK' }] }],
+            generationConfig: { maxOutputTokens: 4 }
+          }),
+          signal: ctrl ? ctrl.signal : undefined
+        });
+        return { ok: r.ok, status: r.status };
+      } catch (e) {
+        return { ok: false, status: 0, error: e?.message || 'network' };
+      } finally {
+        if (timer) clearTimeout(timer);
+      }
+    }
+
+    async function runScheduledAiQuotaCheck(silent = true, forceFullScan = false) {
+      const apiKey = getSavedGeminiKey();
+      if (!apiKey) {
+        if (!silent) showToast('請先於上方設定並儲存 Gemini API Key', '⚠️');
+        updateAutoAiQuotaUi();
+        return { ok: false, reason: 'no_key' };
+      }
+      if (silent && document.hidden) {
+        scheduleNextAutoAiQuotaRun();
+        return { ok: false, skipped: true };
+      }
+      if (autoAiQuotaRunning) return { ok: false, busy: true };
+
+      autoAiQuotaRunning = true;
+      const runBtn = document.getElementById('btnRunAutoAiQuotaNow');
+      if (runBtn) { runBtn.disabled = true; runBtn.textContent = '⏳ 巡檢中...'; }
+      updateAutoAiQuotaUi();
+
+      try {
+        const prevModel = getActiveAiModel();
+
+        // 省額度快速路徑：先測目前鎖定模型是否仍有額度（僅 1 次極小探測）
+        if (!forceFullScan && prevModel) {
+          const fast = await probeSingleModelQuota(apiKey, prevModel);
+          if (fast.ok) {
+            aiQuotaCooldownUntil = 0;
+            autoAiQuotaLastCheckedTs = Date.now();
+            autoAiQuotaLastMsg = `目前模型 ${prevModel} 額度正常`;
+            setActiveAiModel(prevModel);
+            if (!silent) showToast(`✅ ${prevModel} 仍有可用額度`, '🤖');
+            return { ok: true, model: prevModel, switched: false };
+          }
+        }
+
+        // 目前模型額度滿／異常或使用者手動強制巡檢：掃描 Google 即時模型清單找尚有額度模型
+        const res = await repairAiModuleQuota(true);
+        autoAiQuotaLastCheckedTs = Date.now();
+        if (res && res.ok) {
+          const switched = res.model !== prevModel;
+          autoAiQuotaLastMsg = switched ? `已自動切換 → ${res.model}` : `確認可用：${res.model}`;
+          if (!silent || switched) {
+            showToast(switched ? `🔄 已自動切換至有餘額模型：${res.model}` : `✅ 已確認有餘額模型：${res.model}`, '🤖');
+          }
+          return { ok: true, model: res.model, switched };
+        }
+        autoAiQuotaLastMsg = (res && res.all429) ? '目前全模型額度暫滿（下週期自動重試）' : '探測異常（下週期自動重試）';
+        if (!silent) showToast(`⚠️ ${autoAiQuotaLastMsg}`, '⚠️');
+        return { ok: false, all429: !!(res && res.all429) };
+      } finally {
+        autoAiQuotaRunning = false;
+        if (runBtn) { runBtn.disabled = false; runBtn.textContent = '🔄 立即巡檢'; }
+        scheduleNextAutoAiQuotaRun();
+      }
+    }
+
+    function toggleAutoAiQuotaEnabled() {
+      const cfg = getAutoAiQuotaConfig();
+      cfg.enabled = !cfg.enabled;
+      saveAutoAiQuotaConfig(cfg);
+      if (cfg.enabled) {
+        showToast(`🟢 已開啟定期自動更新有餘額 AI 模型（每 ${cfg.intervalMin} 分鐘）`, '⏱️');
+        if (getSavedGeminiKey()) runScheduledAiQuotaCheck(true, false);
+        else scheduleNextAutoAiQuotaRun();
+      } else {
+        stopAutoAiQuotaScheduler();
+        showToast('⚪ 已關閉定期自動巡檢 AI 模型', '⏱️');
+        updateAutoAiQuotaUi();
+      }
+    }
+
+    function changeAutoAiQuotaInterval(val) {
+      const cfg = getAutoAiQuotaConfig();
+      cfg.intervalMin = [5, 10, 15, 30].includes(Number(val)) ? Number(val) : 5;
+      saveAutoAiQuotaConfig(cfg);
+      if (cfg.enabled) scheduleNextAutoAiQuotaRun();
+      else updateAutoAiQuotaUi();
+      showToast(`⏱️ 已設定每 ${cfg.intervalMin} 分鐘自動巡檢一次`, '✅');
+    }
+
+    function initAutoAiQuotaScheduler() {
+      updateAutoAiQuotaUi();
+      const cfg = getAutoAiQuotaConfig();
+      if (cfg.enabled && getSavedGeminiKey()) {
+        // 開啟 App 後 3 秒先做一次背景靜默巡檢，確認模型有餘額
+        autoAiQuotaNextRunTs = Date.now() + 3000;
+        autoAiQuotaTimer = setTimeout(() => {
+          runScheduledAiQuotaCheck(true, false);
+        }, 3000);
+        if (!autoAiQuotaTickTimer) {
+          autoAiQuotaTickTimer = setInterval(() => {
+            if (!document.hidden) updateAutoAiQuotaUi();
+          }, 1000);
+        }
+      }
+      document.addEventListener('visibilitychange', () => {
+        const curCfg = getAutoAiQuotaConfig();
+        if (!document.hidden && curCfg.enabled && getSavedGeminiKey()) {
+          const elapsed = Date.now() - autoAiQuotaLastCheckedTs;
+          if (elapsed >= curCfg.intervalMin * 60 * 1000) {
+            runScheduledAiQuotaCheck(true, false);
+          } else {
+            updateAutoAiQuotaUi();
+          }
+        } else {
+          updateAutoAiQuotaUi();
+        }
+      });
+    }
+
     // === Local Today Date Helpers (Avoid UTC timezone shift in Taiwan!) ===
     function getLocalTodayDateStr() {
       const now = new Date();
@@ -6639,6 +6911,7 @@
       if (!val) { showToast('請輸入有效的 Gemini API Key', '⚠️'); return; }
       try { localStorage.setItem('nutrifit_gemini_key', val); } catch (e) {}
       updateGeminiKeyUi();
+      if (typeof runScheduledAiQuotaCheck === 'function' && getAutoAiQuotaConfig().enabled) runScheduledAiQuotaCheck(true, false);
       document.getElementById('geminiKeyDrawer')?.classList.add('hidden');
       showToast('已儲存您的 Gemini Vision API Key（僅存於本機）！', '🔑');
     }
@@ -7002,11 +7275,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.4.1',
-      date: '2026-11-23',
+      version: 'v4.5.0',
+      date: '2026-11-24',
       items: [
-        '🧦 「單日飲食明細」移至彈出視窗：在「營養監控 → 三大營養素熱量結構佔比」右上方新增「單日飲食明細」按鈕（含即時筆數徽章），點擊即可展開完整餐別快篩、份量微調與編輯功能，主畫面更精簡。',
-        '🎯 延續 v4.4.1 減脂計畫彈出式報告與頂部 BMI 分佈色條設計，讓整體瀏覽與操作動線更一致。'
+        '⏱️ 新增「定期自動更新有餘額 AI 模型」功能：於「系統設置」預設每 5 分鐘（可調 5／10／15／30 分鐘或關閉）自動巡檢目前模型配額；額度正常時僅做 1 次極小檢查省配額，額度滿即自動切換至尚有餘額的模型，背景自動省電暫停。',
+        '🤖 AI 營養師對話新增即時容錯切換：若提問當下遇到模型額度滿或連線失敗，會自動即刻搜尋尚有餘額的模型並無縫重試，大幅降低跳回離線回覆的機率。'
       ]
     };
 
@@ -7677,11 +7950,26 @@
 今日已攝取：熱量 ${Math.round(totals.calories)} kcal、蛋白 ${totals.protein}g、碳水 ${totals.carbs}g、脂肪 ${totals.fat}g、飲水 ${appState.waterMl}ml。
 今日餐點清單：${logsText}。`;
 
-        const json = await callGeminiGenerateContent(apiKey, {
+        const chatPayload = {
           system_instruction: { parts: [{ text: sysPrompt + '\n請以完整句子作答，善用條列重點（每點 1–2 句），切勿在句子中途截斷，總字數控制在 150–350 字以內。' }] },
           contents: (() => { const recent = aiChatHistory.slice(-8); const firstUser = recent.findIndex(m => m.role === 'user'); const valid = firstUser >= 0 ? recent.slice(firstUser) : recent; return valid.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.text }] })); })(),
           generationConfig: { thinkingConfig: { thinkingLevel: 'LOW' }, maxOutputTokens: 2048 }
-        });
+        };
+        let json;
+        try {
+          json = await callGeminiGenerateContent(apiKey, chatPayload);
+        } catch (firstErr) {
+          // 若目前模型額度滿或失敗，即時自動尋找尚有餘額的模型並無縫重試一次
+          const healed = await repairAiModuleQuota(true);
+          if (healed && healed.ok) {
+            autoAiQuotaLastCheckedTs = Date.now();
+            autoAiQuotaLastMsg = `對話即時切換 → ${healed.model}`;
+            updateAutoAiQuotaUi();
+            json = await callGeminiGenerateContent(apiKey, chatPayload);
+          } else {
+            throw firstErr;
+          }
+        }
         const cand = json?.candidates?.[0];
         const respParts = Array.isArray(cand?.content?.parts) ? cand.content.parts : [];
         const visibleText = respParts
@@ -7987,6 +8275,7 @@
       renderStoreCatalog();
       renderAll();
       loadRemoteAppConfig();
+      initAutoAiQuotaScheduler();
       setTimeout(() => checkAndShowWhatsNewOnUpdate(), 400);
       setTimeout(() => runSilentStartupOtaCheck(), 1500);
     });
