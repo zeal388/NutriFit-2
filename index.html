@@ -2237,7 +2237,7 @@
                 <span id="dailyMenuTargetBadge" class="badge badge-emerald">目標 1731 kcal・蛋白 104g・鈉 ≤2400mg</span>
               </div>
               <h2 style="font-size:19px;font-weight:900;margin-top:4px;color:#2a1b14;">單日早・午・晚餐減脂建議菜單</h2>
-              <div class="text-xs text-muted mt-1">涵蓋傳統早餐店、自助餐、健康餐盒、滷味小吃、居家自煮與超商快搭，依早 25%／午 40%／晚 35% 動態換算份量。</div>
+              <div class="text-xs text-muted mt-1">採「早餐吃得好 30%・午餐吃得飽 45%・晚餐吃得少 25%」黃金節奏，涵蓋傳統早餐店、自助餐、健康餐盒、滷味火鍋、居家自煮與超商快搭。</div>
             </div>
             <div class="flex-gap" style="gap:6px;flex-wrap:wrap;">
               <button type="button" class="btn btn-sm btn-slate-soft" onclick="shuffleDailySuggestedMenu()">🎲 全天換一套</button>
@@ -2457,7 +2457,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.8.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.8.1・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2513,7 +2513,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.8.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.8.1・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -4343,133 +4343,133 @@
       breakfast: [
         {
           id: 'bk_tw_shop1', style: 'eating_out', tag: '傳統早餐店', isSeafood: false,
-          name: '里肌肉蛋吐司（去美乃滋）＋ 無糖豆漿 400ml',
-          items: '全麥吐司 2 片（不塗沙拉醬）＋ 煎豬里肌 1 片 ＋ 荷包蛋 1 顆 ＋ 無糖豆漿 1 杯',
-          tip: '主動說「不加美乃滋與胡椒鹽」，可少吃約 120 kcal 與 280 mg 鈉。',
-          calories: 430, protein: 28, carbs: 42, fat: 15, fiber: 4.5, sodium: 520
+          name: '里肌肉蛋全麥吐司（去美乃滋）＋ 無糖豆漿 450ml ＋ 原味堅果',
+          items: '全麥吐司 2 片（不塗沙拉醬）＋ 煎豬里肌 1 片 ＋ 荷包蛋 1 顆 ＋ 無糖豆漿 450ml ＋ 原味綜合堅果 1 小把',
+          tip: '【吃得好】優質蛋白＋全穀碳水＋好油脂啟動代謝；主動不加美乃滋與胡椒鹽可少約 280 mg 鈉。',
+          calories: 520, protein: 33, carbs: 50, fat: 20, fiber: 6.0, sodium: 540
         },
         {
           id: 'bk_tw_shop2', style: 'eating_out', tag: '傳統早餐店', isSeafood: false,
-          name: '蔬菜起司蛋餅（少油）＋ 水煮蛋 1 顆 ＋ 無糖拿鐵',
-          items: '原味蔬菜蛋餅 1 份（不加醬油膏）＋ 水煮蛋 1 顆 ＋ 中杯無糖鮮奶拿鐵',
-          tip: '改沾少量生辣椒或原味吃，避開醬油膏即可省下 400+ mg 鈉。',
-          calories: 445, protein: 24, carbs: 44, fat: 18, fiber: 3.5, sodium: 490
+          name: '蔬菜起司蛋餅（少油）＋ 水煮蛋 2 顆 ＋ 無糖鮮奶拿鐵',
+          items: '原味蔬菜起司蛋餅 1 份（不加醬油膏）＋ 水煮蛋 2 顆 ＋ 中杯無糖鮮奶拿鐵',
+          tip: '【吃得好】補齊雙蛋與乳品蛋白讓上午超專注；改沾生辣椒或吃原味避開醬油膏省下 400+ mg 鈉。',
+          calories: 525, protein: 31, carbs: 46, fat: 23, fiber: 4.0, sodium: 530
         },
         {
           id: 'bk_home1', style: 'home_cook', tag: '居家自煮', isSeafood: false,
-          name: '隔夜燕麥希臘優格杯 ＋ 水煮蛋 2 顆 ＋ 藍莓堅果',
-          items: '無糖希臘優格 150g ＋ 燕麥片 40g ＋ 水煮蛋 2 顆 ＋ 藍莓 50g ＋ 原味杏仁 5 顆',
-          tip: '前一晚冰好隔天 3 分鐘開吃，低鈉高纖又穩定上午血糖。',
-          calories: 440, protein: 27, carbs: 44, fat: 16, fiber: 7.0, sodium: 230
+          name: '隔夜燕麥希臘優格堅果杯 ＋ 水煮蛋 2 顆 ＋ 藍莓',
+          items: '無糖希臘優格 180g ＋ 燕麥片 45g ＋ 水煮蛋 2 顆 ＋ 藍莓 60g ＋ 原味杏仁核桃 10g',
+          tip: '【吃得好】營養密度極高、低鈉高纖又穩血糖，前一晚冰好隔天 3 分鐘就能吃。',
+          calories: 515, protein: 32, carbs: 52, fat: 20, fiber: 8.0, sodium: 240
         },
         {
           id: 'bk_home2', style: 'home_cook', tag: '居家自煮', isSeafood: false,
-          name: '烤地瓜 150g ＋ 嫩煎雙蛋菠菜 ＋ 無糖黑豆漿',
-          items: '電鍋蒸/烤地瓜 150g ＋ 雞蛋 2 顆炒菠菜 80g（少許橄欖油）＋ 無糖黑豆漿 300ml',
-          tip: '原型食物天然低鈉，地瓜提供緩釋碳水避免上午飢餓。',
-          calories: 435, protein: 26, carbs: 48, fat: 14, fiber: 6.5, sodium: 260
+          name: '烤地瓜 180g ＋ 雙蛋嫩煎菠菜菇類 ＋ 無糖黑豆漿 400ml ＋ 核桃',
+          items: '電鍋蒸/烤地瓜 180g ＋ 雞蛋 2 顆炒菠菜鴻喜菇 ＋ 無糖黑豆漿 400ml ＋ 核桃 3 顆',
+          tip: '【吃得好】原型食物天然低鈉，緩釋碳水配好油脂讓整個上午精神穩定不嘴饞。',
+          calories: 520, protein: 31, carbs: 56, fat: 19, fiber: 8.0, sodium: 270
         },
         {
           id: 'bk_fast1', style: 'light_fast', tag: '超商＋外食', isSeafood: false,
-          name: '蒸烤地瓜 150g ＋ 茶葉蛋 2 顆 ＋ 無加糖高纖豆漿',
-          items: '超商夯番薯/蒸地瓜約 150g ＋ 茶葉蛋 2 顆 ＋ 無加糖高纖豆漿 400ml',
-          tip: '上班通勤最穩組合，茶葉蛋盡量挑淺色入味適中的版本控制鈉量。',
-          calories: 425, protein: 26, carbs: 47, fat: 13, fiber: 7.5, sodium: 480
+          name: '蒸烤地瓜 180g ＋ 茶葉蛋 2 顆 ＋ 無糖高纖豆漿 450ml ＋ 堅果',
+          items: '超商夯番薯/蒸地瓜約 180g ＋ 茶葉蛋 2 顆 ＋ 無加糖高纖豆漿 450ml ＋ 原味堅果半包',
+          tip: '【吃得好】通勤也能吃出高營養密度，茶葉蛋挑選淺色入味適中的版本更好控鈉。',
+          calories: 515, protein: 31, carbs: 55, fat: 19, fiber: 8.5, sodium: 500
         }
       ],
       lunch: [
         {
           id: 'ln_buffet1', style: 'eating_out', tag: '自助餐／便當', isSeafood: false,
-          name: '去皮滷雞腿自助餐（五穀飯 7 分滿＋3 樣清炒時蔬）',
-          items: '去皮滷雞腿 1 支 ＋ 滷豆腐 1 塊 ＋ 五穀/白飯 150g ＋ 3 格深綠色燙/清炒青菜',
-          tip: '夾菜時把菜汁瀝乾、飯不要淋滷汁，即可避免多餘油脂與 500 mg 隱藏鈉。',
-          calories: 685, protein: 42, carbs: 72, fat: 22, fiber: 8.5, sodium: 860
+          name: '去皮滷雞腿自助餐（五穀飯 1 碗＋滷豆腐＋滷蛋＋3 大格時蔬）',
+          items: '去皮滷雞腿 1 支 ＋ 滷豆腐 1 塊 ＋ 滷蛋 1 顆 ＋ 五穀/白飯 1 滿碗(190g) ＋ 3 大格清炒/燙青菜',
+          tip: '【吃得飽】足量主食＋厚實雙蛋白＋滿滿青菜撐起下午體力；菜汁瀝乾、飯不淋滷汁避免多餘油鈉。',
+          calories: 780, protein: 49, carbs: 84, fat: 26, fiber: 10.0, sodium: 920
         },
         {
           id: 'ln_healthy1', style: 'eating_out', tag: '健康餐盒', isSeafood: false,
-          name: '舒肥蒜香嫩雞胸餐盒（紫米飯＋水煮蛋＋毛豆時蔬）',
-          items: '舒肥雞胸 140g ＋ 半顆/整顆水煮蛋 ＋ 紫米飯 160g ＋ 花椰菜/高麗菜/毛豆配菜',
-          tip: '外食減脂最省心的標準 211 餐盒，蛋白質充足且油鈉好控制。',
-          calories: 660, protein: 44, carbs: 74, fat: 18, fiber: 9.0, sodium: 740
+          name: '雙主菜舒肥雞胸＆滷牛腱餐盒（紫米飯 200g＋水煮蛋＋毛豆時蔬）',
+          items: '舒肥雞胸 110g ＋ 滷牛腱 70g ＋ 水煮蛋 1 顆 ＋ 紫米飯 200g ＋ 花椰菜/高麗菜/毛豆配菜',
+          tip: '【吃得飽】高蛋白大份量 211 餐盒，飽足感一路延續到下班、完全不會想買手搖飲或下午茶。',
+          calories: 770, protein: 51, carbs: 86, fat: 22, fiber: 10.5, sodium: 820
         },
         {
           id: 'ln_roast1', style: 'eating_out', tag: '燒臘／雞肉飯', isSeafood: false,
-          name: '去皮白斬雞／蔥油雞飯（飯減半＋加點燙青菜與滷蛋）',
-          items: '去皮白斬雞腿肉約 130g ＋ 白飯 150g ＋ 滷蛋 1 顆 ＋ 燙地瓜葉 1 份（不淋肉燥）',
-          tip: '蔥油醬改放旁邊沾取，燙青菜改加蒜末少醬油即可大幅降油降鈉。',
-          calories: 695, protein: 41, carbs: 76, fat: 23, fiber: 6.5, sodium: 890
+          name: '去皮白斬雞腿飯（白飯 1 碗＋滷蛋＋油豆腐＋大份燙地瓜葉）',
+          items: '去皮白斬雞腿肉約 160g ＋ 白飯 1 滿碗(190g) ＋ 滷蛋 1 顆 ＋ 油豆腐 2 塊 ＋ 燙地瓜葉（不淋肉燥）',
+          tip: '【吃得飽】蔥油醬改放旁邊少量沾取，燙青菜改加蒜末少醬油，吃飽又不爆油爆鈉。',
+          calories: 785, protein: 48, carbs: 88, fat: 26, fiber: 7.5, sodium: 940
         },
         {
           id: 'ln_home1', style: 'home_cook', tag: '居家自煮', isSeafood: false,
-          name: '氣炸迷迭香雞腿排 ＋ 糙米飯 ＋ 蒜炒花椰菜菇類',
-          items: '去皮雞腿排 150g（氣炸）＋ 糙米飯 160g ＋ 花椰菜 120g 炒鴻喜菇 ＋ 煎蛋 1 顆',
-          tip: '用黑胡椒、義式香料與蒜末提味，僅需極少鹽巴就非常下飯。',
-          calories: 680, protein: 43, carbs: 73, fat: 22, fiber: 9.5, sodium: 460
+          name: '氣炸迷迭香去皮雞腿排 180g ＋ 糙米飯 200g ＋ 蒜炒花椰菜菇類 ＋ 煎蛋',
+          items: '去皮雞腿排 180g（氣炸）＋ 糙米飯 200g ＋ 花椰菜 150g 炒杏鮑菇 ＋ 嫩煎蛋 1 顆',
+          tip: '【吃得飽】用黑胡椒、迷迭香與蒜末提味，僅需極少鹽巴就能吃得非常滿足。',
+          calories: 775, protein: 49, carbs: 85, fat: 25, fiber: 10.5, sodium: 510
         },
         {
           id: 'ln_home2', style: 'home_cook', tag: '居家自煮', isSeafood: false,
-          name: '番茄嫩豆腐燉牛腱 ＋ 藜麥飯 ＋ 燙青江菜',
-          items: '滷/燉牛腱切片 140g ＋ 板豆腐 100g ＋ 牛番茄 1 顆 ＋ 藜麥白飯 160g ＋ 青江菜 120g',
-          tip: '用新鮮番茄自然酸甜取代重鹹醬料，補鐵又高蛋白。',
-          calories: 670, protein: 45, carbs: 70, fat: 21, fiber: 8.5, sodium: 540
+          name: '番茄板豆腐燉牛腱 170g ＋ 藜麥飯 200g ＋ 蒜炒青江菜一大盤',
+          items: '燉牛腱切片 170g ＋ 板豆腐 120g ＋ 牛番茄 1 顆 ＋ 藜麥白飯 200g ＋ 蒜炒青江菜 150g',
+          tip: '【吃得飽】新鮮番茄自然酸甜超下飯，補鐵高蛋白且鈉含量遠低於外食便當。',
+          calories: 770, protein: 50, carbs: 84, fat: 24, fiber: 10.0, sodium: 590
         },
         {
           id: 'ln_fast1', style: 'light_fast', tag: '超商＋外食', isSeafood: false,
-          name: '超商烤雞纖蔬沙拉 ＋ 舒肥雞胸 ＋ 御飯糰/烤地瓜',
-          items: '原味舒肥雞胸 1 包 ＋ 烤雞時蔬沙拉（和風醬用半包）＋ 烤地瓜 180g 或飯糰 1 顆',
-          tip: '沙拉醬只倒一半可省下近 350 mg 鈉，整體纖維與蛋白都非常均衡。',
-          calories: 655, protein: 45, carbs: 74, fat: 17, fiber: 8.0, sodium: 820
+          name: '超商雙蛋白組（舒肥雞胸＋烤雞纖蔬沙拉）＋ 烤地瓜 200g ＋ 茶葉蛋',
+          items: '原味舒肥雞胸 1 包 ＋ 烤雞時蔬沙拉（和風醬用半包）＋ 烤地瓜 200g ＋ 茶葉蛋 1 顆',
+          tip: '【吃得飽】大份量地瓜配雙份雞肉與沙拉非常有飽足感，醬包只倒一半可省約 350 mg 鈉。',
+          calories: 765, protein: 50, carbs: 86, fat: 22, fiber: 9.5, sodium: 880
         },
         {
           id: 'ln_fish1', style: 'eating_out', tag: '健康餐盒（含魚）', isSeafood: true,
-          name: '鹽烤鯖魚健康餐盒（紫米飯＋水煮蛋＋季節時蔬）',
-          items: '烤鯖魚半片 110g ＋ 水煮蛋 1 顆 ＋ 紫米飯 150g ＋ 3 樣清燙時蔬',
-          tip: '富含 Omega-3 優質好油，建議擠新鮮檸檬汁提味、不再額外沾胡椒鹽。',
-          calories: 690, protein: 38, carbs: 68, fat: 28, fiber: 8.0, sodium: 780
+          name: '鹽烤鯖魚＋水煮蛋雙蛋白餐盒（紫米飯 190g＋毛豆＋3 樣時蔬）',
+          items: '烤鯖魚 130g ＋ 水煮蛋 1 顆 ＋ 毛豆仁 50g ＋ 紫米飯 190g ＋ 3 樣清燙時蔬',
+          tip: '【吃得飽】富含 Omega-3 優質好油與足量主食，擠新鮮檸檬汁提味不額外沾胡椒鹽。',
+          calories: 785, protein: 45, carbs: 80, fat: 31, fiber: 9.5, sodium: 840
         }
       ],
       dinner: [
         {
           id: 'dn_luwei1', style: 'eating_out', tag: '滷味／小吃攤', isSeafood: false,
-          name: '清湯滷味組（去皮雞肉/豬腱＋板豆腐＋高麗菜＋金針菇＋冬粉）',
-          items: '豬腱肉或雞肉 110g ＋ 板豆腐 1 塊 ＋ 滷蛋 1 顆 ＋ 高麗菜＆金針菇各 1 份 ＋ 冬粉 1 球',
-          tip: '不加酸菜、不加沙茶與辣油，湯不要喝完即可把晚餐鈉壓在 800 mg 內。',
-          calories: 590, protein: 36, carbs: 66, fat: 18, fiber: 8.5, sodium: 790
+          name: '清湯輕食滷味（豬腱/雞肉 90g＋板豆腐半塊＋高麗菜金針菇木耳・不加麵）',
+          items: '瘦豬腱或雞肉 90g ＋ 板豆腐半塊 ＋ 滷蛋 1 顆 ＋ 高麗菜＆金針菇＆黑木耳（不點王子麵/冬粉）',
+          tip: '【吃得少】晚餐減碳高纖零負擔！不加酸菜、沙茶與辣油，湯不喝完即可把鈉控在 700 mg 內。',
+          calories: 430, protein: 28, carbs: 38, fat: 16, fiber: 8.5, sodium: 680
         },
         {
           id: 'dn_hotpot1', style: 'eating_out', tag: '個人小火鍋', isSeafood: false,
-          name: '昆布清湯瘦肉鍋（低脂板腱牛/嫩雞＋菜盤全吃＋冬粉/半碗飯）',
-          items: '低脂牛板腱或雞柳 140g ＋ 火鍋天然菜盤（不吃加工餃丸）＋ 半碗飯 ＋ 雞蛋 1 顆',
-          tip: '沾醬改用「白蘿蔔泥＋蒜末＋蔥花＋白醋＋少許醬油」，避開沙茶醬立省 250 kcal。',
-          calories: 605, protein: 38, carbs: 64, fat: 20, fiber: 9.0, sodium: 820
+          name: '昆布清湯瘦肉輕鍋（低脂板腱牛/嫩雞 110g＋天然菜盤全吃＋冬粉半球）',
+          items: '低脂牛板腱或雞柳 110g ＋ 火鍋天然菜盤全吃（不吃加工餃丸）＋ 冬粉半球（或換雞蛋）',
+          tip: '【吃得少】沾醬用「白蘿蔔泥＋蒜末＋蔥花＋白醋＋少許醬油」，暖胃輕盈不造成隔天水腫。',
+          calories: 440, protein: 29, carbs: 38, fat: 17, fiber: 9.0, sodium: 720
         },
         {
           id: 'dn_home1', style: 'home_cook', tag: '居家自煮', isSeafood: false,
-          name: '蔥爆蒜香豬里肌 ＋ 涼拌毛豆木耳 ＋ 半碗五穀飯',
-          items: '豬里肌肉片 130g（少油快炒洋蔥蔥段）＋ 毛豆仁 60g ＋ 黑木耳炒高麗菜 ＋ 五穀飯 110g',
-          tip: '晚餐碳水略減、蔬菜與毛豆拉高，睡前不餓又不影響隔天體重。',
-          calories: 595, protein: 37, carbs: 62, fat: 20, fiber: 9.5, sodium: 490
+          name: '蒜香蔥爆豬里肌 100g ＋ 涼拌毛豆木耳 ＋ 燙花椰菜（無飯輕晚餐）',
+          items: '豬里肌肉片 100g（少油快炒洋蔥蔥段）＋ 毛豆仁 60g ＋ 黑木耳炒高麗菜 ＋ 燙花椰菜 100g',
+          tip: '【吃得少】以毛豆取代白飯提供少量緩釋碳水與高纖，睡前不餓、隔天早上體重更有感。',
+          calories: 435, protein: 29, carbs: 34, fat: 18, fiber: 9.5, sodium: 420
         },
         {
           id: 'dn_home2', style: 'home_cook', tag: '居家自煮', isSeafood: false,
-          name: '電鍋香菇雞湯（去油）＋ 燙大陸妹 ＋ 蒸南瓜 160g',
-          items: '去皮切塊雞腿肉 140g ＋ 乾香菇/秀珍菇 ＋ 嫩豆腐半盒 ＋ 蒸南瓜 160g ＋ 燙青菜 120g',
-          tip: '電鍋一鍵完成免顧火，清爽暖胃且鈉含量不到一般外食的一半。',
-          calories: 585, protein: 36, carbs: 63, fat: 19, fiber: 8.5, sodium: 420
+          name: '電鍋去油香菇雞湯（去皮雞肉 110g＋嫩豆腐半盒＋蒸南瓜 100g＋燙青菜）',
+          items: '去皮切塊雞腿肉 110g ＋ 乾香菇/秀珍菇 ＋ 嫩豆腐半盒 ＋ 蒸南瓜 100g ＋ 燙大陸妹 120g',
+          tip: '【吃得少】電鍋一鍵完成清爽暖胃，低卡低鈉又好消化，特別適合晚下班或睡前 3 小時內吃。',
+          calories: 425, protein: 28, carbs: 40, fat: 15, fiber: 8.5, sodium: 390
         },
         {
           id: 'dn_fast1', style: 'light_fast', tag: '超商＋外食', isSeafood: false,
-          name: '健康餐店燙青菜加雞胸 ＋ 超商毛豆/蒸蛋 ＋ 烤玉米',
-          items: '原味雞胸 110g ＋ 外食燙青菜 1 大份（不淋肉燥）＋ 超商原味毛豆 1 包 ＋ 黃金玉米 1 支',
-          tip: '下班太晚來不及煮時的零負擔組合，高纖高蛋白又好消化。',
-          calories: 580, protein: 37, carbs: 65, fat: 17, fiber: 9.0, sodium: 710
+          name: '外食大份燙青菜（不淋肉燥）＋ 超商原味舒肥雞胸 1 包 ＋ 原味毛豆半包',
+          items: '原味舒肥雞胸 1 包 ＋ 外食燙青菜 1 大份（不淋肉燥）＋ 超商原味毛豆半包（約 60g）',
+          tip: '【吃得少】下班太晚最推的極簡輕食晚餐，高蛋白高纖、熱量精準壓在 430 kcal 內。',
+          calories: 425, protein: 29, carbs: 36, fat: 16, fiber: 8.5, sodium: 620
         },
         {
           id: 'dn_fish1', style: 'home_cook', tag: '居家自煮（含魚）', isSeafood: true,
-          name: '紙包檸檬香草鮭魚 ＋ 烤櫛瓜花椰菜 ＋ 蒸地瓜 120g',
-          items: '鮭魚菲力 120g（氣炸/烤箱紙包）＋ 櫛瓜與花椰菜 150g ＋ 蒸地瓜 120g',
-          tip: '用檸檬片與黑胡椒提味幾乎不需加鹽，優質蛋白與好油一次補足。',
-          calories: 600, protein: 34, carbs: 54, fat: 26, fiber: 7.5, sodium: 320
+          name: '紙包檸檬香草鮭魚 95g ＋ 烤櫛瓜花椰菜一大盤（無澱粉輕晚餐）',
+          items: '鮭魚菲力 95g（氣炸/烤箱紙包）＋ 烤櫛瓜、花椰菜與菇類 180g',
+          tip: '【吃得少】用檸檬片與黑胡椒提味幾乎零額外加鹽，低碳高纖且富含 Omega-3 抗發炎。',
+          calories: 435, protein: 25, carbs: 26, fat: 25, fiber: 7.0, sodium: 290
         }
       ]
     };
@@ -4610,7 +4610,7 @@
 - 單日目標：熱量 ${targets.targetCalories} kcal、蛋白質 ${targets.targetProtein}g、碳水 ${targets.targetCarbs}g、脂肪 ${targets.targetFat}g、纖維 ${targets.targetFiber}g、鈉上限 ${targets.targetSodium || 2400}mg。
 - 今日目前已攝取：熱量 ${Math.round(totals.calories)} kcal、蛋白 ${totals.protein}g、鈉 ${totals.sodium || 0}mg（剩餘熱量 ${remCal} kcal、蛋白 ${remPro}g、鈉額度 ${remSod}mg）。
 - 飲食限制：${appState.excludeSeafood !== false ? '100% 嚴格排除海鮮（無魚蝦蟹貝）' : '可包含魚類海鮮'}。
-請用繁體中文條列「🌅 早餐」「☀️ 午餐」「🌙 晚餐」，每餐註明具體菜色、預估熱量/蛋白/鈉(mg)及1句減油減鈉點餐小技巧，簡潔完整不截斷。`;
+配餐原則：嚴格採「早餐吃得好（佔單日約 30%，高營養密度＋好油脂蛋白）」「午餐吃得飽（佔單日約 45%，足量主食與高蛋白主菜）」「晚餐吃得少（佔單日約 25%，低碳高纖低鈉輕食）」。請用繁體中文條列「🌅 早餐吃得好」「☀️ 午餐吃得飽」「🌙 晚餐吃得少」，每餐註明具體菜色、預估熱量/蛋白/鈉(mg)及1句減油減鈉小技巧，簡潔完整不截斷。`;
         const json = await callGeminiGenerateContent(apiKey, {
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
           generationConfig: { thinkingConfig: { thinkingLevel: 'LOW' }, maxOutputTokens: 1536 }
@@ -4642,9 +4642,9 @@
       if (badge) badge.textContent = `目標 ${targets.targetCalories} kcal・蛋白 ${targets.targetProtein}g・鈉 ≤${sodTgt}mg`;
 
       const slots = [
-        { key: 'breakfast', icon: '🌅', title: '早餐建議', pctLabel: '佔單日 ~25%', accent: '#b45309', bg: '#fffbeb', border: '#fde68a' },
-        { key: 'lunch', icon: '☀️', title: '午餐建議', pctLabel: '佔單日 ~40%', accent: '#15803d', bg: '#f0fdf4', border: '#bbf7d0' },
-        { key: 'dinner', icon: '🌙', title: '晚餐建議', pctLabel: '佔單日 ~35%', accent: '#1d4ed8', bg: '#eff6ff', border: '#bfdbfe' }
+        { key: 'breakfast', icon: '🌅', title: '早餐吃得好', pctLabel: '佔單日 ~30%', accent: '#b45309', bg: '#fffbeb', border: '#fde68a' },
+        { key: 'lunch', icon: '☀️', title: '午餐吃得飽', pctLabel: '佔單日 ~45%', accent: '#15803d', bg: '#f0fdf4', border: '#bbf7d0' },
+        { key: 'dinner', icon: '🌙', title: '晚餐吃得少', pctLabel: '佔單日 ~25%', accent: '#1d4ed8', bg: '#eff6ff', border: '#bfdbfe' }
       ];
 
       let totCal = 0, totPro = 0, totCarb = 0, totFat = 0, totFib = 0, totSod = 0;
@@ -6082,7 +6082,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.8.0';
+    const APP_VERSION = 'v4.8.1';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -7734,11 +7734,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.8.0',
+      version: 'v4.8.1',
       date: '2026-11-25',
       items: [
-        '🍽️ 於「減脂秘訣」分頁新增「單日早・午・晚餐減脂建議菜單」：依個人單日熱量／蛋白／鈉上限動態換算份量，涵蓋傳統早餐店、自助餐、健康餐盒、滷味小吃、居家自煮與超商快搭，不限於超商食品。',
-        '⚡ 支援單餐獨立換菜、全天換一套、一鍵加入今日紀錄（含完整熱量與鈉含量），以及 AI 依今日剩餘額度即時客製三餐建議。'
+        '🍽️ 依「早餐吃得好（~30%）・午餐吃得飽（~45%）・晚餐吃得少（~25%）」原則重新規劃「減脂秘訣」分頁的單日三餐建議菜單與 AI 客製配餐邏輯。',
+        '🥗 早餐強化優質蛋白與好油脂啟動代謝、午餐給足主食與雙蛋白增加飽足感、晚餐改為低碳高纖低鈉輕食減輕夜間負擔。'
       ]
     };
 
