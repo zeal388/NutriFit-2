@@ -1930,6 +1930,14 @@
               </div>
               <div style="height:5px;background:#e8f2ec;border-radius:999px;overflow:hidden;margin-top:5px;"><div id="topDashWaterBar" style="height:100%;width:0%;background:#38bdf8;"></div></div>
             </div>
+            <div style="background:#ffffff;border:1.5px solid #f0e4dc;border-radius:14px;box-shadow:0 3px 10px rgba(148,163,184,0.08);padding:8px 10px;">
+              <div class="flex-between text-xs" style="color:#7c3aed;gap:4px;"><span style="display:inline-flex;align-items:center;gap:4px;">🧂 鈉含量</span><strong id="topDashSodiumPct">0%</strong></div>
+              <div class="flex-between mt-1" style="gap:4px;align-items:center;">
+                <div id="topDashSodiumVal" class="text-xs font-extrabold" style="color:#44322a;">0 / 2400mg</div>
+                <span id="badgeSodiumStatus" class="xmas-status-pill badge-emerald">✅ 正常</span>
+              </div>
+              <div style="height:5px;background:#e8f2ec;border-radius:999px;overflow:hidden;margin-top:5px;"><div id="topDashSodiumBar" style="height:100%;width:0%;background:#8b5cf6;"></div></div>
+            </div>
           </div>
 
           <!-- Integrated Macro Calorie Split Donut Chart -->
@@ -2081,6 +2089,7 @@
               <button type="button" id="trendMetricBtn-fat" class="trend-metric-pill" onclick="setPlanTrendMetric('fat')">🥑 脂肪</button>
               <button type="button" id="trendMetricBtn-fiber" class="trend-metric-pill" onclick="setPlanTrendMetric('fiber')">🥬 纖維</button>
               <button type="button" id="trendMetricBtn-water" class="trend-metric-pill" onclick="setPlanTrendMetric('water')">💧 飲水</button>
+              <button type="button" id="trendMetricBtn-sodium" class="trend-metric-pill" onclick="setPlanTrendMetric('sodium')">🧂 鈉含量</button>
             </div>
 
             <!-- Timeframe Segmented Switcher: 天 / 週 / 月 / 年 -->
@@ -2219,6 +2228,38 @@
 
       <!-- ==================== TAB 4: 超商無海鮮餐點庫 ==================== -->
       <section id="view-store" class="hidden" style="display:flex;flex-direction:column;gap:16px;">
+        <!-- Personalized Daily Breakfast / Lunch / Dinner Suggested Menu (Not limited to convenience stores) -->
+        <div id="dailySuggestedMenuCard" class="card" style="display:flex;flex-direction:column;gap:12px;background:linear-gradient(135deg,#fffbf5 0%,#ffffff 55%,#f3fbf6 100%);border:1.5px solid #e6e0d4;">
+          <div class="flex-between" style="flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--border);padding-bottom:10px;">
+            <div>
+              <div class="flex-gap" style="gap:6px;flex-wrap:wrap;">
+                <span class="text-xs font-extrabold" style="color:var(--emerald);">🍽️ 依個人單日目標動態配餐・不限超商</span>
+                <span id="dailyMenuTargetBadge" class="badge badge-emerald">目標 1731 kcal・蛋白 104g・鈉 ≤2400mg</span>
+              </div>
+              <h2 style="font-size:19px;font-weight:900;margin-top:4px;color:#2a1b14;">單日早・午・晚餐減脂建議菜單</h2>
+              <div class="text-xs text-muted mt-1">涵蓋傳統早餐店、自助餐、健康餐盒、滷味小吃、居家自煮與超商快搭，依早 25%／午 40%／晚 35% 動態換算份量。</div>
+            </div>
+            <div class="flex-gap" style="gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-sm btn-slate-soft" onclick="shuffleDailySuggestedMenu()">🎲 全天換一套</button>
+              <button type="button" class="btn btn-sm btn-primary" onclick="applyAllSuggestedMealsToLog()">⚡ 一鍵加入今日三餐</button>
+              <button type="button" id="btnAiCustomDailyMenu" class="btn btn-sm btn-blue" onclick="generateAiCustomDailyMenu()">✨ AI 依剩餘額度客製</button>
+            </div>
+          </div>
+
+          <div class="pill-row" style="margin:0;">
+            <button type="button" id="menuStyleBtn-all" class="pill-btn active" onclick="setSuggestedMenuStyle('all')">🎲 多元混搭</button>
+            <button type="button" id="menuStyleBtn-eating_out" class="pill-btn" onclick="setSuggestedMenuStyle('eating_out')">🍱 外食／便當／小吃</button>
+            <button type="button" id="menuStyleBtn-home_cook" class="pill-btn" onclick="setSuggestedMenuStyle('home_cook')">🍳 居家簡單自煮</button>
+            <button type="button" id="menuStyleBtn-light_fast" class="pill-btn" onclick="setSuggestedMenuStyle('light_fast')">🏪 外食＋超商快搭</button>
+          </div>
+
+          <div id="aiCustomMenuResultBox" class="card-soft hidden" style="background:#eff6ff;border:1.5px solid #bfdbfe;padding:10px 12px;font-size:12px;line-height:1.65;color:#1e3a8a;"></div>
+
+          <div id="dailySuggestedMealsGrid" class="grid grid-3" style="gap:10px;"></div>
+
+          <div id="dailySuggestedSummaryBar" class="card-soft" style="background:#ffffff;border:1.5px solid #e2e8f0;padding:10px 12px;display:flex;flex-direction:column;gap:6px;"></div>
+        </div>
+
         <div class="card" style="display:flex;flex-direction:column;gap:14px;">
           <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:12px;">
             <div>
@@ -2416,7 +2457,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.6.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.8.0・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2472,7 +2513,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.6.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.8.0・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -2792,12 +2833,13 @@
           </div>
         </div>
 
-        <div class="grid grid-5" style="gap:8px;">
-          <div><label for="customFoodCal" class="text-xs font-bold">熱量</label><input type="number" id="customFoodCal" value="250" min="0" step="1" class="mt-1" /></div>
-          <div><label for="customFoodPro" class="text-xs font-bold" style="color:var(--blue);">蛋白質g</label><input type="number" id="customFoodPro" value="20" min="0" step="0.5" class="mt-1" /></div>
-          <div><label for="customFoodCarb" class="text-xs font-bold" style="color:var(--amber);">碳水g</label><input type="number" id="customFoodCarb" value="25" min="0" step="0.5" class="mt-1" /></div>
-          <div><label for="customFoodFat" class="text-xs font-bold" style="color:var(--rose);">脂肪g</label><input type="number" id="customFoodFat" value="8" min="0" step="0.5" class="mt-1" /></div>
-          <div><label for="customFoodFib" class="text-xs font-bold" style="color:var(--teal);">纖維g</label><input type="number" id="customFoodFib" value="3" min="0" step="0.5" class="mt-1" /></div>
+        <div class="grid grid-3" style="gap:8px;">
+          <div><label for="customFoodCal" class="text-xs font-bold">熱量 kcal</label><input type="number" id="customFoodCal" value="250" min="0" step="1" class="mt-1" /></div>
+          <div><label for="customFoodPro" class="text-xs font-bold" style="color:var(--blue);">蛋白質 g</label><input type="number" id="customFoodPro" value="20" min="0" step="0.5" class="mt-1" /></div>
+          <div><label for="customFoodCarb" class="text-xs font-bold" style="color:var(--amber);">碳水 g</label><input type="number" id="customFoodCarb" value="25" min="0" step="0.5" class="mt-1" /></div>
+          <div><label for="customFoodFat" class="text-xs font-bold" style="color:var(--rose);">脂肪 g</label><input type="number" id="customFoodFat" value="8" min="0" step="0.5" class="mt-1" /></div>
+          <div><label for="customFoodFib" class="text-xs font-bold" style="color:var(--teal);">纖維 g</label><input type="number" id="customFoodFib" value="3" min="0" step="0.5" class="mt-1" /></div>
+          <div><label for="customFoodSodium" class="text-xs font-bold" style="color:#7c3aed;">鈉 mg</label><input type="number" id="customFoodSodium" value="0" min="0" step="10" class="mt-1" /></div>
         </div>
         <div class="flex-between text-xs">
           <span class="text-muted">可依三大營養素自動換算熱量</span>
@@ -3288,7 +3330,7 @@
         weightKg: w, bmr, actMult, minSafeFloor, calFactor, maintFactor, bmiInfo, targetCalories, maintCalories,
         deficit: Math.max(0, maintCalories + activityBurnKcal - targetCalories),
         activityBurnKcal, bonusCal, bonusPro, bonusCarb, bonusFat, bonusWater,
-        targetProtein, targetCarbs, targetFat, targetFiber, targetWater,
+        targetProtein, targetCarbs, targetFat, targetFiber, targetWater, targetSodium: 2400,
         pRatioPct: Math.round(pRatio * 100), cRatioPct: Math.round(cRatio * 100), fRatioPct: Math.round(fRatio * 100)
       };
     }
@@ -3549,7 +3591,8 @@
       carbs:    { label: '碳水', unit: 'g', color: '#e69d2c', fill: 'rgba(230,157,44,0.16)', targetKey: 'targetCarbs' },
       fat:      { label: '脂肪', unit: 'g', color: '#f27474', fill: 'rgba(242,116,116,0.15)', targetKey: 'targetFat' },
       fiber:    { label: '膳食纖維', unit: 'g', color: '#389e95', fill: 'rgba(56,158,149,0.15)', targetKey: 'targetFiber' },
-      water:    { label: '飲水', unit: 'ml', color: '#2b95d6', fill: 'rgba(43,149,214,0.15)', targetKey: 'targetWater' }
+      water:    { label: '飲水', unit: 'ml', color: '#2b95d6', fill: 'rgba(43,149,214,0.15)', targetKey: 'targetWater' },
+      sodium:   { label: '鈉含量', unit: 'mg', color: '#7c3aed', fill: 'rgba(124,58,237,0.14)', targetKey: 'targetSodium' }
     };
 
     function setPlanTrendMetric(metric) {
@@ -4051,14 +4094,15 @@
     }
 
     function computeDailyTotals() {
-      let cal = 0, pro = 0, carb = 0, fat = 0, fib = 0;
+      let cal = 0, pro = 0, carb = 0, fat = 0, fib = 0, sod = 0;
       for (const item of appState.logs) {
         const mult = Number(item.portion) || 1;
-        cal += item.calories * mult; pro += item.protein * mult; carb += item.carbs * mult; fat += item.fat * mult; fib += (item.fiber || 0) * mult;
+        cal += item.calories * mult; pro += item.protein * mult; carb += item.carbs * mult; fat += item.fat * mult; fib += (item.fiber || 0) * mult; sod += (Number(item.sodium) || 0) * mult;
       }
       return {
         calories: Math.round(cal * 10) / 10, protein: Math.round(pro * 10) / 10,
-        carbs: Math.round(carb * 10) / 10, fat: Math.round(fat * 10) / 10, fiber: Math.round(fib * 10) / 10
+        carbs: Math.round(carb * 10) / 10, fat: Math.round(fat * 10) / 10, fiber: Math.round(fib * 10) / 10,
+        sodium: Math.round(sod)
       };
     }
 
@@ -4294,6 +4338,373 @@
       }
     }
 
+    // === 🍽️ Personalized Daily Breakfast / Lunch / Dinner Suggested Menu Engine ===
+    const DAILY_SUGGESTED_MENU_DB = {
+      breakfast: [
+        {
+          id: 'bk_tw_shop1', style: 'eating_out', tag: '傳統早餐店', isSeafood: false,
+          name: '里肌肉蛋吐司（去美乃滋）＋ 無糖豆漿 400ml',
+          items: '全麥吐司 2 片（不塗沙拉醬）＋ 煎豬里肌 1 片 ＋ 荷包蛋 1 顆 ＋ 無糖豆漿 1 杯',
+          tip: '主動說「不加美乃滋與胡椒鹽」，可少吃約 120 kcal 與 280 mg 鈉。',
+          calories: 430, protein: 28, carbs: 42, fat: 15, fiber: 4.5, sodium: 520
+        },
+        {
+          id: 'bk_tw_shop2', style: 'eating_out', tag: '傳統早餐店', isSeafood: false,
+          name: '蔬菜起司蛋餅（少油）＋ 水煮蛋 1 顆 ＋ 無糖拿鐵',
+          items: '原味蔬菜蛋餅 1 份（不加醬油膏）＋ 水煮蛋 1 顆 ＋ 中杯無糖鮮奶拿鐵',
+          tip: '改沾少量生辣椒或原味吃，避開醬油膏即可省下 400+ mg 鈉。',
+          calories: 445, protein: 24, carbs: 44, fat: 18, fiber: 3.5, sodium: 490
+        },
+        {
+          id: 'bk_home1', style: 'home_cook', tag: '居家自煮', isSeafood: false,
+          name: '隔夜燕麥希臘優格杯 ＋ 水煮蛋 2 顆 ＋ 藍莓堅果',
+          items: '無糖希臘優格 150g ＋ 燕麥片 40g ＋ 水煮蛋 2 顆 ＋ 藍莓 50g ＋ 原味杏仁 5 顆',
+          tip: '前一晚冰好隔天 3 分鐘開吃，低鈉高纖又穩定上午血糖。',
+          calories: 440, protein: 27, carbs: 44, fat: 16, fiber: 7.0, sodium: 230
+        },
+        {
+          id: 'bk_home2', style: 'home_cook', tag: '居家自煮', isSeafood: false,
+          name: '烤地瓜 150g ＋ 嫩煎雙蛋菠菜 ＋ 無糖黑豆漿',
+          items: '電鍋蒸/烤地瓜 150g ＋ 雞蛋 2 顆炒菠菜 80g（少許橄欖油）＋ 無糖黑豆漿 300ml',
+          tip: '原型食物天然低鈉，地瓜提供緩釋碳水避免上午飢餓。',
+          calories: 435, protein: 26, carbs: 48, fat: 14, fiber: 6.5, sodium: 260
+        },
+        {
+          id: 'bk_fast1', style: 'light_fast', tag: '超商＋外食', isSeafood: false,
+          name: '蒸烤地瓜 150g ＋ 茶葉蛋 2 顆 ＋ 無加糖高纖豆漿',
+          items: '超商夯番薯/蒸地瓜約 150g ＋ 茶葉蛋 2 顆 ＋ 無加糖高纖豆漿 400ml',
+          tip: '上班通勤最穩組合，茶葉蛋盡量挑淺色入味適中的版本控制鈉量。',
+          calories: 425, protein: 26, carbs: 47, fat: 13, fiber: 7.5, sodium: 480
+        }
+      ],
+      lunch: [
+        {
+          id: 'ln_buffet1', style: 'eating_out', tag: '自助餐／便當', isSeafood: false,
+          name: '去皮滷雞腿自助餐（五穀飯 7 分滿＋3 樣清炒時蔬）',
+          items: '去皮滷雞腿 1 支 ＋ 滷豆腐 1 塊 ＋ 五穀/白飯 150g ＋ 3 格深綠色燙/清炒青菜',
+          tip: '夾菜時把菜汁瀝乾、飯不要淋滷汁，即可避免多餘油脂與 500 mg 隱藏鈉。',
+          calories: 685, protein: 42, carbs: 72, fat: 22, fiber: 8.5, sodium: 860
+        },
+        {
+          id: 'ln_healthy1', style: 'eating_out', tag: '健康餐盒', isSeafood: false,
+          name: '舒肥蒜香嫩雞胸餐盒（紫米飯＋水煮蛋＋毛豆時蔬）',
+          items: '舒肥雞胸 140g ＋ 半顆/整顆水煮蛋 ＋ 紫米飯 160g ＋ 花椰菜/高麗菜/毛豆配菜',
+          tip: '外食減脂最省心的標準 211 餐盒，蛋白質充足且油鈉好控制。',
+          calories: 660, protein: 44, carbs: 74, fat: 18, fiber: 9.0, sodium: 740
+        },
+        {
+          id: 'ln_roast1', style: 'eating_out', tag: '燒臘／雞肉飯', isSeafood: false,
+          name: '去皮白斬雞／蔥油雞飯（飯減半＋加點燙青菜與滷蛋）',
+          items: '去皮白斬雞腿肉約 130g ＋ 白飯 150g ＋ 滷蛋 1 顆 ＋ 燙地瓜葉 1 份（不淋肉燥）',
+          tip: '蔥油醬改放旁邊沾取，燙青菜改加蒜末少醬油即可大幅降油降鈉。',
+          calories: 695, protein: 41, carbs: 76, fat: 23, fiber: 6.5, sodium: 890
+        },
+        {
+          id: 'ln_home1', style: 'home_cook', tag: '居家自煮', isSeafood: false,
+          name: '氣炸迷迭香雞腿排 ＋ 糙米飯 ＋ 蒜炒花椰菜菇類',
+          items: '去皮雞腿排 150g（氣炸）＋ 糙米飯 160g ＋ 花椰菜 120g 炒鴻喜菇 ＋ 煎蛋 1 顆',
+          tip: '用黑胡椒、義式香料與蒜末提味，僅需極少鹽巴就非常下飯。',
+          calories: 680, protein: 43, carbs: 73, fat: 22, fiber: 9.5, sodium: 460
+        },
+        {
+          id: 'ln_home2', style: 'home_cook', tag: '居家自煮', isSeafood: false,
+          name: '番茄嫩豆腐燉牛腱 ＋ 藜麥飯 ＋ 燙青江菜',
+          items: '滷/燉牛腱切片 140g ＋ 板豆腐 100g ＋ 牛番茄 1 顆 ＋ 藜麥白飯 160g ＋ 青江菜 120g',
+          tip: '用新鮮番茄自然酸甜取代重鹹醬料，補鐵又高蛋白。',
+          calories: 670, protein: 45, carbs: 70, fat: 21, fiber: 8.5, sodium: 540
+        },
+        {
+          id: 'ln_fast1', style: 'light_fast', tag: '超商＋外食', isSeafood: false,
+          name: '超商烤雞纖蔬沙拉 ＋ 舒肥雞胸 ＋ 御飯糰/烤地瓜',
+          items: '原味舒肥雞胸 1 包 ＋ 烤雞時蔬沙拉（和風醬用半包）＋ 烤地瓜 180g 或飯糰 1 顆',
+          tip: '沙拉醬只倒一半可省下近 350 mg 鈉，整體纖維與蛋白都非常均衡。',
+          calories: 655, protein: 45, carbs: 74, fat: 17, fiber: 8.0, sodium: 820
+        },
+        {
+          id: 'ln_fish1', style: 'eating_out', tag: '健康餐盒（含魚）', isSeafood: true,
+          name: '鹽烤鯖魚健康餐盒（紫米飯＋水煮蛋＋季節時蔬）',
+          items: '烤鯖魚半片 110g ＋ 水煮蛋 1 顆 ＋ 紫米飯 150g ＋ 3 樣清燙時蔬',
+          tip: '富含 Omega-3 優質好油，建議擠新鮮檸檬汁提味、不再額外沾胡椒鹽。',
+          calories: 690, protein: 38, carbs: 68, fat: 28, fiber: 8.0, sodium: 780
+        }
+      ],
+      dinner: [
+        {
+          id: 'dn_luwei1', style: 'eating_out', tag: '滷味／小吃攤', isSeafood: false,
+          name: '清湯滷味組（去皮雞肉/豬腱＋板豆腐＋高麗菜＋金針菇＋冬粉）',
+          items: '豬腱肉或雞肉 110g ＋ 板豆腐 1 塊 ＋ 滷蛋 1 顆 ＋ 高麗菜＆金針菇各 1 份 ＋ 冬粉 1 球',
+          tip: '不加酸菜、不加沙茶與辣油，湯不要喝完即可把晚餐鈉壓在 800 mg 內。',
+          calories: 590, protein: 36, carbs: 66, fat: 18, fiber: 8.5, sodium: 790
+        },
+        {
+          id: 'dn_hotpot1', style: 'eating_out', tag: '個人小火鍋', isSeafood: false,
+          name: '昆布清湯瘦肉鍋（低脂板腱牛/嫩雞＋菜盤全吃＋冬粉/半碗飯）',
+          items: '低脂牛板腱或雞柳 140g ＋ 火鍋天然菜盤（不吃加工餃丸）＋ 半碗飯 ＋ 雞蛋 1 顆',
+          tip: '沾醬改用「白蘿蔔泥＋蒜末＋蔥花＋白醋＋少許醬油」，避開沙茶醬立省 250 kcal。',
+          calories: 605, protein: 38, carbs: 64, fat: 20, fiber: 9.0, sodium: 820
+        },
+        {
+          id: 'dn_home1', style: 'home_cook', tag: '居家自煮', isSeafood: false,
+          name: '蔥爆蒜香豬里肌 ＋ 涼拌毛豆木耳 ＋ 半碗五穀飯',
+          items: '豬里肌肉片 130g（少油快炒洋蔥蔥段）＋ 毛豆仁 60g ＋ 黑木耳炒高麗菜 ＋ 五穀飯 110g',
+          tip: '晚餐碳水略減、蔬菜與毛豆拉高，睡前不餓又不影響隔天體重。',
+          calories: 595, protein: 37, carbs: 62, fat: 20, fiber: 9.5, sodium: 490
+        },
+        {
+          id: 'dn_home2', style: 'home_cook', tag: '居家自煮', isSeafood: false,
+          name: '電鍋香菇雞湯（去油）＋ 燙大陸妹 ＋ 蒸南瓜 160g',
+          items: '去皮切塊雞腿肉 140g ＋ 乾香菇/秀珍菇 ＋ 嫩豆腐半盒 ＋ 蒸南瓜 160g ＋ 燙青菜 120g',
+          tip: '電鍋一鍵完成免顧火，清爽暖胃且鈉含量不到一般外食的一半。',
+          calories: 585, protein: 36, carbs: 63, fat: 19, fiber: 8.5, sodium: 420
+        },
+        {
+          id: 'dn_fast1', style: 'light_fast', tag: '超商＋外食', isSeafood: false,
+          name: '健康餐店燙青菜加雞胸 ＋ 超商毛豆/蒸蛋 ＋ 烤玉米',
+          items: '原味雞胸 110g ＋ 外食燙青菜 1 大份（不淋肉燥）＋ 超商原味毛豆 1 包 ＋ 黃金玉米 1 支',
+          tip: '下班太晚來不及煮時的零負擔組合，高纖高蛋白又好消化。',
+          calories: 580, protein: 37, carbs: 65, fat: 17, fiber: 9.0, sodium: 710
+        },
+        {
+          id: 'dn_fish1', style: 'home_cook', tag: '居家自煮（含魚）', isSeafood: true,
+          name: '紙包檸檬香草鮭魚 ＋ 烤櫛瓜花椰菜 ＋ 蒸地瓜 120g',
+          items: '鮭魚菲力 120g（氣炸/烤箱紙包）＋ 櫛瓜與花椰菜 150g ＋ 蒸地瓜 120g',
+          tip: '用檸檬片與黑胡椒提味幾乎不需加鹽，優質蛋白與好油一次補足。',
+          calories: 600, protein: 34, carbs: 54, fat: 26, fiber: 7.5, sodium: 320
+        }
+      ]
+    };
+
+    let suggestedMenuStyle = 'all';
+    let suggestedMenuIdx = { breakfast: 0, lunch: 0, dinner: 0 };
+
+    function getFilteredMealPool(mealKey) {
+      const raw = DAILY_SUGGESTED_MENU_DB[mealKey] || [];
+      const noSea = appState.excludeSeafood !== false;
+      let pool = raw.filter(m => !noSea || !m.isSeafood);
+      if (suggestedMenuStyle !== 'all') {
+        const styled = pool.filter(m => m.style === suggestedMenuStyle);
+        if (styled.length > 0) pool = styled;
+      }
+      return pool;
+    }
+
+    function getScaledSuggestedMeal(mealKey, targets) {
+      const pool = getFilteredMealPool(mealKey);
+      if (!pool.length) return null;
+      const idx = ((suggestedMenuIdx[mealKey] || 0) % pool.length + pool.length) % pool.length;
+      const base = pool[idx];
+      // 以 1730 kcal 為基準，依使用者單日目標熱量動態縮放建議份量比例（夾限 0.78x ~ 1.32x）
+      const scale = Math.max(0.78, Math.min(1.32, (targets.targetCalories || 1730) / 1730));
+      const scaleLabel = Math.abs(scale - 1) < 0.06 ? '標準 1 份' : (scale > 1 ? `建議份量 ×${scale.toFixed(2)}` : `建議份量 ×${scale.toFixed(2)}`);
+      return {
+        ...base,
+        poolLen: pool.length,
+        poolPos: idx + 1,
+        scale,
+        scaleLabel,
+        calories: Math.round(base.calories * scale),
+        protein: Math.round(base.protein * scale * 10) / 10,
+        carbs: Math.round(base.carbs * scale * 10) / 10,
+        fat: Math.round(base.fat * scale * 10) / 10,
+        fiber: Math.round(base.fiber * scale * 10) / 10,
+        sodium: Math.round(base.sodium * scale)
+      };
+    }
+
+    function setSuggestedMenuStyle(style) {
+      suggestedMenuStyle = style || 'all';
+      for (const k of ['all', 'eating_out', 'home_cook', 'light_fast']) {
+        document.getElementById('menuStyleBtn-' + k)?.classList.toggle('active', k === suggestedMenuStyle);
+      }
+      suggestedMenuIdx = { breakfast: 0, lunch: 0, dinner: 0 };
+      const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+      renderDailyMealPlanSuggestions(targets);
+    }
+
+    function cycleSuggestedMeal(mealKey) {
+      suggestedMenuIdx[mealKey] = (suggestedMenuIdx[mealKey] || 0) + 1;
+      const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+      renderDailyMealPlanSuggestions(targets);
+    }
+
+    function shuffleDailySuggestedMenu() {
+      for (const k of ['breakfast', 'lunch', 'dinner']) {
+        const pool = getFilteredMealPool(k);
+        if (pool.length > 1) {
+          let next = Math.floor(Math.random() * pool.length);
+          if (next === (suggestedMenuIdx[k] % pool.length)) next = (next + 1) % pool.length;
+          suggestedMenuIdx[k] = next;
+        }
+      }
+      const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+      renderDailyMealPlanSuggestions(targets);
+      showToast('已為您更換一套全新早・午・晚餐建議菜單！', '🎲');
+    }
+
+    function addSuggestedMealToLog(mealKey) {
+      const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+      const item = getScaledSuggestedMeal(mealKey, targets);
+      if (!item) return;
+      appState.logs.push({
+        logId: 'sug_' + Date.now() + '_' + Math.floor(Math.random() * 999),
+        meal: mealKey,
+        foodId: item.id,
+        name: item.name,
+        store: item.tag,
+        portion: 1,
+        calories: item.calories,
+        protein: item.protein,
+        carbs: item.carbs,
+        fat: item.fat,
+        fiber: item.fiber,
+        sodium: item.sodium
+      });
+      renderAll();
+      const labelMap = { breakfast: '早餐', lunch: '午餐', dinner: '晚餐' };
+      showToast(`已將建議${labelMap[mealKey] || ''}加入今日紀錄（${item.calories} kcal・鈉 ${item.sodium}mg）`, '✅');
+    }
+
+    function applyAllSuggestedMealsToLog() {
+      const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+      let added = 0;
+      for (const mealKey of ['breakfast', 'lunch', 'dinner']) {
+        const item = getScaledSuggestedMeal(mealKey, targets);
+        if (!item) continue;
+        appState.logs.push({
+          logId: 'sug_' + mealKey + '_' + Date.now() + '_' + Math.floor(Math.random() * 999),
+          meal: mealKey,
+          foodId: item.id,
+          name: item.name,
+          store: item.tag,
+          portion: 1,
+          calories: item.calories,
+          protein: item.protein,
+          carbs: item.carbs,
+          fat: item.fat,
+          fiber: item.fiber,
+          sodium: item.sodium
+        });
+        added++;
+      }
+      renderAll();
+      showToast(`已一鍵加入今日早・午・晚共 ${added} 餐建議菜單！`, '⚡');
+    }
+
+    async function generateAiCustomDailyMenu() {
+      const box = document.getElementById('aiCustomMenuResultBox');
+      const btn = document.getElementById('btnAiCustomDailyMenu');
+      const apiKey = getSavedGeminiKey();
+      if (!apiKey) {
+        showToast('請先至「系統設置」綁定免費 Gemini API Key 即可使用 AI 客製配餐', '🔑');
+        return;
+      }
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ AI 配餐中...'; }
+      if (box) { box.classList.remove('hidden'); box.innerHTML = '⏳ 正在依您今日目標營養量與剩餘額度，客製台灣日常早・午・晚餐（不限超商）...'; }
+      try {
+        const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+        const totals = computeDailyTotals();
+        const remCal = Math.max(0, Math.round(targets.targetCalories - totals.calories));
+        const remPro = Math.max(0, Math.round((targets.targetProtein - totals.protein) * 10) / 10);
+        const remSod = Math.max(0, Math.round((targets.targetSodium || 2400) - (totals.sodium || 0)));
+        const prompt = `你是台灣減脂營養師。請依據以下個人單日目標，設計一套「不限超商（含台灣早餐店、自助餐、健康餐盒、小吃或居家自煮）」的早餐、午餐、晚餐建議菜單：
+- 單日目標：熱量 ${targets.targetCalories} kcal、蛋白質 ${targets.targetProtein}g、碳水 ${targets.targetCarbs}g、脂肪 ${targets.targetFat}g、纖維 ${targets.targetFiber}g、鈉上限 ${targets.targetSodium || 2400}mg。
+- 今日目前已攝取：熱量 ${Math.round(totals.calories)} kcal、蛋白 ${totals.protein}g、鈉 ${totals.sodium || 0}mg（剩餘熱量 ${remCal} kcal、蛋白 ${remPro}g、鈉額度 ${remSod}mg）。
+- 飲食限制：${appState.excludeSeafood !== false ? '100% 嚴格排除海鮮（無魚蝦蟹貝）' : '可包含魚類海鮮'}。
+請用繁體中文條列「🌅 早餐」「☀️ 午餐」「🌙 晚餐」，每餐註明具體菜色、預估熱量/蛋白/鈉(mg)及1句減油減鈉點餐小技巧，簡潔完整不截斷。`;
+        const json = await callGeminiGenerateContent(apiKey, {
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { thinkingConfig: { thinkingLevel: 'LOW' }, maxOutputTokens: 1536 }
+        });
+        const parts = json?.candidates?.[0]?.content?.parts || [];
+        const txt = parts.filter(p => p && !p.thought && typeof p.text === 'string').map(p => p.text).join('').trim();
+        if (!txt) throw new Error('AI 未回傳內容');
+        const safeHtml = txt
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n/g, '<br/>');
+        if (box) {
+          box.innerHTML = `<div class="flex-between" style="margin-bottom:6px;"><strong>✨ AI 客製單日三餐建議（依目前目標與剩餘額度）</strong><button type="button" onclick="document.getElementById('aiCustomMenuResultBox')?.classList.add('hidden')" style="font-size:12px;color:#475569;font-weight:800;">✕ 收合</button></div><div>${safeHtml}</div>`;
+        }
+      } catch (err) {
+        if (box) box.innerHTML = `⚠️ AI 客製配餐暫時無法連線（${err?.message || '請稍後再試'}），您可先使用下方內建動態配餐卡片！`;
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '✨ AI 依剩餘額度客製'; }
+      }
+    }
+
+    function renderDailyMealPlanSuggestions(targets) {
+      const grid = document.getElementById('dailySuggestedMealsGrid');
+      const sumBar = document.getElementById('dailySuggestedSummaryBar');
+      const badge = document.getElementById('dailyMenuTargetBadge');
+      if (!grid || !targets) return;
+
+      const sodTgt = targets.targetSodium || 2400;
+      if (badge) badge.textContent = `目標 ${targets.targetCalories} kcal・蛋白 ${targets.targetProtein}g・鈉 ≤${sodTgt}mg`;
+
+      const slots = [
+        { key: 'breakfast', icon: '🌅', title: '早餐建議', pctLabel: '佔單日 ~25%', accent: '#b45309', bg: '#fffbeb', border: '#fde68a' },
+        { key: 'lunch', icon: '☀️', title: '午餐建議', pctLabel: '佔單日 ~40%', accent: '#15803d', bg: '#f0fdf4', border: '#bbf7d0' },
+        { key: 'dinner', icon: '🌙', title: '晚餐建議', pctLabel: '佔單日 ~35%', accent: '#1d4ed8', bg: '#eff6ff', border: '#bfdbfe' }
+      ];
+
+      let totCal = 0, totPro = 0, totCarb = 0, totFat = 0, totFib = 0, totSod = 0;
+
+      grid.innerHTML = slots.map(sl => {
+        const it = getScaledSuggestedMeal(sl.key, targets);
+        if (!it) return '';
+        totCal += it.calories; totPro += it.protein; totCarb += it.carbs; totFat += it.fat; totFib += it.fiber; totSod += it.sodium;
+        const sodColor = it.sodium >= 850 ? '#e11d48' : '#7c3aed';
+        return `
+          <div style="background:#ffffff;border:1.5px solid ${sl.border};border-radius:14px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;box-shadow:0 3px 10px rgba(15,23,42,0.04);">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="flex-between" style="gap:4px;">
+                <span style="font-size:12px;font-weight:900;color:${sl.accent};">${sl.icon} ${sl.title} <span style="font-weight:700;opacity:0.8;">(${sl.pctLabel})</span></span>
+                <span class="badge" style="background:${sl.bg};color:${sl.accent};border:1px solid ${sl.border};font-size:10px;">${it.tag}</span>
+              </div>
+              <div style="font-size:14px;font-weight:900;color:#1e293b;line-height:1.35;">${it.name}</div>
+              <div class="text-xs text-muted" style="line-height:1.5;">${it.items}</div>
+              <div style="background:${sl.bg};border-radius:10px;padding:6px 8px;font-size:11px;color:#475569;line-height:1.45;">💡 ${it.tip}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px;font-size:11px;font-weight:800;margin-top:2px;">
+                <span style="background:#fef2f2;color:#b91c1c;padding:2px 7px;border-radius:999px;">🔥 ${it.calories} kcal</span>
+                <span style="background:#eff6ff;color:#1d4ed8;padding:2px 7px;border-radius:999px;">🥩 蛋白 ${it.protein}g</span>
+                <span style="background:#fffbeb;color:#b45309;padding:2px 7px;border-radius:999px;">🍚 碳 ${it.carbs}g</span>
+                <span style="background:#fdf2f8;color:#be185d;padding:2px 7px;border-radius:999px;">🥑 脂 ${it.fat}g</span>
+                <span style="background:#f5f3ff;color:${sodColor};padding:2px 7px;border-radius:999px;">🧂 鈉 ${it.sodium}mg</span>
+              </div>
+            </div>
+            <div class="flex-between" style="gap:6px;border-top:1px dashed #e2e8f0;padding-top:8px;">
+              <button type="button" class="btn btn-sm btn-slate-soft" style="flex:1;font-size:11px;padding:6px 8px;" onclick="cycleSuggestedMeal('${sl.key}')">🔀 換這餐 (${it.poolPos}/${it.poolLen})</button>
+              <button type="button" class="btn btn-sm btn-primary" style="flex:1;font-size:11px;padding:6px 8px;" onclick="addSuggestedMealToLog('${sl.key}')">＋ 加入今日</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (sumBar) {
+        totPro = Math.round(totPro * 10) / 10;
+        totCarb = Math.round(totCarb * 10) / 10;
+        totFat = Math.round(totFat * 10) / 10;
+        totFib = Math.round(totFib * 10) / 10;
+        const calDiff = totCal - targets.targetCalories;
+        const calStatus = Math.abs(calDiff) <= 120 ? '✅ 精準貼合目標' : (calDiff > 0 ? `⚠️ 略高 +${calDiff} kcal` : `👍 保留 ${Math.abs(calDiff)} kcal 點心空間`);
+        const sodStatus = totSod <= sodTgt ? `✅ 鈉控制良好（低於 ${sodTgt}mg）` : `🚨 鈉略超標（+${totSod - sodTgt}mg）`;
+        sumBar.innerHTML = `
+          <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
+            <strong class="text-xs" style="color:#1e293b;">📊 以上三餐合計 vs 個人今日目標</strong>
+            <span class="text-xs font-bold" style="color:${totSod <= sodTgt ? '#15803d' : '#e11d48'};">${calStatus} ・ ${sodStatus}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:#475569;">
+            <span>熱量 <strong style="color:#1e293b;">${totCal}</strong> / ${targets.targetCalories} kcal</span>
+            <span>蛋白 <strong style="color:var(--blue);">${totPro}</strong> / ${targets.targetProtein}g</span>
+            <span>碳水 <strong style="color:var(--amber);">${totCarb}</strong> / ${targets.targetCarbs}g</span>
+            <span>脂肪 <strong style="color:var(--rose);">${totFat}</strong> / ${targets.targetFat}g</span>
+            <span>纖維 <strong style="color:var(--teal);">${totFib}</strong> / ${targets.targetFiber}g</span>
+            <span>鈉 <strong style="color:${totSod <= sodTgt ? '#7c3aed' : '#e11d48'};">${totSod}</strong> / ${sodTgt}mg</span>
+          </div>
+        `;
+      }
+    }
+
     function renderAll() {
       const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
       const totals = computeDailyTotals();
@@ -4406,6 +4817,20 @@
         else if (wPct >= 75) { bWater.textContent = '💧 快達標'; bWater.className = 'xmas-status-pill badge-blue'; }
         else { bWater.textContent = '⏳ 待補'; bWater.className = 'xmas-status-pill badge-amber'; }
       }
+      const sodVal = Math.round(totals.sodium || 0);
+      const sodTgt = targets.targetSodium || 2400;
+      const sodPct = Math.round((sodVal / Math.max(1, sodTgt)) * 100);
+      setT('topDashSodiumPct', sodPct + '%');
+      setT('topDashSodiumVal', `${sodVal} / ${sodTgt}mg`);
+      setW('topDashSodiumBar', sodPct);
+      const sodBar = document.getElementById('topDashSodiumBar');
+      if (sodBar) sodBar.style.background = sodPct > 100 ? '#e11d48' : (sodPct >= 80 ? '#f59e0b' : '#8b5cf6');
+      const bSod = document.getElementById('badgeSodiumStatus');
+      if (bSod) {
+        if (sodPct > 100) { bSod.textContent = '🚨 超標'; bSod.className = 'xmas-status-pill badge-rose'; }
+        else if (sodPct >= 80) { bSod.textContent = '⚠️ 偏高'; bSod.className = 'xmas-status-pill badge-amber'; }
+        else { bSod.textContent = '✅ 正常'; bSod.className = 'xmas-status-pill badge-emerald'; }
+      }
       updateBackendDashboardKpis();
       syncInputSafely('todayActiveKcalInput', appState.todayActiveKcal || 0);
       syncInputSafely('todayStepsInput', appState.todaySteps || 0);
@@ -4435,6 +4860,7 @@
       renderPlanIntakeAnalysis(totals, targets);
       renderPlanNutritionTrendChart(targets);
       renderTimelineAndGuide(targets);
+      renderDailyMealPlanSuggestions(targets);
       renderWeightMatrix();
       updateScanPortionPreview();
 
@@ -4548,13 +4974,15 @@
             const pro = Math.round(it.protein * it.portion * 10) / 10;
             const carb = Math.round(it.carbs * it.portion * 10) / 10;
             const fat = Math.round(it.fat * it.portion * 10) / 10;
+            const sod = Math.round((Number(it.sodium) || 0) * it.portion);
+            const sodHtml = sod > 0 ? ` ・ <span style="color:${sod >= 800 ? '#e11d48;font-weight:800' : '#7c3aed'};">鈉 ${sod}mg</span>` : '';
             html += `
               <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px;" class="flex-between">
                 <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:190px;">
                   ${it.photoThumb ? `<img src="${it.photoThumb}" alt="餐點相片" style="width:52px;height:52px;border-radius:10px;object-fit:cover;border:1px solid #cbd5e1;flex-shrink:0;" />` : ''}
                   <div style="flex:1;min-width:130px;">
                     <div class="flex-gap"><span class="badge badge-emerald">${it.store || '無海鮮'}</span><strong class="text-sm">${it.name}</strong></div>
-                    <div class="text-xs text-muted mt-1">🔥 <strong>${cals} kcal</strong> ・ <span style="color:var(--blue);">蛋白 ${pro}g</span> ・ 碳水 ${carb}g ・ 脂肪 ${fat}g</div>
+                    <div class="text-xs text-muted mt-1">🔥 <strong>${cals} kcal</strong> ・ <span style="color:var(--blue);">蛋白 ${pro}g</span> ・ 碳水 ${carb}g ・ 脂肪 ${fat}g${sodHtml}</div>
                   </div>
                 </div>
                 <div class="flex-gap" style="gap:6px;">
@@ -5038,13 +5466,15 @@
       document.getElementById('customSeafoodError').classList.toggle('hidden', !isSea);
       return isSea;
     }
-    function setCustomModalMacroFields(cal, pro, carb, fat, fib) {
-      customBaseMacros = { calories: Math.round(cal * 10) / 10, protein: Math.round(pro * 10) / 10, carbs: Math.round(carb * 10) / 10, fat: Math.round(fat * 10) / 10, fiber: Math.round(fib * 10) / 10 };
+    function setCustomModalMacroFields(cal, pro, carb, fat, fib, sod = 0) {
+      customBaseMacros = { calories: Math.round(cal * 10) / 10, protein: Math.round(pro * 10) / 10, carbs: Math.round(carb * 10) / 10, fat: Math.round(fat * 10) / 10, fiber: Math.round(fib * 10) / 10, sodium: Math.round(Math.max(0, Number(sod) || 0)) };
       document.getElementById('customFoodCal').value = customBaseMacros.calories;
       document.getElementById('customFoodPro').value = customBaseMacros.protein;
       document.getElementById('customFoodCarb').value = customBaseMacros.carbs;
       document.getElementById('customFoodFat').value = customBaseMacros.fat;
       document.getElementById('customFoodFib').value = customBaseMacros.fiber;
+      const sodEl = document.getElementById('customFoodSodium');
+      if (sodEl) sodEl.value = customBaseMacros.sodium;
     }
     function scaleCustomModalMacros(mult) {
       document.getElementById('customFoodCal').value = Math.round(customBaseMacros.calories * mult * 10) / 10;
@@ -5052,6 +5482,8 @@
       document.getElementById('customFoodCarb').value = Math.round(customBaseMacros.carbs * mult * 10) / 10;
       document.getElementById('customFoodFat').value = Math.round(customBaseMacros.fat * mult * 10) / 10;
       document.getElementById('customFoodFib').value = Math.round(customBaseMacros.fiber * mult * 10) / 10;
+      const sodEl = document.getElementById('customFoodSodium');
+      if (sodEl) sodEl.value = Math.round((customBaseMacros.sodium || 0) * mult);
     }
     function autoCalcCaloriesFromMacros() {
       const p = Math.max(0, Number(document.getElementById('customFoodPro').value) || 0);
@@ -5264,6 +5696,8 @@
       let fat = parseLineFirstValue(/脂\s*肪|脂\s*質|\bFat\b/i, /飽\s*和|反\s*式|不\s*飽\s*和|粗\s*脂|Saturated|Trans|Unsaturated/i, 200);
       let carbs = parseLineFirstValue(/碳\s*水\s*化\s*合\s*物|碳\s*水|醣\s*類|Carbohydrate/i, null, 300);
       let fiber = parseLineFirstValue(/膳\s*食\s*纖\s*維|Dietary\s*Fiber|Fiber/i, null, 100);
+      let sodium = parseLineFirstValue(/鈉|Sodium/i, /每\s*100/i, 10000);
+      if (sodium === null) sodium = parseLineFirstValue(/鈉|Sodium/i, null, 10000);
 
       // 備援：允許中英文標籤與數字之間有最多 28 字元
       const tableCompact = tableSection.replace(/\s+/g, ' ');
@@ -5280,6 +5714,7 @@
       if (fat === null) fat = fallbackExtract(/(?<!飽\s*和)(?<!反\s*式)(?<!不\s*飽\s*和)(?<!粗)(?<!Saturated\s)(?<!Trans\s)(?:脂\s*肪|\bFat\b)[^\d]{0,22}(\d+(?:\.\d+)?)(?!\s*%)/i, 200);
       if (carbs === null) carbs = fallbackExtract(/(?:碳\s*水\s*化\s*合\s*物|Total\s*Carbohydrate)[^\d]{0,28}(\d+(?:\.\d+)?)(?!\s*%)/i, 300);
       if (fiber === null) fiber = fallbackExtract(/(?:膳\s*食\s*纖\s*維|Dietary\s*Fiber)[^\d]{0,24}(\d+(?:\.\d+)?)(?!\s*%)/i, 100);
+      if (sodium === null) sodium = fallbackExtract(/(?:鈉|Sodium)[^\d]{0,20}(\d+(?:\.\d+)?)(?!\s*%)/i, 10000);
 
       // 2. 關鍵修正：容量只從「內容量 / 每一份量 / 淨重」抓且必須 >= 15，絕不會誤抓「反式脂肪 0 公克」變成 0g！
       let detectedVolume = '';
@@ -5354,7 +5789,7 @@
             const gLabel = await callGeminiVisionForNutritionLabel(pendingModalFullPhotoDataUrl, apiKey);
             const ni = document.getElementById('customFoodName');
             if (gLabel.name && ni) ni.value = gLabel.name;
-            setCustomModalMacroFields(gLabel.calories, gLabel.protein, gLabel.carbs, gLabel.fat, gLabel.fiber);
+            setCustomModalMacroFields(gLabel.calories, gLabel.protein, gLabel.carbs, gLabel.fat, gLabel.fiber, gLabel.sodium || 0);
             if (gLabel.isSeafood || containsSeafood(gLabel.name)) {
               document.getElementById('customSeafoodError')?.classList.remove('hidden');
             } else {
@@ -5368,7 +5803,7 @@
             si.textContent = gLabel.mismatch ? '⚠️' : '✨';
             st.textContent = `${gLabel.usedModel || 'Gemini'} 辨識完成（⚡ ${gLabel.elapsedSec || 1}秒）：${gLabel.name || '包裝食品'}${servHint}`;
             setFoodFlowStage(gLabel.mismatch ? 'warn' : 'ready', gLabel.mismatch ? '⚠️ 數值落差請微調' : '✅ AI 標示辨識完成');
-            sd.textContent = `每份：熱量 ${gLabel.calories} kcal｜蛋白 ${gLabel.protein}g｜碳水 ${gLabel.carbs}g｜脂肪 ${gLabel.fat}g｜纖維 ${gLabel.fiber}g${checkHint}${fixHint}`;
+            sd.textContent = `每份：熱量 ${gLabel.calories} kcal｜蛋白 ${gLabel.protein}g｜碳水 ${gLabel.carbs}g｜脂肪 ${gLabel.fat}g｜纖維 ${gLabel.fiber}g｜鈉 ${Math.round(gLabel.sodium || 0)}mg${checkHint}${fixHint}`;
             showToast(gLabel.mismatch ? '已帶入標示，但偵測到數值落差請微調確認' : `已精準讀取營養標示（⚡ ${gLabel.elapsedSec || 1}秒）！`, gLabel.mismatch ? '⚠️' : '✨');
             return;
           } catch (gErr) {
@@ -5448,7 +5883,7 @@
           const finalFat = fat !== null ? fat : 0;
           const finalFib = fib !== null ? fib : 0;
 
-          setCustomModalMacroFields(finalCal, finalPro, finalCarb, finalFat, finalFib);
+          setCustomModalMacroFields(finalCal, finalPro, finalCarb, finalFat, finalFib, parsed.sodium || 0);
           checkCustomSeafoodWarning();
 
           si.textContent = '✅';
@@ -5647,7 +6082,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.6.0';
+    const APP_VERSION = 'v4.8.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -7037,8 +7472,8 @@
       const slimUrl = await compressImageForGemini(dataUrl, 768, 0.72);
       const base64Data = slimUrl.split(',')[1];
       const mimeType = (slimUrl.match(/data:(image\/[^;]+);/) || [])[1] || 'image/jpeg';
-      const promptText = `台灣營養師餐盤辨識：辨識照片中所有實際食物（忽略餐盤花紋），預估每項合理克數(g)與該份量熱量/蛋白/碳水/脂肪/纖維及是否含海鮮。只回傳純 JSON 陣列：
-[{"name":"水煮蛋(2顆)","grams":110,"calories":148,"protein":13.8,"carbs":1.6,"fat":9.7,"fiber":0,"isSeafood":false}]`;
+      const promptText = `台灣營養師餐盤辨識：辨識照片中所有實際食物（忽略餐盤花紋），預估每項合理克數(g)與該份量熱量/蛋白/碳水/脂肪/纖維/鈉(毫克mg)及是否含海鮮。只回傳純 JSON 陣列：
+[{"name":"水煮蛋(2顆)","grams":110,"calories":148,"protein":13.8,"carbs":1.6,"fat":9.7,"fiber":0,"sodium":140,"isSeafood":false}]`;
 
       const json = await callGeminiGenerateContent(apiKey, {
         contents: [{
@@ -7094,6 +7529,7 @@
             carb100: (Number(d.carbs) || 0) * 100 / Math.max(1, Number(d.grams) || 100),
             fat100: (Number(d.fat) || 0) * 100 / Math.max(1, Number(d.grams) || 100),
             fib100: (Number(d.fiber) || 0) * 100 / Math.max(1, Number(d.grams) || 100),
+            sod100: (Number(d.sodium) || 0) * 100 / Math.max(1, Number(d.grams) || 100),
             isSeafood: Boolean(d.isSeafood) || containsSeafood(d.name)
           }));
           if (hdr) hdr.textContent = '✨ Gemini 3.8 Flash 視覺 AI 餐盤拆解與份量估算（可微調克數）';
@@ -7137,7 +7573,7 @@
       const sd = document.getElementById('customAiStatusDetail');
       if (!listEl) return;
 
-      let totCal = 0, totPro = 0, totCarb = 0, totFat = 0, totFib = 0;
+      let totCal = 0, totPro = 0, totCarb = 0, totFat = 0, totFib = 0, totSod = 0;
       let hasSeafoodDish = false;
       const nameParts = [];
 
@@ -7148,8 +7584,9 @@
         const carb = Math.round(it.carb100 * m * 10) / 10;
         const fat = Math.round(it.fat100 * m * 10) / 10;
         const fib = Math.round(it.fib100 * m * 10) / 10;
+        const sod = Math.round((it.sod100 || 0) * m);
 
-        totCal += cal; totPro += pro; totCarb += carb; totFat += fat; totFib += fib;
+        totCal += cal; totPro += pro; totCarb += carb; totFat += fat; totFib += fib; totSod += sod;
         if (it.isSeafood || containsSeafood(it.customName)) hasSeafoodDish = true;
         nameParts.push(`${it.customName.split(' ')[0]}${it.grams}g`);
 
@@ -7185,12 +7622,12 @@
       totFat = Math.round(totFat * 10) / 10;
       totFib = Math.round(totFib * 10) / 10;
 
-      if (sumEl) sumEl.textContent = `整盤合計：${totCal} kcal｜蛋白質 ${totPro}g｜碳水 ${totCarb}g｜脂肪 ${totFat}g｜纖維 ${totFib}g`;
+      if (sumEl) sumEl.textContent = `整盤合計：${totCal} kcal｜蛋白質 ${totPro}g｜碳水 ${totCarb}g｜脂肪 ${totFat}g｜纖維 ${totFib}g｜鈉 ${Math.round(totSod)}mg`;
 
       // Sync to main modal inputs
       const ni = document.getElementById('customFoodName');
       if (ni && nameParts.length > 0) ni.value = nameParts.join(' + ');
-      setCustomModalMacroFields(totCal, totPro, totCarb, totFat, totFib);
+      setCustomModalMacroFields(totCal, totPro, totCarb, totFat, totFib, Math.round(totSod));
       checkCustomSeafoodWarning();
 
       if (hasSeafoodDish) {
@@ -7288,7 +7725,8 @@
         Math.round(it.protein * mult * 10) / 10,
         Math.round(it.carbs * mult * 10) / 10,
         Math.round(it.fat * mult * 10) / 10,
-        Math.round((it.fiber || 0) * mult * 10) / 10
+        Math.round((it.fiber || 0) * mult * 10) / 10,
+        Math.round((Number(it.sodium) || 0) * mult)
       );
       const subBtn = document.getElementById('customFoodSubmitBtn');
       if (subBtn) subBtn.textContent = '💾 儲存明細修改';
@@ -7296,11 +7734,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.6.0',
+      version: 'v4.8.0',
       date: '2026-11-25',
       items: [
-        '🥩 新增並預設套用「一般族群減脂期建議」營養比例（蛋白質依體重 1.35 g/kg 計算，落在 ISSN 一般減脂 1.2–1.6 g/kg 中位，兼顧保肌與外食可行性）。',
-        '⚙️ 仍可隨時於「系統設置 → 營養素分配策略」自由切換「一般族群減脂期建議」、「營養師減醣高蛋白」或「國健署均衡減重」。'
+        '🍽️ 於「減脂秘訣」分頁新增「單日早・午・晚餐減脂建議菜單」：依個人單日熱量／蛋白／鈉上限動態換算份量，涵蓋傳統早餐店、自助餐、健康餐盒、滷味小吃、居家自煮與超商快搭，不限於超商食品。',
+        '⚡ 支援單餐獨立換菜、全天換一套、一鍵加入今日紀錄（含完整熱量與鈉含量），以及 AI 依今日剩餘額度即時客製三餐建議。'
       ]
     };
 
@@ -7620,6 +8058,7 @@
       const carb = Math.max(0, Number(document.getElementById('customFoodCarb').value) || 0);
       const fat = Math.max(0, Number(document.getElementById('customFoodFat').value) || 0);
       const fib = Math.max(0, Number(document.getElementById('customFoodFib').value) || 0);
+      const sod = Math.max(0, Math.round(Number(document.getElementById('customFoodSodium')?.value) || 0));
 
       if (editingLogId) {
         const target = (appState.logs || []).find(l => l.logId === editingLogId);
@@ -7632,6 +8071,7 @@
           target.carbs = carb;
           target.fat = fat;
           target.fiber = fib;
+          target.sodium = sod;
           if (pendingModalPhotoThumb) target.photoThumb = pendingModalPhotoThumb;
         }
         editingLogId = null;
@@ -7646,14 +8086,14 @@
       const badge = customFoodEntryMode === 'ai' ? 'AI辨識無海鮮' : '手動標示無海鮮';
       if (!Array.isArray(appState.savedCustomFoods)) appState.savedCustomFoods = [];
       const idx = appState.savedCustomFoods.findIndex(f => f.name === name);
-      const entry = { name, calories: cal, protein: pro, carbs: carb, fat: fat, fiber: fib };
+      const entry = { name, calories: cal, protein: pro, carbs: carb, fat: fat, fiber: fib, sodium: sod };
       if (idx >= 0) appState.savedCustomFoods[idx] = entry;
       else { appState.savedCustomFoods.unshift(entry); if (appState.savedCustomFoods.length > 12) appState.savedCustomFoods.pop(); }
 
       const logBadge = pendingModalPhotoThumb ? (customFoodEntryMode === 'ai' ? '相簿AI辨識' : '相簿手動標示') : badge;
       appState.logs.push({
         logId: 'custom_' + Date.now(), meal, foodId: 'custom', name, store: logBadge,
-        portion: 1, calories: cal, protein: pro, carbs: carb, fat: fat, fiber: fib,
+        portion: 1, calories: cal, protein: pro, carbs: carb, fat: fat, fiber: fib, sodium: sod,
         photoThumb: pendingModalPhotoThumb || null
       });
       document.getElementById('customFoodName').value = '';
@@ -7668,11 +8108,13 @@
       let fat = round1(obj.perServingTotalFat);
       let carb = round1(obj.perServingTotalCarbs);
       let fib = round1(obj.perServingFiber);
+      let sod = Math.round(Math.max(0, Number(obj.perServingSodium) || 0));
 
       const p100Cal = round1(obj.per100Calories);
       const p100Pro = round1(obj.per100Protein);
       const p100Fat = round1(obj.per100TotalFat);
       const p100Carb = round1(obj.per100TotalCarbs);
+      const p100Sod = Math.round(Math.max(0, Number(obj.per100Sodium) || 0));
       const p100Fib = round1(obj.per100Fiber);
 
       // 解析每一份量數值（例如 "40公克" -> 40, "250毫升" -> 250），用於雙欄比例數學驗算
@@ -7703,6 +8145,7 @@
       fat = reconcileField('脂肪', fat, p100Fat);
       carb = reconcileField('碳水', carb, p100Carb);
       fib = reconcileField('纖維', fib, p100Fib);
+      sod = Math.round(reconcileField('鈉', sod, p100Sod));
 
       const atwater = round1(pro * 4 + carb * 4 + fat * 9);
       const diff = Math.abs(cal - atwater);
@@ -7712,7 +8155,7 @@
         name: String(obj.productName || '包裝食品'),
         servingSize: String(obj.servingSize || ''),
         servingsPerPackage: Math.max(1, Number(obj.servingsPerPackage) || 1),
-        calories: cal, protein: pro, carbs: carb, fat: fat, fiber: fib,
+        calories: cal, protein: pro, carbs: carb, fat: fat, fiber: fib, sodium: sod,
         atwaterKcal: atwater, mismatch, autoFixes,
         isSeafood: Boolean(obj.isSeafood)
       };
@@ -7753,14 +8196,16 @@
               perServingTotalFat: { type: 'NUMBER' },
               perServingTotalCarbs: { type: 'NUMBER' },
               perServingFiber: { type: 'NUMBER' },
+              perServingSodium: { type: 'NUMBER' },
               per100Calories: { type: 'NUMBER' },
               per100Protein: { type: 'NUMBER' },
               per100TotalFat: { type: 'NUMBER' },
               per100TotalCarbs: { type: 'NUMBER' },
               per100Fiber: { type: 'NUMBER' },
+              per100Sodium: { type: 'NUMBER' },
               isSeafood: { type: 'BOOLEAN' }
             },
-            required: ['productName', 'servingSize', 'servingAmountNum', 'servingsPerPackage', 'perServingCalories', 'perServingProtein', 'perServingTotalFat', 'perServingTotalCarbs', 'perServingFiber', 'per100Calories', 'per100Protein', 'per100TotalFat', 'per100TotalCarbs', 'per100Fiber', 'isSeafood']
+            required: ['productName', 'servingSize', 'servingAmountNum', 'servingsPerPackage', 'perServingCalories', 'perServingProtein', 'perServingTotalFat', 'perServingTotalCarbs', 'perServingFiber', 'perServingSodium', 'per100Calories', 'per100Protein', 'per100TotalFat', 'per100TotalCarbs', 'per100Fiber', 'per100Sodium', 'isSeafood']
           }
         }
       });
@@ -7968,7 +8413,7 @@
 使用者即時狀態：${targets.genderLabel} ${targets.age}歲、身高 ${appState.heightCm}cm、目前體重 ${appState.weightKg}kg（BMI ${targets.bmiInfo.bmi.toFixed(1)}）、目標體重 ${appState.targetWeightKg}kg、BMR ${targets.bmr}、TDEE ${targets.maintCalories}。
 今日活動量：活動能量 ${appState.todayActiveKcal} kcal、步數 ${appState.todaySteps} 步（今日運動動態加成 +${targets.bonusCal} kcal）。
 今日目標：熱量 ${targets.targetCalories} kcal、蛋白 ${targets.targetProtein}g、碳水 ${targets.targetCarbs}g、脂肪 ${targets.targetFat}g、飲水 ${targets.targetWater}ml。
-今日已攝取：熱量 ${Math.round(totals.calories)} kcal、蛋白 ${totals.protein}g、碳水 ${totals.carbs}g、脂肪 ${totals.fat}g、飲水 ${appState.waterMl}ml。
+今日已攝取：熱量 ${Math.round(totals.calories)} kcal、蛋白 ${totals.protein}g、碳水 ${totals.carbs}g、脂肪 ${totals.fat}g、鈉 ${totals.sodium || 0}/${targets.targetSodium || 2400}mg、飲水 ${appState.waterMl}ml。
 今日餐點清單：${logsText}。`;
 
         const chatPayload = {
@@ -8137,7 +8582,7 @@
     function loadSavedCustomFood(idx) {
       const it = appState.savedCustomFoods[idx]; if (!it) return;
       document.getElementById('customFoodName').value = it.name;
-      setCustomModalMacroFields(it.calories, it.protein, it.carbs, it.fat, it.fiber || 0);
+      setCustomModalMacroFields(it.calories, it.protein, it.carbs, it.fat, it.fiber || 0, it.sodium || 0);
       checkCustomSeafoodWarning();
       closeSavedCustomFoodsDrawer();
       const si = document.getElementById('customAiStatusIcon'), st = document.getElementById('customAiStatusTitle'), sd = document.getElementById('customAiStatusDetail');
