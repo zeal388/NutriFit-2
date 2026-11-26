@@ -2122,6 +2122,18 @@
               <span id="trendTargetBadge" class="badge badge-emerald" style="font-size:10px;">目標 —</span>
             </div>
           </div>
+
+          <!-- 7-Day Diet Structure Analysis, Improvement Plan & Deficiency Risk Popup Trigger Button -->
+          <button type="button" id="btnOpenSevenDayDietReport" onclick="openSevenDayDietReportModal()" style="width:100%;text-align:left;background:linear-gradient(135deg,#fff7ed 0%,#ffffff 55%,#f0fdf4 100%);border:1.5px solid #f5d0a9;border-radius:16px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;box-shadow:0 4px 12px rgba(180,83,9,0.08);">
+            <div style="min-width:0;flex:1;">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span style="font-size:14px;font-weight:900;color:#7c2d12;">🩺 近 7 日飲食結構分析・改善方案與缺乏風險</span>
+                <span id="sevenDayRiskCountBadge" class="badge badge-amber" style="font-size:10px;">分析中</span>
+              </div>
+              <div id="sevenDayReportPreviewLine" class="text-xs" style="color:#6b5246;margin-top:4px;line-height:1.4;">點擊彈出完整 7 日飲食結構評估、潛在營養缺乏風險與具體改善建議</div>
+            </div>
+            <span style="flex-shrink:0;padding:7px 12px;border-radius:999px;background:#e11d48;color:#ffffff;font-size:12px;font-weight:800;white-space:nowrap;">查看報告 ↗</span>
+          </button>
         </div>
       </section>
 
@@ -2457,7 +2469,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v4.9.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v5.0.0・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2513,7 +2525,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v4.9.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v5.0.0・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -2888,6 +2900,28 @@
 
       <div style="display:flex;justify-content:flex-end;border-top:1px solid var(--border);padding-top:10px;">
         <button type="button" class="btn btn-sm btn-slate-soft" onclick="closeDailyMealLogModal()">關閉明細</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: 7-Day Diet Structure Analysis, Deficiency Risk & Improvement Plan Popup -->
+  <div id="sevenDayDietReportModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeSevenDayDietReportModal()">
+    <div class="modal-sheet" style="max-width:680px;display:flex;flex-direction:column;gap:12px;">
+      <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;gap:8px;">
+        <div>
+          <span id="sevenDayModalDateBadge" class="badge badge-amber">📅 近 7 日飲食結構報告</span>
+          <h3 style="font-size:18px;font-weight:900;margin-top:4px;color:#2a1b14;">近 7 日飲食結構分析・缺乏風險與改善方案</h3>
+        </div>
+        <button type="button" onclick="closeSevenDayDietReportModal()" style="font-size:18px;font-weight:800;color:#64748b;padding:4px 8px;">✕</button>
+      </div>
+
+      <div id="sevenDayReportModalBody" style="display:flex;flex-direction:column;gap:12px;"></div>
+
+      <div id="sevenDayAiInsightBox" class="card-soft hidden" style="background:#eff6ff;border:1.5px solid #bfdbfe;padding:10px 12px;font-size:12px;line-height:1.65;color:#1e3a8a;"></div>
+
+      <div class="flex-between" style="border-top:1px solid var(--border);padding-top:10px;gap:8px;flex-wrap:wrap;">
+        <button type="button" id="btnRunSevenDayAiDeepDive" class="btn btn-sm btn-blue" onclick="runSevenDayAiDeepDive()">✨ AI 營養師深度點評這 7 天</button>
+        <button type="button" class="btn btn-sm btn-slate-soft" onclick="closeSevenDayDietReportModal()">關閉報告</button>
       </div>
     </div>
   </div>
@@ -3615,6 +3649,7 @@
       }
       const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
       renderPlanNutritionTrendChart(targets);
+      if (typeof updateSevenDayReportTriggerPreview === 'function') updateSevenDayReportTriggerPreview(targets);
     }
 
     function setPlanTrendRange(range) {
@@ -5157,6 +5192,329 @@
       document.getElementById('dailyMealLogModal')?.classList.add('hidden');
     }
 
+    // === 🩺 7-Day Diet Structure Analysis, Potential Deficiency Risks & Improvement Plan ===
+    function computeSevenDayDietAnalysis(targets) {
+      const baseDate = parseDateYmd(appState.activeDate || getLocalTodayDateStr());
+      const days = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() - i);
+        const ymd = formatDateYmd(d);
+        const isCur = ymd === appState.activeDate;
+        const rec = isCur
+          ? { waterMl: appState.waterMl, logs: appState.logs, activeKcal: appState.todayActiveKcal }
+          : (appState.historyByDate && appState.historyByDate[ymd]) || null;
+        const logs = (rec && Array.isArray(rec.logs)) ? rec.logs : [];
+        let cal = 0, pro = 0, carb = 0, fat = 0, fib = 0, sod = 0;
+        const mealCal = { breakfast: 0, lunch: 0, dinner: 0, snack: 0 };
+        for (const it of logs) {
+          const m = Number(it.portion) || 1;
+          const c = (Number(it.calories) || 0) * m;
+          cal += c;
+          pro += (Number(it.protein) || 0) * m;
+          carb += (Number(it.carbs) || 0) * m;
+          fat += (Number(it.fat) || 0) * m;
+          fib += (Number(it.fiber) || 0) * m;
+          sod += (Number(it.sodium) || 0) * m;
+          const mk = mealCal[it.meal] !== undefined ? it.meal : 'lunch';
+          mealCal[mk] += c;
+        }
+        const water = Math.round(Number(rec && rec.waterMl) || 0);
+        const hasFood = logs.length > 0 && cal > 0;
+        days.push({ ymd, hasFood, logs, cal, pro, carb, fat, fib, sod, water, mealCal });
+      }
+
+      const foodDays = days.filter(d => d.hasFood);
+      const n = foodDays.length;
+      const startYmd = days[0].ymd;
+      const endYmd = days[days.length - 1].ymd;
+
+      if (n === 0) {
+        return {
+          daysCount: 0, startYmd, endYmd,
+          risks: [{ level: 'info', title: '尚無近 7 日飲食紀錄', detail: '請先記錄至少 1 天的餐點，系統就會自動分析您的飲食結構、缺乏風險與改善建議。' }],
+          improvements: ['從今天開始記錄早、午、晚餐（可用拍照辨識或「減脂秘訣」一鍵加入），累積 3–7 天後即可獲得完整趨勢分析。']
+        };
+      }
+
+      const sum = (fn) => foodDays.reduce((a, d) => a + fn(d), 0);
+      const avgCal = Math.round(sum(d => d.cal) / n);
+      const avgPro = Math.round((sum(d => d.pro) / n) * 10) / 10;
+      const avgCarb = Math.round((sum(d => d.carb) / n) * 10) / 10;
+      const avgFat = Math.round((sum(d => d.fat) / n) * 10) / 10;
+      const avgFib = Math.round((sum(d => d.fib) / n) * 10) / 10;
+      const avgSod = Math.round(sum(d => d.sod) / n);
+      const waterDays = days.filter(d => d.water > 0);
+      const avgWater = waterDays.length ? Math.round(waterDays.reduce((a, d) => a + d.water, 0) / waterDays.length) : 0;
+
+      const macroKcal = Math.max(1, avgPro * 4 + avgCarb * 4 + avgFat * 9);
+      const pPct = Math.round((avgPro * 4 / macroKcal) * 100);
+      const cPct = Math.round((avgCarb * 4 / macroKcal) * 100);
+      const fPct = Math.max(0, 100 - pPct - cPct);
+
+      const totMealCal = Math.max(1, sum(d => d.mealCal.breakfast + d.mealCal.lunch + d.mealCal.dinner + d.mealCal.snack));
+      const mealSplit = {
+        breakfast: Math.round(sum(d => d.mealCal.breakfast) / totMealCal * 100),
+        lunch: Math.round(sum(d => d.mealCal.lunch) / totMealCal * 100),
+        dinner: Math.round(sum(d => d.mealCal.dinner) / totMealCal * 100),
+        snack: Math.round(sum(d => d.mealCal.snack) / totMealCal * 100)
+      };
+
+      // Food-group keyword coverage across 7 days
+      const allMealText = foodDays.flatMap(d => d.logs.map(x => String(x.name || ''))).join(' ');
+      const vegDays = foodDays.filter(d => /(蔬菜|青菜|花椰|高麗|菠菜|地瓜葉|四季豆|沙拉|毛豆|菇|木耳|白菜|青江|萵苣|芹菜|蘆筍|空心菜|秋葵|茄|瓜|番茄|時蔬|生菜)/.test(d.logs.map(x => x.name).join(' '))).length;
+      const dairyCalciumHits = /(牛奶|鮮奶|拿鐵|優格|起司|豆漿|豆奶|豆腐|豆干|黑芝麻|乳清)/.test(allMealText);
+      const fruitHits = /(蘋果|香蕉|芭樂|奇異果|藍莓|草莓|橘|柳丁|木瓜|火龍果|水果|番茄)/.test(allMealText);
+      const omegaHits = /(堅果|杏仁|核桃|酪梨|橄欖油|亞麻|鮭魚|鯖魚|魚|芝麻|毛豆)/.test(allMealText);
+      const wholeGrainHits = /(地瓜|燕麥|糙米|五穀|紫米|藜麥|玉米|南瓜|全麥)/.test(allMealText);
+
+      const sodTgt = targets.targetSodium || 2400;
+      const risks = [];
+      const improvements = [];
+
+      // 1. Calorie deficit / surplus check
+      const calRatio = avgCal / Math.max(1, targets.targetCalories);
+      if (calRatio > 1.08) {
+        risks.push({ level: 'high', title: '熱量赤字不足（減脂速度恐停滯）', detail: `近 ${n} 日平均攝取 ${avgCal} kcal，高於目標 ${targets.targetCalories} kcal 約 +${avgCal - targets.targetCalories} kcal。` });
+        improvements.push(`每日減少約 ${Math.min(350, avgCal - targets.targetCalories)} kcal：優先將晚餐澱粉減半或把含醬／炸物改為清燙、滷味瀝汁。`);
+      } else if (calRatio < 0.78) {
+        risks.push({ level: 'high', title: '長期熱量過低（基礎代謝與掉肌風險）', detail: `近 ${n} 日平均僅 ${avgCal} kcal（低於目標 78%），過度節食易導致疲勞、掉髮與基礎代謝率下降。` });
+        improvements.push(`每日至少補回至 ${Math.max(targets.minSafeFloor || 1500, Math.round(targets.targetCalories * 0.9))} kcal 以上，優先從優質蛋白與地瓜／糙米補足。`);
+      }
+
+      // 2. Protein check
+      const proRatio = avgPro / Math.max(1, targets.targetProtein);
+      if (proRatio < 0.85) {
+        risks.push({ level: 'high', title: '蛋白質攝取不足（肌肉量流失風險）', detail: `近 ${n} 日平均蛋白 ${avgPro}g，僅達目標 ${targets.targetProtein}g 的 ${Math.round(proRatio * 100)}%，減脂期容易伴隨瘦體重流失與飢餓感。` });
+        improvements.push(`每日多補 ${Math.round(targets.targetProtein - avgPro)}g 蛋白質：可在早餐加 1 顆水煮蛋＋無糖豆漿，或午餐多加一份豆腐／舒肥雞胸。`);
+      }
+
+      // 3. Fiber & vegetable check
+      const fibRatio = avgFib / Math.max(1, targets.targetFiber);
+      if (fibRatio < 0.72 || vegDays < Math.ceil(n * 0.5)) {
+        risks.push({ level: 'warn', title: '膳食纖維與植化素偏低（腸道與血糖波動風險）', detail: `近 ${n} 日平均纖維 ${avgFib}g（目標 ${targets.targetFiber}g），有記錄到蔬菜類的天數為 ${vegDays}/${n} 天，恐增加排便不順與維生素 C／葉酸／鉀攝取不足風險。` });
+        improvements.push('午、晚餐各固定加入 1 份拳頭大小深綠色青菜（燙青菜不淋肉燥），或以毛豆、木耳、地瓜取代部分精緻澱粉。');
+      }
+
+      // 4. Fat ratio check
+      if (fPct > 38) {
+        risks.push({ level: 'warn', title: '脂肪熱量佔比偏高（擠壓蛋白與碳水空間）', detail: `近 ${n} 日脂肪佔總熱量 ${fPct}%（目標 ${targets.fRatioPct}%），外食烹調用油、帶皮肉類或醬料可能是隱形來源。` });
+        improvements.push('外食主菜改選去皮雞腿、豬里肌、牛腱或板豆腐，夾自助餐時先瀝乾菜汁並避免美乃滋、沙茶醬。');
+      } else if (fPct < 18) {
+        risks.push({ level: 'warn', title: '油脂攝取過低（脂溶性維生素 A/D/E/K 與荷爾蒙風險）', detail: `近 ${n} 日脂肪僅佔總熱量 ${fPct}%，過低油脂不利於維生素吸收與飽足感維持。` });
+        improvements.push('每天於早餐或點心加入 1 小把原味堅果（約 10–15g）或料理使用少量橄欖油。');
+      }
+
+      // 5. Sodium check
+      if (avgSod > sodTgt) {
+        risks.push({ level: 'high', title: '鈉攝取超標（水腫與血壓負擔風險）', detail: `近 ${n} 日平均鈉攝取 ${avgSod} mg，已超過國健署建議上限 ${sodTgt} mg，容易造成水分滯留讓體重計數字居高不下。` });
+        improvements.push('湯品不喝完、沙拉醬／滷汁減半、減少加工品（貢丸／香腸／泡麵），並多喝水與攝取高鉀深綠蔬菜幫助排鈉。');
+      } else if (avgSod >= sodTgt * 0.82) {
+        risks.push({ level: 'warn', title: '鈉攝取接近上限（留意隱形鈉來源）', detail: `近 ${n} 日平均鈉 ${avgSod} mg（達上限 ${Math.round(avgSod / sodTgt * 100)}%），外食醬料與湯底稍多即容易超標。` });
+        improvements.push('外食點餐主動要求「少鹽、醬料分開」，晚餐盡量以清燙或原型食材為主。');
+      }
+
+      // 6. Water check
+      if (avgWater > 0 && avgWater < targets.targetWater * 0.78) {
+        risks.push({ level: 'warn', title: '飲水量偏低（代謝效率與排鈉變慢）', detail: `近 7 日平均飲水 ${avgWater} ml，低於目標 ${targets.targetWater} ml，水分不足易誤判為飢餓並影響減脂代謝。` });
+        improvements.push(`每天多補約 ${Math.round((targets.targetWater - avgWater) / 100) * 100} ml：起床、午飯前、下午 3 點各固定喝 1 杯 300–400 ml 白開水。`);
+      }
+
+      // 7. Micronutrient potential risks from 7-day food variety
+      if (!fruitHits) {
+        risks.push({ level: 'warn', title: '潛在缺乏風險：維生素 C、鉀與抗氧化物', detail: '近 7 日紀錄中較少出現新鮮水果，外食久煮青菜易流失維生素 C。' });
+        improvements.push('每週 3–5 天在早餐或下午茶加入 1 份低 GI 水果（如芭樂、奇異果、小番茄或藍莓）。');
+      }
+      if (!dairyCalciumHits) {
+        risks.push({ level: 'warn', title: '潛在缺乏風險：鈣質與維生素 B2', detail: '近 7 日紀錄中較少出現鮮奶、無糖優格、起司或傳統板豆腐等高鈣食材。' });
+        improvements.push('每日安排 1 份高鈣食物（如無糖鮮奶拿鐵、希臘優格、加鈣無糖豆漿或板豆腐）。');
+      }
+      if (appState.excludeSeafood !== false && !omegaHits) {
+        risks.push({ level: 'warn', title: '潛在缺乏風險：Omega-3 脂肪酸（無海鮮飲食留意）', detail: '目前開啟嚴格無海鮮模式且近 7 日紀錄少見核桃、亞麻仁籽等植物性 Omega-3 來源。' });
+        improvements.push('因排除魚類，建議每週 3–4 天補充 1 小把原味核桃、亞麻仁籽粉或考量植物性藻油（DHA/EPA）。');
+      }
+      if (!wholeGrainHits) {
+        improvements.push('將部分白飯／麵條替換為地瓜、糙米、五穀飯或燕麥，可同時提升維生素 B 群與飽足感。');
+      }
+
+      // Meal timing rhythm check
+      if (mealSplit.dinner >= 45 || mealSplit.snack >= 25) {
+        improvements.push(`目前晚餐佔比 ${mealSplit.dinner}%（點心 ${mealSplit.snack}%）偏高，建議朝「早餐吃得好 30%・午餐吃得飽 45%・晚餐吃得少 25%」調整。`);
+      }
+
+      if (risks.length === 0) {
+        risks.push({ level: 'ok', title: '近 7 日整體營養結構表現穩健！', detail: '熱量赤字、蛋白質、三大比例與鈉含量皆落在健康減脂區間，請繼續保持。' });
+      }
+      if (improvements.length === 0) {
+        improvements.push('目前飲食節奏非常穩定，下週可維持現有模式並持續輪換不同深色蔬菜，讓微量營養素更全面。');
+      }
+
+      return {
+        daysCount: n, startYmd, endYmd,
+        avgCal, avgPro, avgCarb, avgFat, avgFib, avgSod, avgWater,
+        pPct, cPct, fPct, mealSplit, vegDays,
+        risks, improvements,
+        highCount: risks.filter(r => r.level === 'high').length,
+        warnCount: risks.filter(r => r.level === 'warn').length
+      };
+    }
+
+    function updateSevenDayReportTriggerPreview(targets) {
+      const badge = document.getElementById('sevenDayRiskCountBadge');
+      const line = document.getElementById('sevenDayReportPreviewLine');
+      if (!badge && !line) return;
+      const a = computeSevenDayDietAnalysis(targets);
+      if (a.daysCount === 0) {
+        if (badge) { badge.textContent = '尚無紀錄'; badge.className = 'badge badge-slate'; }
+        if (line) line.textContent = '累積紀錄餐點後，點擊即可查看近 7 日飲食結構與缺乏風險報告';
+        return;
+      }
+      const alertTotal = a.highCount + a.warnCount;
+      if (badge) {
+        if (a.highCount > 0) { badge.textContent = `⚠️ ${alertTotal} 項需留意`; badge.className = 'badge badge-rose'; }
+        else if (a.warnCount > 0) { badge.textContent = `💡 ${alertTotal} 項建議優化`; badge.className = 'badge badge-amber'; }
+        else { badge.textContent = '✅ 結構良好'; badge.className = 'badge badge-emerald'; }
+      }
+      if (line) {
+        line.textContent = `近 7 日有紀錄 ${a.daysCount} 天｜均 ${a.avgCal} kcal・蛋白 ${a.avgPro}g・比例 P${a.pPct}/C${a.cPct}/F${a.fPct}%（點擊看改善方案）`;
+      }
+    }
+
+    function openSevenDayDietReportModal() {
+      const modal = document.getElementById('sevenDayDietReportModal');
+      const body = document.getElementById('sevenDayReportModalBody');
+      const dateBadge = document.getElementById('sevenDayModalDateBadge');
+      const aiBox = document.getElementById('sevenDayAiInsightBox');
+      if (!modal || !body) return;
+
+      const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+      const a = computeSevenDayDietAnalysis(targets);
+      const sodTgt = targets.targetSodium || 2400;
+
+      if (dateBadge) dateBadge.textContent = `📅 ${a.startYmd} ～ ${a.endYmd}（有紀錄 ${a.daysCount} 天）`;
+      if (aiBox) aiBox.classList.add('hidden');
+
+      if (a.daysCount === 0) {
+        body.innerHTML = `<div class="card-soft text-sm text-muted" style="padding:14px;">目前這 7 天尚未記錄任何餐點。請先至「記食物」或「減脂秘訣」加入餐點後，再點擊查看完整的近 7 日飲食結構與缺乏風險報告。</div>`;
+        modal.classList.remove('hidden');
+        return;
+      }
+
+      const metricRow = [
+        { label: '日均熱量', val: `${a.avgCal} kcal`, tgt: `目標 ${targets.targetCalories}`, ok: a.avgCal >= targets.targetCalories * 0.8 && a.avgCal <= targets.targetCalories * 1.08 },
+        { label: '日均蛋白', val: `${a.avgPro} g`, tgt: `目標 ${targets.targetProtein}g`, ok: a.avgPro >= targets.targetProtein * 0.85 },
+        { label: '日均碳水', val: `${a.avgCarb} g`, tgt: `目標 ${targets.targetCarbs}g`, ok: true },
+        { label: '日均脂肪', val: `${a.avgFat} g`, tgt: `目標 ${targets.targetFat}g`, ok: a.fPct >= 18 && a.fPct <= 38 },
+        { label: '日均纖維', val: `${a.avgFib} g`, tgt: `目標 ${targets.targetFiber}g`, ok: a.avgFib >= targets.targetFiber * 0.72 },
+        { label: '日均鈉量', val: `${a.avgSod} mg`, tgt: `上限 ${sodTgt}mg`, ok: a.avgSod <= sodTgt }
+      ];
+
+      const riskStyle = (lvl) => lvl === 'high'
+        ? { bg: '#fff1f2', bd: '#fecdd3', col: '#be123c', tag: '🚨 優先留意' }
+        : (lvl === 'warn' ? { bg: '#fffbeb', bd: '#fde68a', col: '#b45309', tag: '⚠️ 潛在風險' }
+          : { bg: '#f0fdf4', bd: '#bbf7d0', col: '#15803d', tag: '✅ 表現良好' });
+
+      body.innerHTML = `
+        <!-- Section 1: 7-Day Diet Structure Overview -->
+        <div class="card-soft" style="background:#ffffff;border:1.5px solid #e2e8f0;display:flex;flex-direction:column;gap:10px;">
+          <div class="flex-between" style="flex-wrap:wrap;gap:6px;">
+            <strong class="text-sm" style="color:#1e293b;">📊 一、近 7 日飲食結構總覽</strong>
+            <span class="text-xs font-bold" style="color:#64748b;">日均飲水 ${a.avgWater} / ${targets.targetWater} ml</span>
+          </div>
+          <div class="grid grid-3" style="gap:8px;">
+            ${metricRow.map(m => `
+              <div style="background:${m.ok ? '#f8fafc' : '#fff7ed'};border:1px solid ${m.ok ? '#e2e8f0' : '#fed7aa'};border-radius:10px;padding:8px 10px;">
+                <div class="text-xs text-muted">${m.label}</div>
+                <div style="font-size:15px;font-weight:900;color:${m.ok ? '#1e293b' : '#c2410c'};margin-top:2px;">${m.val}</div>
+                <div style="font-size:10px;color:#64748b;margin-top:1px;">${m.tgt}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div style="background:#f8fafc;border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;">
+            <div class="flex-between text-xs">
+              <strong style="color:#334155;">三大營養素實際比例 vs 目標</strong>
+              <span style="color:#475569;">實際 P${a.pPct}% / C${a.cPct}% / F${a.fPct}%（目標 ${targets.pRatioPct}/${targets.cRatioPct}/${targets.fRatioPct}%）</span>
+            </div>
+            <div style="height:10px;border-radius:999px;overflow:hidden;display:flex;background:#e2e8f0;">
+              <div style="width:${a.pPct}%;background:#3b82f6;" title="蛋白質 ${a.pPct}%"></div>
+              <div style="width:${a.cPct}%;background:#f59e0b;" title="碳水 ${a.cPct}%"></div>
+              <div style="width:${a.fPct}%;background:#f43f5e;" title="脂肪 ${a.fPct}%"></div>
+            </div>
+            <div class="text-xs text-muted">餐別熱量分佈：🌅 早餐 ${a.mealSplit.breakfast}% ・ ☀️ 午餐 ${a.mealSplit.lunch}% ・ 🌙 晚餐 ${a.mealSplit.dinner}% ・ 🍎 點心 ${a.mealSplit.snack}%</div>
+          </div>
+        </div>
+
+        <!-- Section 2: Potential Nutrition Deficiency & Imbalance Risks -->
+        <div class="card-soft" style="background:#ffffff;border:1.5px solid #fde68a;display:flex;flex-direction:column;gap:8px;">
+          <strong class="text-sm" style="color:#92400e;">⚠️ 二、營養缺乏與失衡潛在風險</strong>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            ${a.risks.map(r => {
+              const st = riskStyle(r.level);
+              return `
+                <div style="background:${st.bg};border:1px solid ${st.bd};border-radius:10px;padding:9px 11px;">
+                  <div style="font-size:12px;font-weight:900;color:${st.col};">${st.tag}｜${r.title}</div>
+                  <div class="text-xs" style="color:#475569;margin-top:3px;line-height:1.5;">${r.detail}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Section 3: Concrete Actionable Improvement Plan -->
+        <div class="card-soft" style="background:#f0fdf4;border:1.5px solid #bbf7d0;display:flex;flex-direction:column;gap:8px;">
+          <strong class="text-sm" style="color:#166534;">🎯 三、下週具體改善方案</strong>
+          <ol style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:12px;color:#1e293b;line-height:1.55;">
+            ${a.improvements.map(imp => `<li>${imp}</li>`).join('')}
+          </ol>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function closeSevenDayDietReportModal() {
+      document.getElementById('sevenDayDietReportModal')?.classList.add('hidden');
+    }
+
+    async function runSevenDayAiDeepDive() {
+      const box = document.getElementById('sevenDayAiInsightBox');
+      const btn = document.getElementById('btnRunSevenDayAiDeepDive');
+      const apiKey = getSavedGeminiKey();
+      if (!apiKey) {
+        showToast('請先於「系統設置」綁定免費 Gemini API Key 即可啟用 AI 深度點評', '🔑');
+        return;
+      }
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ AI 營養師分析中...'; }
+      if (box) { box.classList.remove('hidden'); box.innerHTML = '⏳ 正在結合您近 7 日實際餐點與營養數據進行深度診斷...'; }
+      try {
+        const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
+        const a = computeSevenDayDietAnalysis(targets);
+        const hist = buildHistoricalDietContext(7);
+        const prompt = `你是台灣減脂營養師。請根據使用者近 7 日真實飲食數據，給出精準、具體可執行的「飲食結構點評」、「最需留意的前 2 項營養缺乏風險」與「下週 3 個具體外食／日常改善動作」：
+- 身體與目標：${targets.genderLabel} ${targets.age}歲 ${appState.heightCm}cm/${appState.weightKg}kg（目標 ${appState.targetWeightKg}kg），每日目標 ${targets.targetCalories}kcal、蛋白 ${targets.targetProtein}g、纖維 ${targets.targetFiber}g、鈉上限 ${targets.targetSodium || 2400}mg。
+- 近 7 日平均（有紀錄 ${a.daysCount} 天）：熱量 ${a.avgCal}kcal、蛋白 ${a.avgPro}g、碳水 ${a.avgCarb}g、脂肪 ${a.avgFat}g（佔比 P${a.pPct}%/C${a.cPct}%/F${a.fPct}%）、纖維 ${a.avgFib}g、鈉 ${a.avgSod}mg、飲水 ${a.avgWater}ml。
+- 餐別佔比：早 ${a.mealSplit.breakfast}% / 午 ${a.mealSplit.lunch}% / 晚 ${a.mealSplit.dinner}% / 點心 ${a.mealSplit.snack}%。
+- 飲食限制：${appState.excludeSeafood !== false ? '嚴格排除海鮮（無魚蝦蟹貝）' : '可接受海鮮'}。
+- 歷史明細：
+${hist.summaryText}
+請用繁體中文條列回覆，總字數控制在 220–380 字以內，句句完整不截斷。`;
+        const json = await callGeminiGenerateContent(apiKey, {
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { thinkingConfig: { thinkingLevel: 'LOW' }, maxOutputTokens: 1536 }
+        });
+        const parts = json?.candidates?.[0]?.content?.parts || [];
+        const txt = parts.filter(p => p && !p.thought && typeof p.text === 'string').map(p => p.text).join('').trim();
+        if (!txt) throw new Error('AI 未回傳內容');
+        const safeHtml = txt
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n/g, '<br/>');
+        if (box) box.innerHTML = `<div style="font-weight:900;margin-bottom:4px;">✨ AI 營養師近 7 日深度點評</div><div>${safeHtml}</div>`;
+      } catch (err) {
+        if (box) box.innerHTML = `⚠️ AI 深度點評暫時無法連線（${err?.message || '請稍後再試'}），上方離線完整分析報告仍可隨時參考。`;
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '✨ AI 營養師深度點評這 7 天'; }
+      }
+    }
+
     function renderWeightPlanSection(targets) {
       const b = targets.bmiInfo;
       const setT = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -6089,7 +6447,7 @@
       }
     }
 
-    const APP_VERSION = 'v4.9.0';
+    const APP_VERSION = 'v5.0.0';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -7741,11 +8099,11 @@
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v4.9.0',
+      version: 'v5.0.0',
       date: '2026-11-26',
       items: [
-        '💾 AI 營養師「自動保留聊天紀錄」：對話內容與時間戳記自動儲存於本機並納入 JSON 備份還原，重新開啟或更新 App 皆不會遺失。',
-        '📊 AI 營養師「查閱過去飲食狀態」：自動同步最近 14 天有紀錄日的熱量、蛋白、碳水、脂肪、鈉、飲水與餐點清單，並新增「分析近 7 天歷史飲食趨勢」一鍵提問按鈕。'
+        '🩺 「減脂計畫」趨勢圖表下方新增彈出式「近 7 日飲食結構分析・改善方案與缺乏風險」按鈕：點擊即彈出完整報告，包含 7 日平均營養對照、三大比例與三餐分佈、潛在巨量／微量營養素缺乏風險（蛋白、纖維、鈉、鈣、維生素 C、無海鮮 Omega-3 等）與下週具體改善清單。',
+        '✨ 報告視窗內建「AI 營養師深度點評這 7 天」按鈕，可結合真實菜色清單給出更個人化的微調建議。'
       ]
     };
 
