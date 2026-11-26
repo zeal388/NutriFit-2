@@ -2469,7 +2469,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v5.0.1・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v5.0.2・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2525,7 +2525,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v5.0.1・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v5.0.2・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -2907,12 +2907,12 @@
   <!-- Modal: 7-Day Diet Structure Analysis, Deficiency Risk & Improvement Plan Popup -->
   <div id="sevenDayDietReportModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeSevenDayDietReportModal()">
     <div class="modal-sheet" style="max-width:680px;display:flex;flex-direction:column;gap:12px;">
-      <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;gap:8px;">
-        <div>
+      <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:10px;gap:8px;align-items:flex-start;flex-wrap:nowrap;">
+        <div style="min-width:0;flex:1;">
           <span id="sevenDayModalDateBadge" class="badge badge-amber">📅 近 7 日飲食結構報告</span>
-          <h3 style="font-size:18px;font-weight:900;margin-top:4px;color:#2a1b14;">近 7 日飲食結構分析・缺乏風險與改善方案</h3>
+          <h3 style="font-size:17px;font-weight:900;margin-top:4px;color:#2a1b14;line-height:1.3;">近 7 日飲食結構分析・缺乏風險與改善方案</h3>
         </div>
-        <button type="button" onclick="closeSevenDayDietReportModal()" style="font-size:18px;font-weight:800;color:#64748b;padding:4px 8px;">✕</button>
+        <button type="button" onclick="closeSevenDayDietReportModal()" style="flex-shrink:0;font-size:18px;font-weight:800;color:#64748b;padding:4px 8px;">✕</button>
       </div>
 
       <div id="sevenDayReportModalBody" style="display:flex;flex-direction:column;gap:12px;"></div>
@@ -5203,7 +5203,7 @@
       const days = [];
       for (let i = 6; i >= 0; i--) {
         const d = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() - i);
-        const ymd = formatDateYmd(d);
+        const ymd = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         const isCur = ymd === appState.activeDate;
         const rec = isCur
           ? { waterMl: appState.waterMl, logs: appState.logs, activeKcal: appState.todayActiveKcal }
@@ -5236,6 +5236,10 @@
       if (n === 0) {
         return {
           daysCount: 0, startYmd, endYmd,
+          avgCal: 0, avgPro: 0, avgCarb: 0, avgFat: 0, avgFib: 0, avgSod: 0, avgWater: 0,
+          pPct: 0, cPct: 0, fPct: 0, vegDays: 0,
+          mealSplit: { breakfast: 0, lunch: 0, dinner: 0, snack: 0 },
+          highCount: 0, warnCount: 0,
           risks: [{ level: 'info', title: '尚無近 7 日飲食紀錄', detail: '請先記錄至少 1 天的餐點，系統就會自動分析您的飲食結構、缺乏風險與改善建議。' }],
           improvements: ['從今天開始記錄早、午、晚餐（可用拍照辨識或「減脂秘訣」一鍵加入），累積 3–7 天後即可獲得完整趨勢分析。']
         };
@@ -5494,11 +5498,16 @@
       try {
         const targets = computeTargetsForWeight(appState.weightKg, appState.activityLevel, appState.macroMode);
         const a = computeSevenDayDietAnalysis(targets);
+        if (!a || a.daysCount === 0) {
+          if (box) box.innerHTML = '📝 目前近 7 日尚無餐點紀錄，請先記錄至少 1 筆餐點後再使用 AI 深度點評。';
+          return;
+        }
+        const ms = a.mealSplit || { breakfast: 0, lunch: 0, dinner: 0, snack: 0 };
         const hist = buildHistoricalDietContext(7);
         const prompt = `你是台灣減脂營養師。請根據使用者近 7 日真實飲食數據，給出精準、具體可執行的「飲食結構點評」、「最需留意的前 2 項營養缺乏風險」與「下週 3 個具體外食／日常改善動作」：
 - 身體與目標：${targets.genderLabel} ${targets.age}歲 ${appState.heightCm}cm/${appState.weightKg}kg（目標 ${appState.targetWeightKg}kg），每日目標 ${targets.targetCalories}kcal、蛋白 ${targets.targetProtein}g、纖維 ${targets.targetFiber}g、鈉上限 ${targets.targetSodium || 2400}mg。
 - 近 7 日平均（有紀錄 ${a.daysCount} 天）：熱量 ${a.avgCal}kcal、蛋白 ${a.avgPro}g、碳水 ${a.avgCarb}g、脂肪 ${a.avgFat}g（佔比 P${a.pPct}%/C${a.cPct}%/F${a.fPct}%）、纖維 ${a.avgFib}g、鈉 ${a.avgSod}mg、飲水 ${a.avgWater}ml。
-- 餐別佔比：早 ${a.mealSplit.breakfast}% / 午 ${a.mealSplit.lunch}% / 晚 ${a.mealSplit.dinner}% / 點心 ${a.mealSplit.snack}%。
+- 餐別佔比：早 ${ms.breakfast}% / 午 ${ms.lunch}% / 晚 ${ms.dinner}% / 點心 ${ms.snack}%。
 - 飲食限制：${appState.excludeSeafood !== false ? '嚴格排除海鮮（無魚蝦蟹貝）' : '可接受海鮮'}。
 - 歷史明細：
 ${hist.summaryText}
@@ -6454,7 +6463,7 @@ ${hist.summaryText}
       }
     }
 
-    const APP_VERSION = 'v5.0.1';
+    const APP_VERSION = 'v5.0.2';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -8106,7 +8115,7 @@ ${hist.summaryText}
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v5.0.1',
+      version: 'v5.0.2',
       date: '2026-11-26',
       items: [
         '🩺 「減脂計畫」趨勢圖表下方新增彈出式「近 7 日飲食結構分析・改善方案與缺乏風險」按鈕：點擊即彈出完整報告，包含 7 日平均營養對照、三大比例與三餐分佈、潛在巨量／微量營養素缺乏風險（蛋白、纖維、鈉、鈣、維生素 C、無海鮮 Omega-3 等）與下週具體改善清單。',
