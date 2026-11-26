@@ -2469,7 +2469,7 @@
               <div class="text-xs font-extrabold" style="color:var(--emerald);">個人偏好設定・版本更新與 AI 視覺金鑰</div>
               <h2 style="font-size:20px;font-weight:900;margin-top:2px;display:inline-flex;align-items:center;gap:6px;"><svg class="xmas-ic" style="width:26px;height:26px;display:inline-block;vertical-align:-4px;flex-shrink:0;" viewBox="0 0 64 64" aria-hidden="true"><use href="#xmas-bell"/></svg> 個人設定與應用程式更新</h2>
             </div>
-            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v5.0.0・更新日誌 ▾</button>
+            <button type="button" id="otaCurrentVerBadge" class="badge badge-emerald" style="border:none;cursor:pointer;" onclick="openWhatsNewModal(true)" title="點擊查看本次更新內容">v5.0.1・更新日誌 ▾</button>
           </div>
 
           <!-- Dietary Preference Toggle -->
@@ -2525,7 +2525,7 @@
             <div class="flex-between" style="flex-wrap:wrap;gap:8px;">
               <div>
                 <div class="text-xs font-extrabold" style="color:#1e3a8a;">☁️ 應用程式更新（100% 保留所有歷史紀錄）</div>
-                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v5.0.0・自動同步最新飲食設定與功能更新。</div>
+                <div id="sysOtaStatusText" class="text-xs text-muted mt-1">目前版本 v5.0.1・自動同步最新飲食設定與功能更新。</div>
               </div>
               <span id="otaVersionStatusBadge" class="badge badge-blue">最新版本</span>
             </div>
@@ -4903,6 +4903,7 @@
       renderPlanNutritionTrendChart(targets);
       renderTimelineAndGuide(targets);
       renderDailyMealPlanSuggestions(targets);
+      if (typeof updateSevenDayReportTriggerPreview === 'function') updateSevenDayReportTriggerPreview(targets);
       renderWeightMatrix();
       updateScanPortionPreview();
 
@@ -5194,7 +5195,11 @@
 
     // === 🩺 7-Day Diet Structure Analysis, Potential Deficiency Risks & Improvement Plan ===
     function computeSevenDayDietAnalysis(targets) {
-      const baseDate = parseDateYmd(appState.activeDate || getLocalTodayDateStr());
+      const rawYmd = String(appState.activeDate || getLocalTodayDateStr());
+      const ymdParts = rawYmd.split('-').map(n => parseInt(n, 10));
+      const baseDate = (ymdParts.length === 3 && !isNaN(ymdParts[0]) && !isNaN(ymdParts[1]) && !isNaN(ymdParts[2]))
+        ? new Date(ymdParts[0], ymdParts[1] - 1, ymdParts[2])
+        : new Date();
       const days = [];
       for (let i = 6; i >= 0; i--) {
         const d = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() - i);
@@ -5380,6 +5385,7 @@
     }
 
     function openSevenDayDietReportModal() {
+      try {
       const modal = document.getElementById('sevenDayDietReportModal');
       const body = document.getElementById('sevenDayReportModalBody');
       const dateBadge = document.getElementById('sevenDayModalDateBadge');
@@ -5468,6 +5474,7 @@
         </div>
       `;
       modal.classList.remove('hidden');
+      } catch (err) { console.error('openSevenDayDietReportModal error:', err); showToast('報告載入異常：' + (err?.message || '請重新整理'), '⚠️'); }
     }
 
     function closeSevenDayDietReportModal() {
@@ -6447,7 +6454,7 @@ ${hist.summaryText}
       }
     }
 
-    const APP_VERSION = 'v5.0.0';
+    const APP_VERSION = 'v5.0.1';
     const DATA_SCHEMA_VERSION = 2;
 
     function compareSemver(a, b) {
@@ -8099,7 +8106,7 @@ ${hist.summaryText}
     }
 
     const RELEASE_NOTES_DATA = {
-      version: 'v5.0.0',
+      version: 'v5.0.1',
       date: '2026-11-26',
       items: [
         '🩺 「減脂計畫」趨勢圖表下方新增彈出式「近 7 日飲食結構分析・改善方案與缺乏風險」按鈕：點擊即彈出完整報告，包含 7 日平均營養對照、三大比例與三餐分佈、潛在巨量／微量營養素缺乏風險（蛋白、纖維、鈉、鈣、維生素 C、無海鮮 Omega-3 等）與下週具體改善清單。',
